@@ -21,11 +21,11 @@ Para una manual (casi) actualizado, puede visitar la Wiki de la misma página:
 
 Escriba:
 
-hopper3        
+ hopper3        
 
 Para ayuda de analizador y ejecutor
 
-bhopper3       
+ bhopper3       
 
 Para ayuda de ejecutor de binarios.
 
@@ -33,7 +33,7 @@ Puede crear un binario cuando ya está seguro de que su programa funciona bien. 
 
 Un binario se crea así:
 
-hopper3 <filename.ext> -x -o bin/nombre_de_archivo
+ hopper3 <filename.ext> -x -o bin/nombre_de_archivo
 
 #Compilar un programa
 
@@ -42,11 +42,11 @@ Para compilar un programa (y ejecutarlo) tiene dos opciones:
 
 o si ya generó un binario:
 
-2) bhopper /bin/<filename>
+2) bhopper /bin/filename
 
 aunque también puede ejecutar en ambas modalidades como:
 
-./<filename[.ext]>
+ ./filename[.ext]
 
 #Otras opciones de compilación/ejecución:
 
@@ -54,7 +54,7 @@ Consulte la ayuda.
 
 Dudas, consultas o ganas de colaborar con ideas o mejoras (que las necesita), contáctese con el autor en el correo:
 
-daniel.stuardo@gmail.com
+ daniel.stuardo@gmail.com
 
 Con amor
 
