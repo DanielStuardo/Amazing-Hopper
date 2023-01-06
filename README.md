@@ -18,10 +18,16 @@ Para una manual (casi) actualizado, puede visitar la Wiki de la misma página:
  https://rosettacode.org/wiki/Category:Amazing_Hopper
 
 #Help
+
 Escriba:
 
-hopper3        Para ayuda de analizador y ejecutor
-bhopper3       Para ayuda de ejecutor de binarios.
+hopper3        
+
+Para ayuda de analizador y ejecutor
+
+bhopper3       
+
+Para ayuda de ejecutor de binarios.
 
 Puede crear un binario cuando ya está seguro de que su programa funciona bien. Use VALGRIND para asegurarse más todavía.
 
