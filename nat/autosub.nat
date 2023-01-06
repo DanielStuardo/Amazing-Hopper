@@ -1,0 +1,96 @@
+
+#include <stdio.hh>
+#include <math.hh>
+
+// elevar pi al cuadrado, obtener el cuadrado de pi, pertenecen al mismo contexto de "obtiene el cuadrado de pi".
+// Por tanto, son contextos sinónimos. Con #synon, es posible señalar que todos esos contextos apuntan al
+// contexto oficial declarado con "obtiene el cuadrado de pi:". Incluso, podría definirse un "contexto" a base de
+// un código, y asociar como sinónimos a los otros contextos.
+// #CONTEXT es igual a #AUTOSUB, porque en ambos casos se reemplaza la descripción del contexto, por:
+//  jsub(descripción del contexto)
+
+#context-free obtiene el cuadrado de pi
+#synon   obtieneelcuadradodepi    obtenerelcuadradodepi,elevarpialcuadrado,pielevadoalcuadrado,elevapialcuadrado
+
+#defn    imprimir(_X_)   #ATOM#CMPLX,{"\n"},print,
+#defn    eimprime        print
+#define  salto           {"\n"}
+#synon   salto           salta,nuevalínea,NL
+#synon   eimprime        eimprímelo,imprímelo,imprime
+
+#define  luegode  emptystack?,not,do{ {"No puedo continuar por datos remanentes "},throw(1001) }
+#synon   luegode  porotrolado,aparte,ahorabien,finalmente
+#define  luego    emptystack?do{ {"No puedo continuar por falta de datos "},throw(1000) }
+#synon   luego    entonces,yde,yademásde,conloanterior,contodoloanterior,acontinuación,hechoesto,hechoeso
+
+#defn    y(_X_)   #ATOM#CMPLX
+#defn    lasumaentre(_X_,_Y_)        #ATOM#CMPLX,#ATOM#CMPLX,add,
+#defn    larestaentre(_X_,_Y_)       #ATOM#CMPLX,#ATOM#CMPLX,postfix,sub,postfix,
+#synon   larestaentre                ladiferenciaentre
+#defn    elproductoentre(_X_,_Y_)    #ATOM#CMPLX,#ATOM#CMPLX,mul,
+#synon   elproductoentre             lamultiplicaciónentre
+#defn    ladivisiónentre(_X_,_Y_)    #ATOM#CMPLX,#ATOM#CMPLX,postfix,div,postfix,
+#defn    ladivisión-eentre(_X_,_Y_)  #ATOM#CMPLX,#ATOM#CMPLX,postfix,idiv,postfix,
+#defn    elmoduloentre(_X_,_Y_)      #ATOM#CMPLX,#ATOM#CMPLX,postfix,mod,postfix,
+
+#define  nohaganada    clearstack
+#synon   nohaganada    nada
+
+#defn    por(_X_)     #IF mulby(#ATOMF) #ELSE #CMPLX,mul #EIF,  // #ATOMF indica argumento atómico para funcion. impide {}
+#defn    más(_X_)     #IF plus(#ATOMF) #ELSE #CMPLX,add #EIF,
+#defn    menos(_X_)   #IF minus(#ATOMF) #ELSE #CMPLX,postfix,sub,postfix, #EIF,
+#defn    divididopor(_X_)  #IF divby(#ATOMF) #ELSE #CMPLX,postfix,div,postfix, #EIF,
+#defn    dividido-epor(_X_)  #IF idivby(#ATOMF) #ELSE #CMPLX,postfix,idiv,postfix, #EIF,
+#defn    módulo(_X_)  #IF mod(#ATOMF) #ELSE #CMPLX,postfix,mod,postfix #EIF,
+
+#defn    esiguala(_X_)  #IF eqto(#ATOMF) #ELSE #CMPLX,eq? #EIF
+
+#defn    toma(_X_)    #ATOM#CMPLX,
+#synon   toma         esto
+
+#context  realizar proceso alternativo
+#synon    realizarprocesoalternativo    realizaelprocesoalternativo,hazelprocesoalternativo,\
+                                        ejecutaprocesoalternativo,realizaprocesoalternativo
+
+///#define   elstring(_X_)     {"_X_"}  // NO SIRVE, porque se quitan los espacios de _X_
+#define   elnúmero(_X_)     {_X_}
+#synon    elnúmero    tomaelnúmero,sielnúmero,tomalacadena,lacadena,silacadena
+#define   capitalizar(_X_)  [1]get(_X_),upper,put(_X_),{_X_},clearmark
+#defn   capitaliza       #RAND TMP#RNDV=0,mov(TMP#RNDV),[1]get(TMP#RNDV),upper,put(TMP#RNDV),{TMP#RNDV},clearmark
+#synon    capitaliza       capitalízala
+#defn     laexpresión(_X_)  #ATOM#CMPLX,
+#synon    laexpresión       elresultadode
+#define   respaldaen(_X_)   _X_=0,cpy(_X_)
+#define   muevea(_X_)       _X_=0,mov(_X_)
+main:
+   t=0, {t} plus '100', NL, imprime
+   #compute ( t = t+100 ),{t}, salta, imprime
+   
+// luego... requiere que existan datos, porque enlaza lo anterio con lo que sigue
+   eleva pi al cuadrado; luego, salta, imprime.
+//   {t}
+// luego de... comienza un párrafo distinto. No necesita enlazar con nada anterior.
+   luego de obtener el cuadrado de pi, salta, imprime
+   luego de elevar pi al cuadrado, salta, e imprímelo
+   imprimir (la suma entre (pi elevado al cuadrado, y '10'), por '10').
+   por otro lado,imprimir (la suma entre (pi elevado al cuadrado, y '10'), por (la suma entre (10, y '15'))).
+   toma '10', más '2', dividido-e por '7'; hecho esto, respalda en 'r', salta, e imprime.
+   si el número '2' es igual a ( el número '1' más 'r'), realiza el proceso alternativo.
+//   imprimir ("Hola mundo!!")
+   toma la cadena '"hola mundo"', capitalízala, salta, e imprime.
+   {7,5}postfix,ge?,postfix,haz el proceso alternativo
+   {0}return
+
+/* CONTEXTOS LOCALES */
+.locals
+
+obtiene el cuadrado  de   pi    :
+   {M_PI} pow by '2'
+   back
+
+///imprime  :,{"\n"}print, back
+
+realizar proceso alternativo:
+   {"\n\YPROCESO ALTERNATIVO\OFF\n"},print
+   back
+

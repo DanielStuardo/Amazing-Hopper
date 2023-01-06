@@ -1,0 +1,27 @@
+
+#define getasinglelistof(_X_)   {_X_},
+#synon  getasinglelistof        getalistof,getamatrixof
+#define integerrandomnumbers    _V1000_=-1,rand array(_V1000_),mulby(10),ceil,
+#define andrememberas(_X_)      _X_=0,mov(_X_)
+#synon  andrememberas           rememberas
+#defn   nowremember(_X_)           #ATOM#CMPLX;
+#synon  nowremember                variable,thestring,thenumber,number,remember,nowtake,andtake,take
+#define rememberitin(_X_)       _X_=0,cpy(_X_)
+#synon  rememberitin            rememberthisnumbersin
+#define afterdoingit            emptystack?,not,do{ {"I cannot continue due to retentive data "},throw(1001) }
+#synon  afterdoingit            secondly,finally
+#define then                    emptystack?do{ {"I cannot continue because data is missing "},throw(1000) }
+#define andmultiplyit              postfix;matmul;postfix
+#synon  andmultiplyit            multiplyit
+#define andprintwithanewline    {"\n"}print
+#synon  andprintwithanewline    printwithanewline
+#define andputitwithanewline    puts;{"\n"}puts
+#define andputit                puts
+
+//#include <natural.h>
+#include <hopper.h>
+main:
+   get a matrix of '5,2' integer random numbers, remember it in 'first matrix' and put it with a newline
+   get a matrix of '2,3' integer random numbers, remember it in 'second matrix' and put it with a newline
+   now take 'first matrix', and take 'second matrix', and multiply it; then, print with a new line.
+exit(0)
