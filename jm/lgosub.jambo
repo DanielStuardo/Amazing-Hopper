@@ -1,0 +1,22 @@
+
+
+#include <jambo.h>
+
+Main
+   Set(100), Link gosub(proc1, proc2, proc3)
+   Prnl
+End
+
+Subrutines 
+
+Define( proc1, dato )
+   Add(dato,100)
+Return
+
+Define ( proc2, dato )
+   Mul(dato,5)
+Return
+
+Define( proc3, dato )
+   var(dato) Div into(2)
+Return

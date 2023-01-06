@@ -1,0 +1,87 @@
+
+#include <jambo.h>
+
+Main
+
+ //#defn multiplica(_X_,_Y_)   #IF #ATOM #ELSE #CMPLX;#EIF #IF mulby(#FATOM) #ELSE #CMPLX; mul; #EIF
+ #defn multiplicar(*)           {1}#GENCODE $$$*$$$ #ATCMLIST;mul;#ENDGEN
+ //#defn elcocienteentre(__X__,__Y__)      #IF #ATOM #ELSE #CMPLX;#EIF #IF divby(#FATOM) #ELSE #CMPLX; div; #EIF
+ #defn elcocienteentre(*)      #GENCODE $$$*$$$ #ATCMLIST;#ENDGEN; div;
+ #synon elcocienteentre               Elcocienteentre,conelcocienteentre
+// #defn lasumaentre(_X_,_Y_)  #IF #ATOM #ELSE #CMPLX;#EIF #IF plus(#FATOM) #ELSE #CMPLX; add; #EIF
+#defn lasumaentre(*)          {0}#GENCODE $$$*$$$ #ATCMLIST;add;#ENDGEN
+ #synon  lasumaentre           Sumaentre,conlasumaentre,conlasuma,lasuma
+ #synon  multiplicar            Multiplicar, lamultiplicaciónentre
+ #defn  eldoblede(_X_)        ;#ATOM#CMPLX;mulby(2)
+ #defn  eltriplede(_X_)        ;#ATOM#CMPLX;mulby(3)
+ #synon eldoblede             Eldoblede,coneldoblede
+ #defn  aumentadoen(_X_)      ;#ATOM#CMPLX;add;
+ #synon aumentadoen            más,Más
+ #defn  veces(_X_)             ;#ATOM#CMPLX;mul;
+
+ #defn sumar(*)                *;sumall;
+ #synon sumar                  Sumar
+ #defn  lasumade(*)            #GENCODE $$$*$$$ #ATCMLIST;add;#ENDGEN
+  #defn  loscuadradosde(*)     #GENCODE $$$*$$$ #ATCMLIST;powby(2);#ENDGEN
+ #defn  lasumadeloscuadradosde(*)   {0}#GENCODE $$$*$$$ #ATCMLIST;powby(2);add;#ENDGEN
+ #synon loscuadradosde         conelcuadradode,conloscuadradosde,elcuadradode,Elcuadradode,Loscuadradosde
+  #defn  Tomar(*)               #GENCODE $$$*$$$ #ATCMLIST; #ENDGEN;
+  #defn lalistade(*)           {"\033"} *;mklist;
+  #defn laraizcuadradade(_X_)   ;#ATOM#CMPLX;sqrt;
+  
+  #defn   Guardaren(*)          #GENCODE $$$*$$$ mov(#REVLIST);#ENDGEN,
+  
+  #define  en(_X_)                (_X_)
+  #defn    Guardar(*)             #GENCODE $$$*$$$ #ATCMLIST;#ENDGEN;__MOVER__
+  #defn    __MOVER__(*)          #GENCODE $$$*$$$ mov(#REVLIST);#ENDGEN;
+  
+   #defn entre(_X_)            ;#ATOM#CMPLX;
+   #synon entre                 con,elvalorde,elvalorentre,elvalor,elnúmero,laconstante,lavariable, los valoresde
+ 
+ #synon  Printnl     Imprimir con salto
+
+ Multiplicar ( la suma entre (10,40), entre (5), 10, 15, 20 ), Prnl
+
+ Multiplicar ( la suma entre (10,40), con (5)), Prnl
+ El doble de ( la suma entre (10, 40)), Prnl
+ Tomar '5' aumentado en '100', Prnl
+ Tomar '5' veces '100', Prnl
+ Tomar '5' veces 'la suma entre(100 , 20)', Prnl
+ Print ("Resultado: ", El cociente entre ( el cociente entre (1000, 20), entre (5))), Prnl
+ Sumar ( los cuadrados de (10, 5, 3)), Prnl
+ 
+ x=0
+ Sumar ( los valores de (el cociente entre '100,5', con la suma entre (5, el doble de '5') ) ), 
+ Guardar en 'x'; Printnl("X=",x)
+
+ resultado=0
+ Guardar ( la suma entre (10,10,10), veces (el cuadrado de '2')) en 'resultado'
+ Printnl ("Resultado = ", resultado)
+
+ Print("Resultado 2 = "), '5' veces '100', Prnl
+ '"Este es un mensaje directo a PUSH...",100', Prnl
+ 
+Cálculos generales:
+
+  Sumar ( el cociente entre '100,5', con la suma entre ( los cuadrados de (5,6,7), 100)), Prnl
+  /* el programa entra en un loop. Averiguar por qué. */
+  
+    Sumar ( el cociente entre '100,5', con la suma entre ( la suma de los cuadrados de (5,6,7), 100)), Prnl
+    /* problemas con GENCODE anidado. Resolver */
+    Printnl ( la suma entre ( la suma de los  cuadrados de ( el doble de '5', 6, 7), 100), ",\n ", la lista de (los cuadrados de(100, 300, 1000) ) )
+  
+  Printnl( "Pitágoras: ", la raiz cuadrada de (la suma de los cuadrados de (3,4)) )
+  
+  hipotenusa = 0, doble = 0
+  Guardar 'la raiz cuadrada de (la suma de los cuadrados de (3,4)), el doble de ( \
+            la suma entre (25 , (25) más (25) ))' en 'hipotenusa, doble'
+  Printnl ("Pitagoras = ", hipotenusa,"\nDoble = ", doble)
+  doble *= 100
+  Printnl("doble x 100 = ",doble," hipotenusa = ", hipotenusa)
+  doble <-> hipotenusa
+  Imprimir con salto ("doble       = ",doble," hipotenusa = ", hipotenusa)
+  
+End
+
+
+

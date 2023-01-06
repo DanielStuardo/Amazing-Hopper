@@ -1,0 +1,17 @@
+
+#include <jambo.h>
+
+Main
+   Dim (10) as int rand (10, x)
+   //Dim (10) as int rand (10, y)
+   y==x
+   {x,"\n",y,"\n"} print
+   {x,10}add, mov(x)
+   {x,"\n",y,"\n\n"} print
+   Clear 'y'
+   y == x
+   {x,"\n",y,"\n"} print
+   {x,10}add, mov(x)
+   {x,"\n",y,"\n"} print
+   
+End

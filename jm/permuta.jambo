@@ -1,0 +1,64 @@
+
+#include <jambo.h>
+//#define NL  "\n"
+Main
+  Set break
+  //total permutaciones = 0
+  leng=0
+  Void(lista)
+//  Set("la realidad","escapa","a los sentidos"), Apnd list(lista)
+  Set("nuestro cerebro","es dado","a realizar","permutaciones"), Apnd list 'lista'
+
+  Length 'lista', Move to 'leng' //, Get factorial, Move to(total permutaciones)
+  Toksep(" ")
+  Printnl( lista )
+  Set( 1) Gosub(Permutar)
+  //Printnl("\nNuestro cerebro es dado a realizar permutaciones...")
+End-Return
+
+Subrutines
+
+Define( Permutar, pos )
+    If ( Sub(leng, pos) Isgeq(1) )
+       i=pos
+       Loop if( Less( i, leng ) )
+          Plusone(pos), Gosub(Permutar)
+          Set( pos ),   Gosub(Rotate)
+          Printnl( lista )
+          ++i
+       Back
+/*    for (i=pos; i<leng-1; i++) {
+      Permute(pos+1)
+      Rotate(pos)
+      for (j=0; j<=leng-1; j++) {
+        printf("%s",arr[j])
+      }
+      printf(sep)
+    } */
+      Plusone(pos), Gosub(Permutar)
+      Set( pos ),   Gosub(Rotate)
+   End If
+Return
+
+Define ( Rotate, pos )
+/*    c=0, [pos] Get(lista), Move to(c)
+    [ Plusone(pos): leng ] Cget(lista)
+    [ pos: Minusone(leng) ] Cput(lista)
+    Set(c), [ leng ] Cput(lista) */
+    aLrot(pos,leng,lista)
+
+/*    i=pos
+    Loop
+       [Plusone(i)] Get(lista), [i] Cput(lista)
+       ++i
+    Back if( Less (i, leng) ) is true
+    Set(c), [ leng ] Cput(lista)
+  */  
+
+/*    c = arr[pos]
+    for (i=pos; i<leng-1; i++) {
+      arr[i] = arr[i+1]
+    }
+    arr[leng-1] = c */
+Return
+

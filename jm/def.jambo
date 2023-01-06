@@ -1,0 +1,36 @@
+
+#include <jambo.h>
+
+#define T 5
+#define imprime  print
+Main
+   Dim '10' as zeros 'x'
+   
+   #( x[T] = M_PI+ 10 )
+   x, Prnl
+   "Resultado: "
+   0.2459,
+   Plus(-89.678)
+   /*Add it,*/ Prnl
+   
+   "hola mundo", Do upper, Prnl
+   i=1,f=0
+   #hl{ x[T] = M_PI+ 10 
+        while (i<=10)
+           if ( i!=T )
+              x[i] += f:=(M_PI + i)
+           end if
+           print(f,", ")
+           i=i+1
+        wend
+        //imprime ((x - 125),"\n")
+        print (x,"\n")
+        x-125   // queda en memoria
+      }
+      Move to 'x'
+   Printnl 'x'
+   amanda="morena"
+   Amanda="rubia"
+   Printnl (Amanda,"; ",amanda)
+   "Chao mundo",x, // solo imprime el array si se ejecuta con opción "-d".
+End

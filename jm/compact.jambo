@@ -1,0 +1,12 @@
+
+#include <jambo.h>
+
+Main
+   v={}
+   Set '1,0,0,2,3,-1,0,5' Append to list 'v'
+   Printnl(v)
+   Compact 'v', Prnl
+   x=0,
+   Compact into 'v,v'
+   Printnl 'v'
+End

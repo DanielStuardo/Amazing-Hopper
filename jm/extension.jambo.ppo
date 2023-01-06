@@ -1,0 +1,44 @@
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+main:
+true(v);,false(w);,false(x);
+,{0},option1=0;{v};cpy(option1);xor;option2=0;{w};cpy(option2);xor;option3=0;{x};cpy(option3);xor;;jnt(____CODE_JUMP____539231094)
+{" Sólo una es verdadera "};;{"\n"}print;
+jmp(____CODE_JUMP____390211527),____CODE_JUMP____539231094:,true,jnt(____CODE_JUMP____71444195),
+{"Hay más de una verdadera"};;{"\n"}print;
+____CODE_JUMP____390211527:,____CODE_JUMP____71444195:,
+
+,{0},option1=0;{v};cpy(option1);or;option2=0;{w};cpy(option2);or;option3=0;{x};cpy(option3);or;;jnt(____CODE_JUMP____583008357)
+{"Hay algunas verdaderas"};;{"\n"}print;
+jmp(____CODE_JUMP____194576597),____CODE_JUMP____583008357:,true,jnt(____CODE_JUMP____946242458),
+{"Todas son falsas"};;{"\n"}print;
+____CODE_JUMP____194576597:,____CODE_JUMP____946242458:,
+
+,{0},option1=0;{v};cpy(option1);and;option2=0;{w};cpy(option2);and;option3=0;{x};cpy(option3);and;;jnt(____CODE_JUMP____600395849)
+{"Son todas verdaderas"};;{"\n"}print;
+jmp(____CODE_JUMP____557997689),____CODE_JUMP____600395849:,true,jnt(____CODE_JUMP____800303028),
+{"No todas son verdaderas"};;{"\n"}print;
+____CODE_JUMP____557997689:,____CODE_JUMP____800303028:,
+
+
+,{0},option1=0;{v};cpy(option1);and;option2=0;{w};cpy(option2);and;option3=0;{x};cpy(option3);and;;not;jnt(____CODE_JUMP____580499173)
+{"Son todas falsas"};;{"\n"}print;
+jmp(____CODE_JUMP____982970471),____CODE_JUMP____580499173:,true,jnt(____CODE_JUMP____802350901),
+{"Algunas son verdaderas"};;{"\n"}print;
+____CODE_JUMP____982970471:,____CODE_JUMP____802350901:,
+{"opcion NAND : "};{0};{0};nand;;{", "};{0};{1};nand;;{", "};{1};{0};nand;;{", "};{1};{1};nand;;;{"\n"}print;
+emptystack?do{{0}};return
+

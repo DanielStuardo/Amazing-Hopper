@@ -1,0 +1,12 @@
+
+#include <jambo.h>
+
+Main
+   w={}
+   Dim '5' as ceil rand '10,x'
+   Set '-1,-2,-3' Append to list 'w'
+   Set '100,x,200' Append to list 'w'
+   Set 'x' Append to list 'w'
+   Printnl 'w'
+   
+End

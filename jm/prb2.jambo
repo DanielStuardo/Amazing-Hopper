@@ -1,0 +1,43 @@
+
+#include <jambo.h>
+
+#define TOPE 1000000
+Main
+   Set break
+  // Dim (TOPE) as ceil rand '10,x'
+  // Dim (TOPE) as ceil rand '10,y'
+   x=-1,{TOPE} randarray(x), mulby '10', ceil, mov'x'
+   y=-1,{TOPE} randarray(y), mulby '10', ceil, mov'y'
+
+   Printnl("X[1]=\n",[1] Get(x),"\nY[1]=\n",Get(y))
+
+   t1=0, t2=0, r=0
+   Tic (t1)
+      Mul(Add(x,y),x), Move to 'r'
+   Toc(t1,t2)
+   Printnl("\nTime = ", t2, " R=", [1] Sget 'r')
+
+Clear 'r'
+
+   i=TOPE  
+   Tic(t1)
+   Loop
+      [i] Get 'x', Plus( Get 'y' ), /*, Add it*/, Move to 'r'
+      --i
+   Back if (i) is not zero //less-equal (i, TOPE)
+   Toc(t1,t2)
+   Printnl("\nTime = ", t2, " R=", r, " I=",i)
+   
+      
+   i=TOPE
+   Tic(t1)
+   Loop
+      [i] Sget 'x', Plus(Sget 'y') /*, Add it*/, Move to 'r'
+      --i
+   Back if (i) is not zero //less-equal (i, TOPE)
+   Toc(t1,t2)
+   Printnl("\nTime = ", t2, " R=", r, " I=",i)
+
+
+   
+End

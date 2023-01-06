@@ -1,0 +1,38 @@
+
+#include <jambo.h>
+
+
+Main
+   Set stack 16
+   x={}
+   Set '10,0,-1,7,-5,0,0,200,-120,90', Append to list 'x'
+
+   s={}
+   Set '"hola","","mundo","","",100,"pelao",200', Append to list 's'
+   
+   Printnl ("POSITIVOS: ", Get positives from(x) /*{x} get positive '-1'*/ )
+   Printnl ("NEGATIVOS: ", Get negatives from 'x' )//{x} get negative '-1' )
+   Printnl ("NO ZEROS : ", Get non zeroes from 'x' ) //{x} get non zero '-1' )
+   Printnl ("NO VOIDS : ", Get non void from 's' ) //{s} get non void '-1' )
+   n=0,[2] Move negatives from (x) Into (n)  //{x} get negative 'n'
+   Printnl ("SEGUNDO NEGATIVO: ", n)
+   
+   Clear 'x, s'
+   x={}
+   Set '10,0,-1,7,-5,0,0,200,-120,90', Append row to  'x'
+   Set '0,0,-10,9,-5,0,0,0,120,-90',   Append row to 'x'
+
+   s={}
+   Set '"hola","","mundo","","",100,"pelao",200', Append row to 's'
+   Set '"locura","de",0,"","los",100,30,"pueblos"', Append row to 's'
+   
+   Printnl ("\n\nPOSITIVOS: ", {x} get positive '-1' )
+   Printnl ("NEGATIVOS: ", {x} get negative '-1' )
+   Printnl ("NO ZEROS : ", {x} get non zero '-1' )
+   Printnl ("NO VOIDS : ", {s} get non void '-1' )
+   n=0,[1:4] {s} get non void 'n'
+   Printnl ("PRIMEROS 4 NO VOID : ", n)
+   m=0,[3] {x} get negative 'm'
+   Printnl ("TERCER NEGATIVO: ", m)
+   
+End

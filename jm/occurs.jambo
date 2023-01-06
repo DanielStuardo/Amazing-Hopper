@@ -1,0 +1,29 @@
+
+#include <jambo.h>
+
+Main
+   Printnl ( "--> ", var ("hola") Occurs in ("Hola mundo!"))
+   Printnl ( "--> ", var ("hola") Occurs exactly in ("Hola mundo!"))
+   Printnl ( "--> ", var ("Hola") Occurs exactly in ("Hola mundo!"))
+   
+   x=100
+   Printnl ( "X = ", x, ", -X = ", Neg ( #(x + 1) ) )
+   
+   If ( Not negative ( x) )
+       Printnl ("Es positivo o cero : ", x )
+   End If
+   x = 0
+   If ( Not negative (x) )
+       Printnl ("Es positivo o cero : ", x )
+   End If
+   
+   i=10
+   Loop
+      Printnl(" I = ", i )
+      --i
+   Back if ( i ) is not negative
+   
+   Init zero 'a,b,c,d'
+   Copy (10) Into (a,b,c,d)
+   Printnl (a,", ",b,", ",c,", ",d)
+End

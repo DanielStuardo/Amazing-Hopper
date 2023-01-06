@@ -1,0 +1,91 @@
+
+
+
+main:
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+{1}{0}{10};add;{40};add;mul;{5};mul;{10};mul;{15};mul;{20};mul;{"\n"}print
+
+{1}{0}{10};add;{40};add;mul;{5};mul;{"\n"}print
+;{0}{10};add;{40};add;mulby(2),{"\n"}print
+{5};{100};add;{"\n"}print
+{5};{100};mul;{"\n"}print
+{5};{0}{100};add;{20};add;mul;{"\n"}print
+{"Resultado: "};{1000};{20};div;{5};div;print;{"\n"}print
+{10};powby(2);{5};powby(2);{3};powby(2);sumall;{"\n"}print
+
+x=0
+;{100};{5};div;{0}{5};add;{5};mulby(2);add;sumall;
+mov(x);;{"X="};{x};{"\n"}print;
+
+resultado=0
+{0}{10};add;{10};add;{10};add;{2};powby(2);mul;mov(resultado);
+{"Resultado = "};{resultado};{"\n"}print;
+
+{"Resultado 2 = "};print;'5';{100};mul;{"\n"}print
+'"Este es un mensaje directo a PUSH...",100',{"\n"}print
+
+Cálculosgenerales:
+
+{100};{5};div;{0}{5};powby(2);{6};powby(2);{7};powby(2);add;{100};add;sumall;{"\n"}print
+
+
+{100};{5};div;{0}{0}{5};powby(2);add;{6};powby(2);add;{7};powby(2);add;add;{100};add;sumall;{"\n"}print
+
+{0}{0};{5};mulby(2);powby(2);add;{6};powby(2);add;{7};powby(2);add;add;{100};add;{",\n "};{"\033"}{100};powby(2);{300};powby(2);{1000};powby(2);mklist;{"\n"}print;
+
+{"Pitágoras: "};{0}{3};powby(2);add;{4};powby(2);add;sqrt;{"\n"}print;
+
+hipotenusa=0,doble=0
+;{0}{3};powby(2);add;{4};powby(2);add;sqrt;{0}{25};add;(25);{25};add;add;mulby(2);mov(doble);mov(hipotenusa);
+
+{"Pitagoras = "};{hipotenusa};{"\nDoble = "};{doble};{"\n"}print;
+doble*=100
+{"doble x 100 = "};{doble};{" hipotenusa = "};{hipotenusa};{"\n"}print;
+doble<-> hipotenusa
+{"doble       = "};{doble};{" hipotenusa = "};{hipotenusa};{"\n"}print;
+
+{"Son iguales : "};{10};{10};eq?;{10};eq?;{10};eq?;{10};eq?;{10};eq?;{"\n"}print;
+
+emptystack?do{{0}};return
+
+
+
+

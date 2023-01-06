@@ -1,0 +1,16 @@
+
+#include <jambo.h>
+
+Main
+   s="Este mensaje es un mensaje muy mensajeado"
+   c=0
+   Count at (0, "mensaje", s), Prnl
+   Find("mensaje", s) , Prnl   /* left at*/
+   Last find("mensaje", s), Prnl /* right at*/
+   At find(2,"mensaje",s) ---Backup to 'c', Prnl  /* qué match considera: el segundo */
+   /* word(p,s) | get word--> devuelve la palabra compuesta por letras, números, "'", "." y "_", 
+      ubicada en la posición "p" de "s" */
+   
+   Strreplace (7,c,"grupo",s), Prnl /*"Este mensaje es un grupo muy mensajeado"*/
+   
+End

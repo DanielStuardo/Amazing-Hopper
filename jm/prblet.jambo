@@ -1,0 +1,55 @@
+
+#include <jambo.h>
+
+#define TOPE 1000000
+Main
+   x=-1,{TOPE} randarray(x), mulby '10', ceil, mov'x'
+   y=0
+   t1=0, t2=0
+   Tic (t1)
+   [5] y = x
+   Toc(t1,t2)
+   Printnl("\nTime = ", t2)
+   Printnl("\nY= ",y, "\nTipo Y= ",Type(y))
+   //Printnl("PRB1 X= ",x,"\nY= ",y, "\nTipo Y= ",Type(y))
+   Clear 'y'
+   
+   Tic (t1)
+   [20000:600000] y = x
+   Toc(t1,t2)
+   Clr all marks
+   Printnl("\nTime = ", t2)
+   Printnl("LEN Y = ", Length(y))
+   Printnl("Y[1] = ", [2:5] Get 'y'," X[20000] = ",[20001:20004] Get 'x')
+   Printnl("Tipo Y[5] = ", Type([5] Get 'y'))
+   //Printnl("PRB2 X= ",x,"\nY= ",y, "\nTipo Y= ",Type(y))
+
+   Clear 'y', Clear 'x'
+   Clr all marks
+   y=0
+   x=-1,{10,10} randarray(x), mulby '10', ceil, mov'x'
+   Printnl("X=\n",x)
+   
+   [2,3:7] y = x
+   Printnl("\nY=",y)
+
+   Clr all marks
+   Clear 'y'
+   [2:6,7] y = x
+   Printnl("\nY=",y)
+
+   Clr all marks
+   Clear 'y'
+   [2:6,3:7] y = x
+   Printnl("\nY=",y)
+
+   Clr all marks
+   Clear 'y'
+   [2:6,1:2:Rows(x)] y = x
+   Printnl("\nY=",y)
+
+   Clr all marks
+   Clear 'y'
+   [2:3:Rows(x),1:2:Cols(x)] y = x
+   Printnl("\nY=",y)   
+End

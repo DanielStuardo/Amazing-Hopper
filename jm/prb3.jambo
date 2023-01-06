@@ -1,0 +1,26 @@
+
+#include <jambo.h>
+
+#define TOPE 1000000
+Main
+   t1=0, t2=0,m=0,c=0
+   i=1
+   //Set decimal '2' 
+   Tic(t1)
+   Loop
+      Let ( m := Add(i,1) Mul by '10' ---Backup to 'c'--- Div into '5' )
+      //#hl( m = c:=( ((i+1)*10) )/5 )
+      ++i   
+   Back if less-equal (i,TOPE)
+   Toc(t1,t2)
+   //Unset decimal
+   
+   Printnl("\nTime = ", t2),---Set decimal '0'---,Printnl( " RES=",m, " C=",c)
+End
+/*
+  Para el tope de 1000000, sin set decimal demora 0.4 seg.
+  con set decimal demora 6.6 seg.
+  El ajuste de decimales es demoroso.
+  Con HL se demora 0.5 aprox.
+  PROBLEMA: CON hl EL RESULTADO NO SE COPIA CORRECTAMENTE A "C". ¿:= MALO?
+*/

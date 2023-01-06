@@ -1,0 +1,75 @@
+#!/usr/bin/hopper3
+
+#include <jambo.h>
+
+Main
+Set break
+
+ancho=300
+alto=300
+min real=-2
+max real = 0.47 //2
+
+//minReal=minreal
+min complex= -1.12 //-2
+max complex = 1.12 //2
+submaxRminR=0, submaxCminC=0
+'max real' Minus 'min real', Move to (submaxRminR)
+'maxcomplex', Minus 'mincomplex', Move to (submaxCminC)
+
+mandel=0
+Dim 'ancho,alto' as zeros 'mandel'
+
+i=1,a2=0,b2=0,a=0,b=0,t1=0,t2=0,ta=0
+Tok sep (",")
+Tic(t1)
+
+//v=0 //, Let( v := Utf8(Chr(219)))
+//Locate (1,1)
+//i=1
+Loop for (i=1, Less equal(i, ancho),++i)
+//Loop if ( Less equal(i, ancho) )
+
+   Add(min real, Div ( Mul( submaxRminR, Minus one(i)), Minus one(ancho) )), Move to (ta)  
+
+   Loop for (j=1, Less equal (j, alto),++j)
+   //j=1
+   //Loop if (Less equal (j, alto))
+      
+       Add( min complex, Div ( Mul (submaxCminC, Minus one(j)), Minus one(alto))), Move to (b)   
+       a=ta,a2=a,b2=b ,brillo=22
+   
+       k=100
+       Loop
+            Add(Sqrdiff(a,b), a2), 
+            Add(b2, Mul(2, Mul(a, b)))
+
+            Move to (b), Move to (a)
+
+            //Break if ( Sqradd (a,b) Is greater than (4))
+            If( Sqradd (a,b) Is greater than (4)) 
+               brillo=0, Break
+            End If
+            --k
+       Back if (k) is not zero //     k--,jnz(__iterador__)
+       //Printnl("I= ",i,"  J= ",j, " K= ",k)
+       //Print if( brillo, " ", v)
+       //When( Zero(k) ) {k=1}
+       When( brillo ) {[j,i] {k}, Sput(mandel)}
+       //[j,i] {brillo}, Put(mandel)
+       //Clr all marks
+       //++j
+   Back
+   
+//   Prnl
+   //++i
+Back
+
+Toc(t1,t2)
+Clr all marks
+Locate (1,1)
+Draw table 'mandel'
+Pause
+///{"TIME = ",t2,"\n"}print
+///{mandel,"mandel7.dat"}save
+End

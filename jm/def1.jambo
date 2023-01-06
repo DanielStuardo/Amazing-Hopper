@@ -1,0 +1,87 @@
+
+#include <jambo.h>
+
+Main
+   
+   #defn  equal(_X_)        _X_;eq? _X_;
+   #synon equal             .==.
+   #defn  andequal(_X_)     _X_;eq? and; _X_;
+   #defn  finallyequal(_X_) _X_;eq? and;
+
+   #defn  distinct(_X_)        _X_;neq? _X_;
+   #synon distinct             .<>.
+   #defn  anddistinct(_X_)     _X_;neq? and; _X_;
+   #defn  finallydistinct(_X_) _X_;neq? and;
+   #synon finallydistinct      finally.<>.
+
+   #defn  great(_X_)        _X_;gt? _X_;
+   #defn  andgreat(_X_)     _X_;gt? and;_X_;
+   #defn  finallygreat(_X_) _X_;gt? and;
+   
+   #defn  lessequal(_X_)        _X_;le? _X_;
+   #synon lessequal             .<=.
+   #defn  andlessequal(_X_)     _X_;le? and; _X_;
+   #synon andlessequal          and.<=.
+   #defn  finallylessequal(_X_) _X_;le? and;
+
+   #defn  less(_X_)         _X_;lt? _X_;
+   #synon less              .<.
+   #defn  andless(_X_)      _X_;lt? and; _X_;
+   #synon andless           and.<.
+   #defn  finallyless(_X_)  _X_;lt? and;
+   
+   #defn  greatequal(_X_)        _X_;ge? _X_;
+   #defn  andgreatequal(_X_)     _X_;ge? and;_X_;
+   #defn  finallygreatequal(_X_) _X_;ge? and;
+   
+   #defn  add(_X_)         _X_;add;
+   #synon add              .+.
+   #defn  mul(_X_)         _X_;mul;
+   #synon mul              .*.
+   #defn  pow(_X_)         _X_;pow;
+   #synon pow              .^.
+   #define getsqr          powby(2)
+   #defn  move(_X_)          mov(_X_)
+   #synon move             .->.
+   
+   #defn    elseif(__X__)           jmp(%%CODEIF), %ENDIF:, #ATOM#CMPLX, jnt(#ENDIF),
+   #defn    if(__X__)            ##CODEIF, #ATOM#CMPLX, jnt(#ENDIF),
+   #defn    else                 jmp(%%CODEIF), %ENDIF:, true,jnt(#ENDIF),
+   #defn    endif                   %CODEIF:, %ENDIF:,   
+   
+   x=4, y=5, z=10
+   if ( '2' .<. 'x' and .<. '#(y+1)' finally .<>. 'z' )
+      "Se cumple todo\n"
+      '10' .+. ( '10'.*.'10' ), .^. '2'
+     /* d=0
+      10, 10,10,mul,add,get sqr .->. 'd' 
+      'd'*/ 
+   else
+      "No se cumple algo\n"
+   end if
+   Prnl
+End
+/*Add(y,1)
+   '4' equal 'x'       and equal 'y',   finally less 'z'
+  |'4' 'x' eq? 'x' | 'y' eq? and; 'y' |   'z' lt? and;
+          1         1                   
+                              1         0
+                                                   0
+
+  if ( 'x' .==. 'y',
+        ....) 
+  else if ( .... )
+  else (
+      ....
+  )  
+
+  [0:100] .->. 'x'
+  [0:100] .=>. 'x,y,x'
+  x, {1,n}fn(x), x, pow, add, => 'x,y,z'
+  x .+.( {1,n}fn(x) .^. 'x') => 'a,b,c'
+  ...
+  E (x,y) tq( 'x' .<=. '10' & ('y' .==. '0'))
+Defn (x, v,w)
+   
+Ret
+*/                                                 

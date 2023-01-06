@@ -1,0 +1,29 @@
+
+#include <jambo.h>
+
+Main
+   Dim '10' as ceil rand '12,x'
+   
+   Month name 'x', Prnl
+   
+   Dim '5,3' as ceil rand '12,y'
+
+   Month name 'y', Prnl
+   
+   Dim '3,3,3' as ceil rand '12,z'
+   Month name 'z', Prnl
+   
+   Clear 'x,y,z'
+   
+   Dim '10' as ceil rand '7,x'
+   
+   Day name 'x', Prnl
+   
+   Dim '5,3' as ceil rand '7,y'
+
+   Day name 'y', Prnl
+   
+   Dim '3,3,3' as ceil rand '8,z'
+   Day name 'z', Prnl
+
+End

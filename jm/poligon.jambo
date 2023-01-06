@@ -1,0 +1,19 @@
+#include <jambo.h>
+
+
+Main
+   Cls
+   Color back (13)
+   
+   vertices={}
+   Set ' 10,10 ' Apnd row (vertices)
+   Set ' 25,24 ' Apnd row (vertices)
+   Set ' 15,50 ' Apnd row (vertices)
+   Set ' 5,30 ' Apnd row (vertices)
+   Set ' 8,15 ' Apnd row (vertices)
+
+   Draw (vertices)
+   
+   Draw a poligon '70,70,8,45'
+   Pause
+End

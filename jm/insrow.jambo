@@ -1,0 +1,120 @@
+
+#include <jambo.h>
+
+Main
+   Dim '5,5' as ceil rand '10,x'
+   Printnl '"X=\n",x'
+   Set '0,-1,5,7,2,14' insrows(x)
+   Printnl '"X=\n",x'
+   
+   Dim '4,6,3' as ceil rand '10,y'
+
+   Printnl '"Y=\n",y'
+   
+   lista={} Set '3,0,9,11' Append to list 'lista'
+   Set '2,lista,1' Insert rows into 'y'
+   Printnl '"Y=\n",y'
+   
+   [1:Rows(y),1:Cols(y),Pags(y)] Of 'y', Prnl
+
+End
+
+/*
+X= 
+1,2,4,4,8
+9,10,10,9,7
+5,4,1,2,4
+2,3,9,2,1
+7,5,8,6,5
+
+X=
+1,2,4,4,8
+nan,nan,nan,nan,nan
+9,10,10,9,7
+5,4,1,2,4
+2,3,9,2,1
+nan,nan,nan,nan,nan
+7,5,8,6,5
+nan,nan,nan,nan,nan
+nan,nan,nan,nan,nan
+nan,nan,nan,nan,nan
+nan,nan,nan,nan,nan
+nan,nan,nan,nan,nan
+nan,nan,nan,nan,nan
+nan,nan,nan,nan,nan
+nan,nan,nan,nan,nan
+nan,nan,nan,nan,nan
+
+Y=
+7,8,9,2,2,9
+10,1,2,7,1,6
+8,3,7,8,4,3
+10,4,2,2,2,3
+2,10,2,10,9,3
+5,8,9,6,3,1
+9,1,2,10,9,10
+2,8,9,4,2,4
+5,2,6,4,2,6
+9,8,4,9,1,10
+1,10,9,2,6,4
+2,8,10,10,9,9
+
+Y=
+nan,nan,nan,nan,nan,nan
+7,8,9,2,2,9
+nan,nan,nan,nan,nan,nan
+10,1,2,7,1,6
+nan,nan,nan,nan,nan,nan
+8,3,7,8,4,3
+10,4,2,2,2,3
+nan,nan,nan,nan,nan,nan
+nan,nan,nan,nan,nan,nan
+nan,nan,nan,nan,nan,nan
+nan,nan,nan,nan,nan,nan
+nan,nan,nan,nan,nan,nan
+nan,nan,nan,nan,nan,nan
+nan,nan,nan,nan,nan,nan
+nan,nan,nan,nan,nan,nan
+2,10,2,10,9,3
+nan,nan,nan,nan,nan,nan
+5,8,9,6,3,1
+nan,nan,nan,nan,nan,nan
+9,1,2,10,9,10
+2,8,9,4,2,4
+nan,nan,nan,nan,nan,nan
+nan,nan,nan,nan,nan,nan
+nan,nan,nan,nan,nan,nan
+nan,nan,nan,nan,nan,nan
+nan,nan,nan,nan,nan,nan
+nan,nan,nan,nan,nan,nan
+nan,nan,nan,nan,nan,nan
+nan,nan,nan,nan,nan,nan
+5,2,6,4,2,6
+nan,nan,nan,nan,nan,nan
+9,8,4,9,1,10
+nan,nan,nan,nan,nan,nan
+1,10,9,2,6,4
+2,8,10,10,9,9
+nan,nan,nan,nan,nan,nan
+nan,nan,nan,nan,nan,nan
+nan,nan,nan,nan,nan,nan
+nan,nan,nan,nan,nan,nan
+nan,nan,nan,nan,nan,nan
+nan,nan,nan,nan,nan,nan
+nan,nan,nan,nan,nan,nan
+
+nan,nan,nan,nan,nan,nan
+5,2,6,4,2,6
+nan,nan,nan,nan,nan,nan
+9,8,4,9,1,10
+nan,nan,nan,nan,nan,nan
+1,10,9,2,6,4
+2,8,10,10,9,9
+nan,nan,nan,nan,nan,nan
+nan,nan,nan,nan,nan,nan
+nan,nan,nan,nan,nan,nan
+nan,nan,nan,nan,nan,nan
+nan,nan,nan,nan,nan,nan
+nan,nan,nan,nan,nan,nan
+nan,nan,nan,nan,nan,nan
+*/

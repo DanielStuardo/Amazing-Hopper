@@ -1,0 +1,13 @@
+
+#include <jambo.h>
+
+Main
+   h={}, i=0, Dim '5' as ceil rand '10,i'
+   
+   Set '-1,-2,-3,-4,-5,-6' Append row to 'h'
+   Set '100,i' Append row to 'h'
+   Set '900' Append to list 'i'
+   
+   Set 'i' Append row to 'h'
+   Printnl 'h'
+End

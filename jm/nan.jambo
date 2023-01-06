@@ -1,0 +1,7 @@
+
+#include <jambo.h>
+
+Main
+   Dim '10,10' as nan 'x'
+   Printnl(x)
+End

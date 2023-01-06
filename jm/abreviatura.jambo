@@ -1,0 +1,41 @@
+#include <jambo.h>
+
+
+
+#define MAX_LINE   150
+Main
+   Break on
+   days of week = 0, fd=0, length=0, days=0, group=0, temp=0, ltemp=0
+   
+   Open in("dias_de_la_semana.txt")( fd )
+   If ( Not( File error ) )
+      ///[1:end]
+      
+      Loop if (Not (Eof(fd)) ) 
+         Using( MAX_LINE ), Split( Readlin(fd) » (days), days of week, " ")
+         //Let( length := Length( days of week ) )
+
+         Continue if( Zero( Length( days of week ) » (length) ))
+         i=1
+         Loop
+            //Let( temp := Mid( i, 1, days of week ))
+            Let( temp := Ucase( Left( i, days of week ) ---Backup to (group)--- ) )
+            aSort(temp)  //, Let( ltemp := Length(Unique(temp)) )
+
+            Break if (Eq(Length(Unique(temp)), length ))
+            //If( Eq(Length(Unique(temp)), length ) )
+            //   Break
+            //End If
+            ++i
+         Back
+        // i=length
+        // Iterator(--i,Not(Zero(i)), w=0, Let(w:=[i]Get(group)), \
+        //                                 Sel( Gt(Asc( [Len(w)]Get(w) ), 122 ), Cat(w, )
+                                               
+         Printnl( Cpad(" ",3,Str(i))," : ", Utf8(Ansi(days)),"\n\t",group )
+      Back
+      Close(fd)
+   Else
+      Printnl("Error en archivo: ", ~Get str file error)
+   End If
+End

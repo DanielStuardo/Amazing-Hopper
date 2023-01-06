@@ -1,0 +1,16 @@
+
+#include <jambo.h>
+
+Main
+  Break on
+  high=6, low=2
+  Dim(25) as int limited rand (0,2,v)
+  Printnl(v)
+//  i=100
+//  Loop
+//     Rand(1000000) Module( Sub(high, low)) Plus( low ), Get int, Retain
+//     Sel on( Iseq(5),"X" ), Print(",")
+//  --i
+
+//  Back if (i) is not zero
+End

@@ -1,0 +1,80 @@
+
+#include <jambo.h>
+
+Main
+   Init zero 'T,flag,i, matches, Res,e,desde,hasta,r,número,nuevo número'
+
+//   r="\+56\s[0-9]\s[0-9]{4}\s[0-9]{4}"
+//   r="\+(56|49)\s[0-9]\s[0-9]{4}\s[0-9]{4}"
+   r="\+(56|49)\s[0-9](\s[0-9]{4}){2}"
+//   r="\+[1-9]{2,3}\s[0-9](\s[0-9]{3,4}){2}"
+
+   text="Carlos\n+56 2 3899 7269\nPedro\n+49 2 2908 7712\nLuisa\n+56 2 2997 5670\nMaria\n+47 3 288 908"
+   Printnl(text)
+   
+   flag = REG_EXTENDED  //BASIC
+
+   
+   CRegex(flag,r,T)
+   Let( matches := MRegex(0,1,text,T) ) 
+   FreeRE(T)
+   Try
+      Let( Res := Rows(matches) )
+   Catch(e)
+      Res=0
+      Printnl("No matching!")
+   Finish
+   Prnl
+   Printnl 'matches'
+   Printnl("Tipo matches=",Type(matches))
+
+ /* no necesito definir esto en JAMBO.H, porque está DUMPARRAY */
+  #defn Copyrow(_M_,_R_,*)   #GENCODE $$$*$$$ [_R_,#REVITV]get(_M_) mov(#REVLIST);#ENDGEN,
+  #defn Copycol(_M_,_C_,*)   #GENCODE $$$*$$$ [#REVITV,_C_]get(_M_) mov(#REVLIST);#ENDGEN,
+ // #defn Getof(_M_,_R_)   #GENCODE $$$*$$$ [_R_,#REVITV]get(_M_) mov(#REVLIST);#ENDGEN,
+   If ( Res /*Array 'matches'*/ )
+      Loop for( i=Res, i, --i)
+       /* esto sirve */
+         /*#hl{ nuevonúmero = deletechar("+ ",matches[i,3])
+              desde = matches[i,1]
+              hasta = matches[i,2]
+              text = replace( (hasta-desde+1), desde, nuevonúmero, text)
+            }*/
+       /* esto sirve */
+        /*  #hl{ 
+              text = replace( (matches[i,2]-matches[i,1]+1), matches[i,1], deletechar("+ ",matches[i,3]), text)
+            }*/
+       /* funciona: */
+       //  Dump ( [i,1:_end_] Get 'matches' ) Move to 'desde, hasta, número'
+
+       /* funciona: */
+         Dump ( #(matches[i,1:_end_]) ) Move to 'desde, hasta, número'
+       
+       /* funciona, pero es incorrecto: copiará solo el primer elemento: */  
+       /*  #( desde = hasta = número = dumparray(matches[i, 1:_end_]) )
+         Printnl ("desde = ",desde," Hasta = ", hasta, " Número = ", número ) 
+         */
+         
+         Let ( nuevo número := Chardel("+ ", número ))
+         Let ( text := Str replace ( #(hasta-desde+1), desde, nuevo número, text) )
+/* esto sirve. */            
+/*           Let ( número := #( matches[i,3]) ) 
+           Let ( desde := #( matches[i,1]) ) 
+           Let ( hasta := #( matches[i,2]) )
+           Let ( nuevo número := Chardel("+ ", número ))
+  */         
+/* esto sirve. */
+//         Copy row (matches,i, desde, hasta, número)
+//         Let ( nuevo número := Chardel("+ ", número/*[i,3] Of 'matches'*/ ))
+/* esto sirve. */
+         /*Let ( desde:=[i,1] Of 'matches' )
+         Let ( hasta:=[i,2] Of 'matches' )*/
+//           Let ( text := Str replace ( #(hasta-desde+1), desde, nuevo número, text) )
+      Back
+      "\n",text,
+   Else
+      "No encuentra concordancia"
+   End If
+   Prnl
+End
+

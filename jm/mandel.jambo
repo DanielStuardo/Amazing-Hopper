@@ -1,0 +1,87 @@
+
+// [[File:Captura de pantalla de 2022-10-28 15-37-55.png|200px|thumb|left|Caption]]
+
+//[[File:Captura de pantalla de 2022-10-28 15-37-55.png]]
+
+// rxvt -g 500x250 -fn "xft:FantasqueSansMono-Regular:pixelsize=1" -e hopper3 jm/mandel.jambo
+
+#include <jambo.h>
+
+Main
+//Set break
+
+Initialize '300, ancho, alto'
+//alto=300
+
+Set '-2,0.47,-1.12,1.12' Init 'min real, max real, min complex, max complex'
+/*min real=-2
+max real = 0.47
+
+min complex= -1.12 
+max complex = 1.12 */
+Init zero 'submaxRminR, submaxCminC'
+//submaxRminR=0, submaxCminC=0
+Let ( submaxRminR := 'max real' Minus 'min real') //, Move to (submaxRminR)
+Let ( submaxCminC := 'maxcomplex' Minus 'mincomplex' ) //, Move to (submaxCminC)
+
+Init zero 'a2,b2,a,b,t1,t2,ta'
+
+Dim '300' as zeros 'v'
+tabla={}
+Locate(1,1)
+Loop for (i=1, Less equal(i, ancho),++i)
+   //Locate(i,1)
+   Let ( ta := Add(min real, Div ( Mul( submaxRminR, Minus one(i)), Minus one(ancho) )) )//, Move to (ta)  
+   h=300 /*150*/, j=1 //, nLoop=150
+   Loop times (150)
+   //Loop for (j=1, Less equal (j, 150),++j)
+
+       Let ( b := Add( min complex, Div ( Mul (submaxCminC, Minus one(j)), Minus one(alto))) )//, Move to (b)   
+       
+       a=ta, a2=a, b2=b
+   
+       k=1000, color=256
+       Loop if ( Sqradd (a,b) Is less than (4) ---not true exit---, 'k') //And (k) )
+            Add(Sqrdiff(a,b), a2), 
+            Add(b2, Mul(2, Mul(a, b)))
+
+            Move to 'a,b' //, Move to (a)
+
+            --color
+            --k
+       Back
+       //Color back (color), Puts(" ") //Print(" ")
+       Set 'color', Hold, [j] Put cell 'v' //, --h
+                          [h] Put cell 'v', --h
+       //Break if ( Equals(j,150) ) 
+   //Back
+       ++j //, --nLoop
+   //Back if 'nLoop' is positive
+   Back if not over
+   /*Loccol (151),*/ //Locrow(i), Draw table 'v'
+   Set 'v', Append row to 'tabla'
+//   Prnl
+Back
+Clr all marks
+Draw table 'tabla'
+//Flush_inp
+
+Pause
+
+End
+/*
+for each pixel (Px, Py) on the screen do
+    x0 := scaled x coordinate of pixel (scaled to lie in the Mandelbrot X scale (-2.00, 0.47))
+    y0 := scaled y coordinate of pixel (scaled to lie in the Mandelbrot Y scale (-1.12, 1.12))
+    x := 0.0
+    y := 0.0
+    iteration := 0
+    max_iteration := 1000
+    while (x*x + y*y ≤ 2*2 AND iteration < max_iteration) do
+        xtemp := x*x - y*y + x0
+        y := 2*x*y + y0
+        x := xtemp
+        iteration := iteration + 1
+    
+    color := palette[iteration]
+    plot(Px, Py, color) */

@@ -1,0 +1,16 @@
+
+#include <jambo.h>
+
+
+
+Main
+   Color back (13)
+   Draw a circle '10,10,7'
+   Color back (45)
+   Draw a circle '100,155,70'
+   
+   Color back (124)
+   Draw a line '100,155,10,10' //' 10,10,100,155'
+
+   Pause
+End

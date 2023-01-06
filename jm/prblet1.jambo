@@ -1,0 +1,17 @@
+
+#include <jambo.h>
+
+#define TOPE 5
+Main
+   Dim (10) as zeros 'x'
+   Dim (5,5) as zeros 'y'
+   Dim (3,3,3) as zeros 'z'
+   
+   x=1
+   Printnl("X=\n",x)
+   y=1
+   Printnl("Y=\n",y)
+   z=1
+   Printnl("Z=\n",z)
+
+End

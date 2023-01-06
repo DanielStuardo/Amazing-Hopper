@@ -1,0 +1,28 @@
+
+#include <jambo.h>
+
+#define TOPE  100000
+Main
+   t1=0, t2=0
+   Dim '10,10' as ceil rand '10,x'
+   Dim '10,10' as ceil rand '10,y'
+
+   "X=\n",x,"\nY=\n",y, Prnl
+
+   z=0
+   Tic(t1)
+   Loop times(TOPE)
+      Mul-into(Sqr(x),Sqr(y), z)
+   Back if not over
+   Toc(t1,t2)
+   Printnl("Time = ", t2)
+   z, Prnl
+   
+   Tic(t1)
+   Loop times(TOPE)
+      Mul(Sqr(x),Sqr(y)) Move to (z)
+   Back if not over
+   Toc(t1,t2)
+   Printnl("Time = ", t2)
+
+End

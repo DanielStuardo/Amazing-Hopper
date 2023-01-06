@@ -1,0 +1,82 @@
+
+#include <jambo.h>
+
+/*
+  OPTIMLOG no sirve, es más lento!!!
+  Se ha quitado del código del compilador
+
+*/
+
+Main
+   Init zero 't1,t2'
+
+   Tic(t1)
+   Loop for ( i=1000000; j=0, #( ispos(i) && j<100000000 ), ++j;--i )
+      ;
+   Next
+   Toc(t1,t2), Printnl("I=",i," J=",j,"\nTIME = ",t2)
+
+   Tic(t1)
+   Loop for ( i=1000000; j=0, var'i' ---not positive exit--- Less(j, 100000000 ), ++j;--i )
+      ;
+   Next
+   Toc(t1,t2), Printnl("I=",i," J=",j,"\nTIME = ",t2)
+
+   Tic(t1)
+   Loop for ( i=1000000; j=0, var'i' ---not positive exit--- Sub(100000000,j ), ++j;--i )
+      ;
+   Next
+   Toc(t1,t2), Printnl("I=",i," J=",j,"\nTIME = ",t2)
+   
+   Tic(t1)
+   Loop for ( i=1000000; j=0, var (i) And( Sub(100000000,j )), ++j;--i )
+      ;
+   Next
+   Toc(t1,t2), Printnl("I=",i," J=",j,"\nTIME = ",t2)
+   
+   Tic(t1)
+   Loop for ( i=1000000; j=0, Positive (i) And( Less(j, 100000000 )), ++j;--i )
+      ;
+   Next
+   Toc(t1,t2), Printnl("I=",i," J=",j,"\nTIME = ",t2)
+   
+   Tran("def","DEF",Utf8("Cuando más definimos algo, más lejos estamos de la definición original")), Prnl
+   
+End
+
+/*
+I=0 J=1000000
+TIME = 0.533813
+I=0 J=1000000
+TIME = 0.35757
+I=0 J=1000000
+TIME = 0.403589
+I=0 J=1000000
+TIME = 0.429599
+I=0 J=1000000
+TIME = 0.466435
+
+despues de quitar evaluacion POSFIX de "computo"
+I=0 J=1000000
+TIME = 0.538573
+I=0 J=1000000
+TIME = 0.353451
+I=0 J=1000000
+TIME = 0.36504
+I=0 J=1000000
+TIME = 0.414479
+I=0 J=1000000
+TIME = 0.472401
+
+despues de quitar evaluacion posfix de "logical_compare"
+I=0 J=1000000
+TIME = 0.520851
+I=0 J=1000000
+TIME = 0.34499
+I=0 J=1000000
+TIME = 0.356952
+I=0 J=1000000
+TIME = 0.383036
+I=0 J=1000000
+TIME = 0.45397
+*/

@@ -1,0 +1,8 @@
+
+#include <jambo.h>
+
+Main
+   205,"(OCT)=", 205, Do octal, Prnl
+   205,"(BIN)=", 205, Do binary, Prnl
+   205,"(HEX)=", 205, Do hexadecimal, Prnl
+End

@@ -1,0 +1,143 @@
+
+#include <jambo.h>
+
+Main
+
+   Dim '3,6,5' as ceil rand '10,y'
+
+   Printnl '"Y=\n",y'
+   
+   //lista={} Set '0,2,4,7' Append to list 'lista'
+   //Set 'lista,1' Insert pages into 'y'
+   Set '3,4,0,9' Insert pages into 'y'
+   Printnl '"Y=\n",y'
+   
+   [1:Rows(y),1:Cols(y),3] Of 'y', Prnl,Prnl
+   [1:Rows(y),1:Cols(y),4] Of 'y', Prnl
+   
+   [2,3,9] Set '"HOLA!"' Put cell 'y'
+   [1:Rows(y),1:Cols(y),9] Of 'y', Prnl
+
+   Printnl ( Utf8("\nCuántos NAN hay aquí??:\n"),Nan 'y' ---Hold--- Get summatory )
+
+   Dim '3,6,3' as ceil rand '10,x'
+   Set '0' Insert pages into 'x'
+   Printnl '"\nX=\n",x'
+End
+
+/*
+Y= 
+1,2,1,10,8,2
+3,7,5,6,3,10
+10,9,4,6,8,3
+8,2,2,10,8,10
+3,5,1,3,7,5
+10,6,5,7,7,3
+1,4,9,4,1,8
+9,2,8,9,6,10
+9,7,7,10,3,4
+8,2,9,6,3,2
+3,1,3,10,4,7
+9,1,1,4,4,2
+9,3,9,5,4,1
+10,7,10,8,10,7
+3,6,8,6,10,10
+
+Y=
+1,2,1,10,8,2
+3,7,5,6,3,10
+10,9,4,6,8,3
+8,2,2,10,8,10
+3,5,1,3,7,5
+10,6,5,7,7,3
+nan,nan,nan,nan,nan,nan
+nan,nan,nan,nan,nan,nan
+nan,nan,nan,nan,nan,nan
+1,4,9,4,1,8
+9,2,8,9,6,10
+9,7,7,10,3,4
+nan,nan,nan,nan,nan,nan
+nan,nan,nan,nan,nan,nan
+nan,nan,nan,nan,nan,nan
+8,2,9,6,3,2
+3,1,3,10,4,7
+9,1,1,4,4,2
+9,3,9,5,4,1
+10,7,10,8,10,7
+3,6,8,6,10,10
+nan,nan,nan,nan,nan,nan
+nan,nan,nan,nan,nan,nan
+nan,nan,nan,nan,nan,nan
+nan,nan,nan,nan,nan,nan
+nan,nan,nan,nan,nan,nan
+nan,nan,nan,nan,nan,nan
+nan,nan,nan,nan,nan,nan
+nan,nan,nan,nan,nan,nan
+nan,nan,nan,nan,nan,nan
+nan,nan,nan,nan,nan,nan
+nan,nan,nan,nan,nan,nan
+nan,nan,nan,nan,nan,nan
+
+nan,nan,nan,nan,nan,nan
+nan,nan,nan,nan,nan,nan
+nan,nan,nan,nan,nan,nan
+
+
+1,4,9,4,1,8
+9,2,8,9,6,10
+9,7,7,10,3,4
+
+nan,nan,nan,nan,nan,nan
+nan,nan,HOLA!,nan,nan,nan
+nan,nan,nan,nan,nan,nan
+
+
+Cuántos NAN hay aquí??:
+0,0,0,0,0,0
+0,0,0,0,0,0
+0,0,0,0,0,0
+0,0,0,0,0,0
+0,0,0,0,0,0
+0,0,0,0,0,0
+1,1,1,1,1,1
+1,1,1,1,1,1
+1,1,1,1,1,1
+0,0,0,0,0,0
+0,0,0,0,0,0
+0,0,0,0,0,0
+1,1,1,1,1,1
+1,1,1,1,1,1
+1,1,1,1,1,1
+0,0,0,0,0,0
+0,0,0,0,0,0
+0,0,0,0,0,0
+0,0,0,0,0,0
+0,0,0,0,0,0
+0,0,0,0,0,0
+1,1,1,1,1,1
+1,1,1,1,1,1
+1,1,1,1,1,1
+1,1,1,1,1,1
+1,1,0,1,1,1
+1,1,1,1,1,1
+1,1,1,1,1,1
+1,1,1,1,1,1
+1,1,1,1,1,1
+1,1,1,1,1,1
+1,1,1,1,1,1
+1,1,1,1,1,1
+107
+
+X=
+10,9,8,8,2,9
+9,6,10,2,1,10
+1,8,9,1,10,4
+2,1,6,2,8,3
+7,3,3,6,6,4
+2,9,1,10,8,4
+9,1,8,1,2,9
+5,8,10,2,4,5
+10,2,9,2,9,2
+
+
+*/

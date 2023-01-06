@@ -1,0 +1,60 @@
+
+#include <jambo.h>
+
+
+Main
+   Init zero 't1, t2'
+   
+   Tic(t1)
+   Gosub while ( i=0, Less(i,1000000), Suma todo )
+   Toc(t1,t2), Printnl("I=",i,"\nTIME = ",t2)
+
+   Tic(t1)
+   i=0
+   Loop while (Less(i,1000000))
+       Gosub 'Suma  todo'
+   Back
+   Toc(t1,t2), Printnl("I=",i,"\nTIME = ",t2)
+
+   Tic(t1)
+   i=0
+   Loop while (Less(i,1000000))
+       ++i
+   Back
+   Toc(t1,t2), Printnl("I=",i,"\nTIME = ",t2)
+   
+   Tic(t1)
+   i=0
+   Gosub times (1000000, Suma todo )
+   Toc(t1,t2), Printnl("I=",i,"\nTIME = ",t2)
+   
+   Gosub if ( Not positive 'i', Suma todo )
+   Printnl("I=",i)
+/*   Pause
+   q=0,w=40, v=50
+   Let( q := Mul(w,v))
+   {q} Prnl
+   m={}
+   Set '10,10,10,10,10' Append to list 'm'
+   Set 'm,m,m', Mul by '2', Add it, Div it, Prnl
+   On the arrays /// realiza los cáculos sobre los mismos arrays, sin crear copias en el stack 
+   Set 'm', Mulby '2', Plus '10', Div into '10', Set'm', Prnl*/
+   
+End
+Subrutines
+Define 'Suma todo'
+   ++i
+Return
+
+/*
+I=1000000
+TIME = 0.22792
+I=1000000
+TIME = 0.231342
+I=1000000
+TIME = 0.208162
+I=1000000
+TIME = 0.18934
+I=1000000
+
+*/

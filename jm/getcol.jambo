@@ -1,0 +1,18 @@
+
+#include <jambo.h>
+
+Main
+   Set stack 15
+   Dim '10,10' as ceil rand '10,x'
+   Printnl( "X=\n", x)
+   
+   Set '0,4,2,4,10,1,1' Get columns from 'x', Prnl
+   
+   Dim '10,10,3' as ceil rand '10,y'
+   Printnl( "\nY=\n", y)
+   
+   z=0
+   Set '0,4,2,4,10,1,1' Get columns from 'y', Move to 'z'
+   Printnl ("\nZ=\n",z,"\nDIMS = ",Dims(z),"\nROWS = ",Rows(z),"\nCOLS = ",Cols(z), "\nPAGS = ",Pags(z))
+   
+End

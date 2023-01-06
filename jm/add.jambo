@@ -1,0 +1,14 @@
+
+#include <jambo.h>
+
+Main
+   Dim '10' as ceil rand '10,x'
+   Printnl 'x'
+   Add([1:2:Rows(x)] Of 'x', '100') [6:10] Put to 'x'
+   Printnl 'x'
+   
+   [1:5] Of 'Mul(x,0.5)', Prnl
+   Printnl (x)
+   Mul([1:5] Of 'x',0.5), Prnl
+   Printnl (x)
+End

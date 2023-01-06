@@ -1,0 +1,24 @@
+
+#include <jambo.h>
+#define SIZE 1000
+#define PORC 500
+Main
+   Dim 'SIZE,SIZE' as ceil rand '10,x'
+   Dim 'SIZE,SIZE' as ceil rand '10,y'
+   Dim 'SIZE,SIZE' as zeros 'r'
+   Init zero 't1,t2'
+   Tic(t1)
+   [1:PORC,1:PORC] Get 'x', Get'y', Add to 'r' //Add it, Put 'r'
+   Toc(t1,t2)
+   Printnl("Tiempo = ", t2) //,"\nResultado:",r)
+   
+/*   r=0, w1=0,w2=0
+   Tic(t1)
+   [1:5,1:5] {x} getfrm(w1)
+   [1:5,1:5] {y} getfrm(w2)
+   Add (w1,w2), [1:10,1:10] Put 'r'
+   Toc(t1,t2)
+   Printnl("Tiempo = ", t2,"\nResultado:",r)
+  */ 
+
+End

@@ -1,0 +1,21 @@
+
+#include <jambo.h>
+
+Main
+   Color back '13'
+   Loop for (n=1, Less equal (n,100), ++n)
+      RGB-fore ( #(2*n),#(2*n),#(2*n) )
+      Draw a circle ( #(150-(2*n/3)), #(150-(n/2)), #(150-n) )
+   Back
+   Pause
+End
+
+/*
+clg
+color white
+rect 0,0,graphwidth, graphheight
+for n = 1 to 100
+	color rgb(2*n,2*n,2*n)
+	circle 150-2*n/3,150-n/2,150-n
+next n
+*/

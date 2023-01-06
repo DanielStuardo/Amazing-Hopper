@@ -1,0 +1,165 @@
+
+#include <jambo.h>
+/*
+#defn Evaluate(*)                  #GENCODE $$$*$$$ option#ITV=0;#ATCMLIST;\
+                                   mov(option#ITV);#ENDGEN;
+
+#defn Ifalloptionsaretrue(*)       ##CODEIF,{1},#GENCODE $$$*$$$ #ATCMLIST;\
+                                   and;#ENDGEN;jnt(#ENDIF)
+
+#defn Ifalloptionsarefalse(*)      ##CODEIF,{0},#GENCODE $$$*$$$ #ATCMLIST;\
+                                   or;#ENDGEN;jt(#ENDIF)
+
+#defn Ifsomeoptionaretrue(*)       ##CODEIF,{0},#GENCODE $$$*$$$ #ATCMLIST;\
+                                   or;#ENDGEN;jnt(#ENDIF)
+
+#defn Ifonlyoneoptionistrue(*)     ##CODEIF,{0},#GENCODE $$$*$$$ #ATCMLIST;\
+                                   xor;#ENDGEN;jnt(#ENDIF)
+
+#defn Ifonlyoneoptionisfalse(*)    ##CODEIF,{0},#GENCODE $$$*$$$ #ATCMLIST;\
+                                   xor;#ENDGEN;jt(#ENDIF)
+
+#defn Ifallaretrue(*)              ##CODEIF,{1},#GENCODE $$$*$$$ option#ITV=0;#ATCMLIST;\
+                                   cpy(option#ITV);and;#ENDGEN;jnt(#ENDIF)
+// It is the case than
+#defn Aretrue(*)                   jmp(%%CODEIF), %ENDIF:, {1}, #GENCODE $$$*$$$ #ATCMLIST;\
+                                   and;#ENDGEN;jnt(#ENDIF),
+
+#defn Itistrue(_X_)                jmp(%%CODEIF), %ENDIF:, {_X_}, jnt(#ENDIF),
+
+
+#defn Ifallarefalse(*)             ##CODEIF,{0},#GENCODE $$$*$$$ option#ITV=0;#ATCMLIST;\
+                                   cpy(option#ITV);or;#ENDGEN;jt(#ENDIF)
+// It is not the case than
+#defn Arefalse(*)                  jmp(%%CODEIF), %ENDIF:, {0}, #GENCODE $$$*$$$ #ATCMLIST;\
+                                   or;#ENDGEN;jt(#ENDIF),
+
+#defn Itisfalse(_X_)               jmp(%%CODEIF), %ENDIF:, {_X_}, jt(#ENDIF),
+
+
+#defn Ifsomearetrue(*)             ##CODEIF,{0},#GENCODE $$$*$$$ option#ITV=0;#ATCMLIST;\
+                                   cpy(option#ITV);or;#ENDGEN;jnt(#ENDIF)
+
+
+#defn Ifonlyoneistrue(*)           ##CODEIF,{0},#GENCODE $$$*$$$ option#ITV=0;#ATCMLIST;\
+                                   cpy(option#ITV);xor;#ENDGEN;jnt(#ENDIF)
+
+#defn Onlyoneistrue(*)             jmp(%%CODEIF), %ENDIF:, {0}, #GENCODE $$$*$$$ #ATCMLIST;\
+                                   xor;#ENDGEN;jnt(#ENDIF),
+
+#defn Ifonlyoneisfalse(*)          ##CODEIF,{0},#GENCODE $$$*$$$ option#ITV=0;#ATCMLIST;\
+                                   cpy(option#ITV);xor;#ENDGEN;jt(#ENDIF)
+
+#defn Onlyoneisfalse(*)            jmp(%%CODEIF), %ENDIF:, {0}, #GENCODE $$$*$$$ #ATCMLIST;\
+                                   xor;#ENDGEN;jt(#ENDIF),*/
+Main
+   False(v), True(w), False(x)
+   If only one is true (v, w, x)
+      Printnl ("1: Solo una es verdadera: ", Get if(option 1,1,Get if(option 2,2,3)))
+   Else
+      Printnl ("1: Hay mas de una verdadera")
+   End If
+   
+   If some option are true (option 1, option 2, option 3)
+      Printnl ("2: Hay algunas verdaderas, entre ellas: ", Get if(option 1,1,Get if(option 2,2,3)))
+      Print ("2: Las verdaderas: ")
+      When (option 1) { Set '1' }
+      When (option 2) { Set '2' }
+      When (option 3) { Set '3' }
+      Prnl
+   Else
+      Printnl ("2: Todas son falsas")
+   End If
+
+   If all options are true (option 1, option 2, option 3)
+      Printnl ("3: Son todas verdaderas")
+   Else
+      Printnl ("3: No todas son verdaderas")
+   End If
+   
+
+   If all options are false (option 1, option2 , option 3)
+      Printnl ("4: Son todas falsas")
+
+   Are true ( option 1, option 3 )
+      Printnl("4: Opcion 1 y 3 son verdaderas")
+
+   Are false ( option 1, option 2 )
+       Printnl ("4: Son FALSAS 1 y 2")
+   It is false ( option 2 )
+       Printnl( "4: La opcion 2 es falsa")
+
+   It is true ( option 3 )
+       Printnl("4: La opcion 3 es verdadera")
+   Else
+       Printnl ("4: Algunas son verdaderas")
+
+   End If
+       
+///   Printnl("opcion NAND : ", Nand(0,0),", ",Nand(0,1),", ",Nand(1,0),", ",Nand(1,1))
+
+   False(v), False(w), True(x)
+   Evaluate ( v, w, x )
+   
+   If (option 1)
+       Printnl("5: Opcion 1 es verdadera")
+   Are true ( option 1, option 2 )
+       Printnl("5: Opcion 1 y 2 son verdaderas")
+   Only one is true (option 1, option 2, option 3)
+       Printnl("5: Solo una es verdadera: ", Get if(option 1,1,Get if(option 2,2,3)))
+   It is false ( option 2 )
+       Printnl("5: Opcion 2 es falsa")
+   Are true ( option 1, option 3 )
+       Printnl("5: Opcion 1 y 3 son verdaderas")
+   Else
+       Printnl("5: Es otra cosa")
+   End If
+   
+   If only one option is true 'option 1, option 2, option 3'
+       Printnl("5.1: Solo una es verdadera: ", Get if(option 1,1,Get if(option 2,2,3)))
+   Else
+       Printnl("5.1: Hay mas de una verdadera")
+   End If
+   
+   True(v), False(w), True(x)
+
+   If only one is false 'v,w,x'
+       Printnl("6: Solo una es falsa: ", Get if(Not(option 1),1,\
+                                             Get if(Not(option 2),2,3)))
+   Else
+       Printnl("6: Hay mas de una falsa")
+   End If
+
+   If ( option 2 )
+       Printnl("6.1: Opcion 2 es verdadera")
+   Only one is false ( option 1, option2, option3 )
+       Printnl("6.1: Solo una es falsa: ", Get if(Not(option 1),1,\
+                                             Get if(Not(option 2),2,3)))
+   End If
+
+   True(v), True(w), True(x)
+   If all are true 'v, w, x'
+       Printnl("7: Son todas verdaderas")
+   Else
+       Printnl("7: Hay algunas falsas")
+   End If
+
+   False(v), False(w), False(x)
+   If all are false 'v, w, x'
+       Printnl("8: Son todas falsas")
+   Else
+       Printnl("8: Hay algunas verdaderas")
+   End If
+
+   False(v), False(w), True(x), True(y), False(z)
+   Evaluate (v,w,x,y,z)
+   If some option are true (option 1, option 2, option 3, option 4, option 5)
+      Set ("9: Hay algunas verdaderas: ")
+      When (option 1) { Set '"1,"' }
+      When (option 2) { Set '"2,"' }
+      When (option 3) { Set '"3,"' }
+      When (option 4) { Set '"4,"' }
+      When (option 5) { Set '"5"' }
+      Prnl
+   End If
+End

@@ -1,0 +1,9 @@
+
+#include <jambo.h>
+
+Main
+   x=0
+   [0:#(M_PI/100):#(2*M_PI)] 
+   Generate to 'x'
+   Printnl (x)
+End

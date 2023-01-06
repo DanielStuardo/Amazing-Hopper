@@ -1,0 +1,74 @@
+
+#include <jambo.h>
+
+Main
+   Set stack 19
+   Set decimal '15'
+   Color fore '121'
+   Set '2.38463874792594798321' Round by '0', Prnl
+   Set '2.38463874792594798321' Round by '1', Prnl
+   Set '2.38463874792594798321' Round by '2', Prnl
+   Set '2.38463874792594798321' Round by '3', Prnl
+   Set '2.38463874792594798321' Round by '4', Prnl
+   Set '2.38463874792594798321' Round by '5', Prnl
+   Set '2.38463874792594798321' Round by '6', Prnl
+   Set '2.38463874792594798321' Round by '7', Prnl
+   Set '2.38463874792594798321' Round by '8', Prnl
+   Set '2.38463874792594798321' Round by '9', Prnl
+   Set '2.38463874792594798321' Round by '10', Prnl
+   Set '2.38463874792594798321' Round by '11', Prnl
+   Set '2.38463874792594798321' Round by '12', Prnl
+   Set '2.38463874792594798321' Round by '13', Prnl
+   Set '2.38463874792594798321' Round by '14', Prnl
+   Set '2.38463874792594798321' Round by '15', Prnl
+   Set '2.38463874792594798321' Round by '16', Prnl
+   Set '2.38463874792594798321' Round by '17', Prnl /* fail from here. lógico */
+   Set '2.38463874792594798321' Round by '18', Prnl /* fail from here. lógico */
+   Set '2.38463874792594798321' /*Round by '19'*/, Prnl
+   
+   Set decimal '4'
+   Set '2.38746, 2.98393', Add it, Prnl
+   Unset decimal
+//   Set decimal '100'
+   
+   Set '2.38746' Round by '4', Set '2.98393' Round by '4', Add it, Prnl
+   
+  /* imprime con el ajuste decimal por default: 5 */ 
+   Color fore '15', Set '2.38463874792594798321' Mul by '10000000', Echo it
+   Prnl
+
+   Color fore '22', Set '238463874792594798321' Mul by '10000000', Echo it
+   Prnl
+   //l=0,n=0
+   //Sequence ( 0,1,21, l)
+   //Set '0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15' Append to list 'l'
+   //Set '10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10' Append to list 'n'
+   //Dim '21' as zeros 'n', n=10
+   //Printnl (l,"\n",n)
+   //'n' Pow by 'l', Prnl
+End
+
+/*
+2  
+2.400000000000000
+2.380000000000000
+2.385000000000000
+2.384600000000000
+2.384640000000000
+2.384639000000000
+2.384638700000000
+2.384638750000000
+2.384638748000000
+2.384638747900000
+2.384638747930000
+2.384638747926000
+2.384638747925900
+2.384638747925950
+2.384638747925948
+2.384638747925948
+-nan
+-nan
+-nan
+5.3714
+5.3714
+*/

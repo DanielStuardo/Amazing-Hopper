@@ -1,0 +1,15 @@
+
+
+
+main:
+{10},__TMPARR__=-1,randarray(__TMPARR__),mulby(10),ceil,x=0,cpy(x),kill;
+{x};{"\n"}print;
+{1};loc1;{5};offset1;get(x);clearinterval;(100);add;{6};loc1;{10};offset1;put(x);clearinterval;
+{x};{"\n"}print;
+
+{1};loc1;{5};offset1,__MVP__921901170=0;{x}mulby(0.5);mov(__MVP__921901170);get(__MVP__921901170);clearinterval,{"\n"}print
+{x};{"\n"}print;
+{1};loc1;{5};offset1;get(x);clearinterval;mulby(0.5),{"\n"}print
+{x};{"\n"}print;
+emptystack?do{{0}};return
+

@@ -1,0 +1,61 @@
+
+
+/* Espiral de Arquímedes, para Rosetta Code 
+
+   Ejecutar como :
+   
+   rxvt -g 500x250 -fn "xft:FantasqueSansMono-Regular:pixelsize=1" -e hopper jm/archi.jambo
+   
+*/
+#include <jambo.h>
+
+
+Main
+   Set break
+   a=1.5, b=1.5, r=0, origen x=200, origen y=105
+   total = 0, Let ( total := Mul(20, M_PI) )
+   Cls , Color back (13)
+   Loop for ( t=0, var 't' Is less equal to 'total', Let (t := Add (t, 0.005)) )
+       #( r = a + b * t )
+       Draw a line ( origen x, origen y, # ( 200 + (2*r*sin(t)) ) » 'origen x', #( 105 + (r*cos(t)) ) » 'origen y' )
+       //Gosub 'Dibuja un segmento'
+       //line
+   Next
+   Printnl("\OFF")
+   Pause
+End
+
+Subrutines
+
+Define (Dibuja un segmento, x1, y1, x2, y2)
+  dx=0, dy=0, paso=0, i=0, DX=0, DY=0
+
+  Sub(x2, x1), Sub (y2, y1), Move to ' dx, dy '
+
+  Let( paso := Get if( Greater equal ( Abs(dx) » (DX), Abs(dy)»(DY) ), DX, DY ) )
+
+  // incremento:
+  Div(dx, paso), Div(dy, paso), Move to ( dx, dy )
+
+  Color back (13)
+  // dibuja línea:
+  i = 0
+  Loop if ( Less equal (i, paso) )
+     Locate( y1, x1 ), Printnl( " " )
+     Add ( x1, dx), Add( y1, dy ), Move to ( x1, y1 )
+     ++i
+  Back
+  Printnl("\OFF")
+Return
+
+/*
+a=1.5
+b=1.5 
+pi=3.141592
+
+PSET (320,100)
+FOR t=0 TO 40*pi STEP .1
+  r=a+b*t  
+  LINE -(320+2*r*SIN(t),100+r*COS(t))
+NEXT
+*/

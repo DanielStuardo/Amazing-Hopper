@@ -1,0 +1,23 @@
+
+#include <jambo.h>
+
+#define TOPE  1000000
+Main
+   w="amoroso",z=0
+   t1=0,t2=0
+   
+   Tic(t1);
+   Loop times (TOPE)
+      z = "María tenía un corderito mañoso"
+      Let ( z := Tran( "corderito","lorito", Tran( "mañoso", Ucase(w), z) ) )
+   Back if not over
+   
+   Toc(t1,t2);
+   Printnl( "Z=", Utf8(z));
+   Printnl( "TIME = ", t2);
+
+End
+/*
+Z=María tenía un lorito AMOROSO
+TIME = 1.58685
+*/

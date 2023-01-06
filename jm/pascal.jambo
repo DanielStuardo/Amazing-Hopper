@@ -1,0 +1,40 @@
+
+#include <jambo.h>
+
+#define Mulbyandmoveto(_X_)   Mul by '_X_', Move to '_X_'
+
+Main
+   Set break
+   filas=0, Get arg numeric '2', Move to 'filas'
+   i=0, r=""
+   Loop if( var 'i' Is less than 'filas' )
+      c=1, j=0
+      
+      Set 'c' To str, Move to 'r'
+      Loop if ( var 'j' Is less than 'i' )
+         Set 'i' Minus 'j', Plus one 'j', Div it; Mul by and move to 'c' //Mul by 'c', Move to 'c'
+         //Cat ( r, Cat ( "\t", Str(c) ) ), Move to 'r'
+         Multi cat ' r, "\t", Str(c) '; Move to 'r'
+         ++j
+      Back
+      Printnl 'r'
+      ++i
+   Back
+End
+
+/*
+
+BEGIN{
+   for(i=0;i<6;i++)
+   {
+      c=1;r=c;
+      for(j=0;j<i;j++)
+      {
+         c*=(i-j)/(j+1);
+         r=r" "c
+      };
+      print r
+   }
+}
+
+*/

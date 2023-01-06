@@ -1,0 +1,131 @@
+/* JAMBO */
+
+// las instrucciones y palabras reservadas inician con mayúsculas
+// Set establece constantes, variables y expresiones funcionales
+// Las funciones pueden establecer sus resultados, sin Set; las instrucciones, no
+
+#include <jambo.h>
+
+#define NL  "\n"
+#define TAB "\t"
+
+Main
+  Set stack 16
+  i=500
+  Loop
+     j=5
+     Loop
+        Set ("i=",i,", j=",j--,"\n") Print
+     Back if (j) is not zero //(j)
+     --i
+  Back if (i) is not zero //(i)
+  
+  y=5
+  Loop
+     Set( "y=",y,"\n" ) Print
+     --y
+  Back if (y) is not zero
+  
+  y=5
+  Loop
+     Set( "y=",y,"\n" ) Print
+     --y
+  Back if ( Leq(y,0) ) is true
+
+  x=5
+  Loop if( Not (Zero(x)) )
+     Set ("x=",x,"\n") Print
+     --x
+  Back
+  
+  y=5
+  Loop
+     Set("y=",y,"\n") Print
+     --y
+     If ( Eq(y,1) )
+        Set("Ya es 1\n")
+     Else If( Eq( y,2 ) )
+        Set("Se aproxima el final...\n")
+     End If
+     Print it
+  Until ( Zero(y) )  
+
+  Trash(i,j,y,x) // deja todo en 0, incluso los arrays son borrados
+                 // pero no llama al GC.
+  Init zero (a,b,c)   // declara variables en 0. Si las variables existen, tiene
+                 // diversas consecuencias: un array es llenado con 0.
+  Set ("Mensaje: ", Mul( Add(y,10), 2), Utf8(" es numérico\n") ), Move to(a,b,c)
+  Mul(Add(b,100),5), Move to(x)
+  Set (a,b,c,"...",x,"...\n") Print it
+
+  Printnl(a,b,c,"...",x,"...\n")
+  Printnl(a,b,c,"...",Sub(x,100),"...\n")
+  
+  Add(10,10) Mul(2,5), Add it, Gosub(imprimir)
+  Add(10,10) Mul(2,5), Add it, Get sqrt, Gosub(imprimir de otra forma)
+
+  error=0
+  //           1        2      3
+  On '3' option (x+=0.5, x-=0.5, x*=0.5) // si no es ninguna, la opcion se queda en memoria.
+  If ( Stack busy? )
+     Move to(error),Set("Opcion errada: ",error,"\n")
+  Else
+     Set("Aficionado al crimen\n")
+     Set("Valor modificado: ",x,": ",Sqrt(x),"\n")
+  End If
+  Set( Arg str(1) )
+  Prnl
+  
+/*  v="", w="maría tenía un corderito"
+  Token separator (" "), get Total tokens(w), Move to(t)
+  i=1
+  Loop
+     Select token(i),Set(v), get token(w), get upper, cat it, Move to(v)
+     Let( v := cat( v, upper( get token(w)))
+     --t, ++i
+  Back if (t) is not zero
+  */
+  x=200,y=100
+  Set("DATO\n"), Move if( Zero(19), x, y)
+  
+  Printnl( "X=",x, ", Y=", y, " numeric?(Y)=", Sel( Numeric(y), "Yes","No") )
+
+  Void(x,y), z=0, w=0
+  Set("A=","B=","C=") Apnd list(x)
+  Set(1,2,3) Apnd list(y)
+  Let( z:= aMix(x,y) )
+  Let( w := aDistrib(x,y) )
+  Printnl(z)
+  Printnl( Summatory( [2:2:end] Cget(z) ) )
+  Printnl( Type( [3] get(z) ))
+  Printnl( Type( [2] get(z) ))
+  Printnl( w )
+  Toksep("-"), Print using sep("Hola",100,0.345,"mundo!\n"),Toksep(",")
+
+  z=10,i=1
+  Add(10,20) Copy on( Zero(i), z), Prnl
+  Printnl("Z=",z)
+
+  z=10,i=0
+  Add(10,20) Copy on( Zero(i), z), Prnl
+  Printnl("Z=",z)
+  
+  Void(f)
+  Set(1,2,3,4,5),Apndlist(f), aLrot(1,5,f), Printnl("F=",f)
+                              aRrot(1,5,f), Printnl("F=",f)
+  
+  Set("Fin del programa\n")  // opcion -d
+End-Return
+
+Subrutines
+
+Define( imprimir, msg )
+  j=msg
+  Printnl( "Resultado: ",msg )
+Return
+
+imprimir de otra forma:
+  Args( msg )
+  Printnl( "Resultado: ",msg )
+Return
+

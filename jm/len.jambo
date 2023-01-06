@@ -1,0 +1,11 @@
+
+#include <jambo.h>
+
+Main
+   lista={}
+   Set '"abcd", "123456789", "abcdef", "1234567"' Apnd list 'lista'
+   l = 0
+   Let( l := Len 'lista' ) 
+
+   Printnl( lista,"\n",l )
+End

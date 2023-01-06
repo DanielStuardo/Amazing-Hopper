@@ -1,0 +1,55 @@
+/* Chaos game */
+
+#include <jambo.h>
+
+#define LIMITE  50000
+Main
+  Set video text
+  
+  ancho = 700, alto = 150
+  x=0,y=0,color=0
+  vertice=0, 
+  c=0, Let( c := Utf8(Chr(219)))
+  Let(x := Int(Rand(ancho)))
+  Let(y := Int(Rand(alto)))
+
+  mid ancho=0, Let( mid ancho:= Div(ancho,2))
+
+//  Dim(LIMITE,3) as zeros(pixeles)
+// SWITCH es muy lento!!
+  Cls
+  i=LIMITE
+  Void(pixeles)
+
+  Loop
+    Ceil(Rand(3)), On goto( EQ1, EQ2, EQ3 )
+    
+    EQ1:
+          Let(x := Div(x, 2))
+          Let(y := Div(y, 2))
+          color=9, Goto(Append list)
+
+    EQ2:
+          Let(x := Add( mid ancho, Div(Sub(mid ancho, x), 2) ) )
+          Let(y := Sub( alto, Div( Sub(alto, y), 2 )))
+          color=10, Goto(Append list)
+    EQ3:
+          Let(x := Sub(ancho,  Div( Sub(ancho, x), 2)))
+          Let(y := Div(y, 2))
+          color=4
+
+    Append list:
+      Set( Int(y), Int(x), color),Apndrow(pixeles)
+    --i
+  Back if (i) is not zero
+
+  Set video graph(2)
+  Canvas-term  
+  Cls
+  i=1
+  Iterator(++i, Leq(i,LIMITE), Colorfore([i,3]Get(pixeles)), \
+                             Locate( [i,1]Get(pixeles), [i,2]Get(pixeles) ), Print(c) ); Prnl
+  Pause
+  Set video text
+
+End

@@ -1,0 +1,34 @@
+
+
+
+
+
+
+
+
+
+
+main:
+true(v);,true(x);,true(y);
+
+,{1},opción1=0;{v};cpy(opción1);and;opción2=0;{0.025}eqto(10);cpy(opción2);and;opción3=0;{x};cpy(opción3);and;opción4=0;{y};cpy(opción4);and;;,jnt(____CODE_JUMP____981377334)
+{"Todas las opciones son verdaderas"};;
+jmp(____CODE_JUMP____510855239),____CODE_JUMP____981377334:,{1},{opción2};and;{opción3};and;{opción4};and;;jnt(____CODE_JUMP____675631183),
+{"Sólo son verdaderas la igualdad, X e Y"};;
+jmp(____CODE_JUMP____510855239),____CODE_JUMP____675631183:,{1};{opción1};and;{opción3};and;{opción4};and;;jnt(____CODE_JUMP____766044756),
+{"Son verdaderas V, X e Y"};;
+jmp(____CODE_JUMP____510855239),____CODE_JUMP____766044756:,{1},{opción1};and;{opción3};and;;jnt(____CODE_JUMP____104083412),
+{"Son verdaderas V y X"};;
+
+
+
+jmp(____CODE_JUMP____510855239),____CODE_JUMP____104083412:,{opción4},jnt(____CODE_JUMP____702849413),
+{"Al menos, Y es verdadera"};;
+
+jmp(____CODE_JUMP____510855239),____CODE_JUMP____702849413:,true,jnt(____CODE_JUMP____925531425),
+{"Nada se cumple"};;
+
+____CODE_JUMP____510855239:,____CODE_JUMP____925531425:,
+{"\n"}print
+emptystack?do{{0}};return
+

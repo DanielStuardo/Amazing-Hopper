@@ -1,0 +1,45 @@
+
+#include <jambo.h>
+
+Main
+   Set break
+   sn=1E6, m=0, n=0,l=0, exclusiones={}, criba={}
+
+   #( l = int(int((2.4 * sn * log(sn)) / 2)) )
+   #( m = int( (l - 1) / 2 ) )
+   
+   w = 0, Let ( w := #( 1+floor(sqrt(m/2)) ) )
+   v=0
+   //exclusiones={}
+   "Definiendo esclusiones...", Prnl
+   Loop for( i=1, #( i <= w ), ++i)
+       #( v = (1 + floor((m - i) / (1 + (2 * i)))) )
+       Loop for (j=i, #( j<= v ), ++j )
+           #(2 * i * j + i + j), Push(exclusiones)
+       Back
+       Prnl
+   Back
+   "encontrado criba", Prnl
+   //criba = {}
+   Loop for (x=1, #( x <= (1+m)), ++x )
+       If ( Not(aScan(1,x,exclusiones)) )
+          #(1 + (2 * x)), Push(criba)
+       End If
+   Back
+   //[sn] Get (criba), Prnl
+   criba, Prnl
+End
+
+/*
+
+   exclusions = {
+        2 * i * j + i + j
+        for i in range(1, 1 + floor(sqrt(m / 2)))
+        for j in range(
+            i, 1 + floor((m - i) / (1 + (2 * i)))
+        )
+    }
+
+    1 + (2 * x) for x in range(1, 1 + m)
+        if not x in exclusions
+*/

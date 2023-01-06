@@ -1,0 +1,9 @@
+
+#include <jambo.h>
+
+Main
+   Dim (10) as zeros 'x'
+   Dim (5) as ones 'y'
+   aCat (y,x)
+   Set 'x', Prnl
+End 

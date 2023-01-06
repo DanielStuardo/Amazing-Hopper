@@ -1,0 +1,253 @@
+
+#include <jambo.h>
+
+#define FILATABLA            5
+#define COLUMNATABLA         10
+#define Imprimelamatriz      Gosub 'Pone la matriz'
+#define Imprimelascasillas   Gosub 'Pone las casillas'
+#define Imprimeelíndiceen(_X_,_Y_)  Set '_X_,_Y_',  Gosub 'Pone el índice'
+
+Main
+   //Set break
+   celdas=0
+   Get arg numeric(2), Move to 'celdas'
+   
+   Initialize (celdas, x, y, cerox, ceroy, BASE )
+   Void (casilla, índice, números)
+   Link gosub( Crea una casilla, Crea el índice, Crea la matriz de números )
+   
+   Cls
+   Tok sep '""', Gosub 'Imprime escenario'
+   
+  /* INICIA EL JUEGO */
+   SW = 1, Init zero( GANADOR, c )
+   
+   Loop
+       Let ( c:=Getch )
+       Switch ( c )
+           Case 'KRIGHT'  { #( y < BASE ) do{ ++y, Exit } y=1, Exit }
+           Case 'KDOWN'   { #( x < BASE ) do{ ++x, Exit } x=1, Exit }
+           Case 'KLEFT'   { #( y > 1 ) do{ --y, Exit } y=BASE, Exit }
+           Case 'KUP'     { #( x > 1 ) do{ --x, Exit } x=BASE, Exit }
+           Case 'KRETURN' { If ( Gosub 'Chequear si movimiento es válido' )
+                               Gosub 'Mover las casillas'
+                            End If
+                            Exit
+                          }
+           Case 'KESCAPE' { SW=0 }
+       End switch
+       
+       Gosub 'Imprime escenario'
+       Break if ( Gosub 'Verificar puzzle resuelto' --- Backup to 'GANADOR' )
+   Back if 'SW' is not zero
+
+  /* FIN DEL JUEGO */
+   If ( GANADOR )
+       Locate (18,15), Printnl("LO RESOLVISTE!")
+   End If
+   Locate (19,1), Prnl
+End
+
+Subrutines
+
+/* CHEQUEO DE MOVIMIENTO */
+
+Define ( Verificar puzzle resuelto )
+   ret = 0
+   Clr all marks
+   Tnúmeros=números
+   Redim (Tnúmeros,0), N = 0, Let ( N := Length(Tnúmeros) Minus (1))
+   i=1
+   Iterator ( ++i, Less equal ( i, N ) And( Not(ret) ), \
+           Let ( ret := Bit xor(i, [i] Get 'Tnúmeros') ) )
+   Clr all marks
+   Clear 'Tnúmeros'
+
+Return 'Not (ret); And( Equals(i, Plus one(N)) ) '
+
+Define ( Chequear si movimiento es válido )
+Return 'Only one ( Equals (x, cero x), Equals(y, cero y ) )'
+
+Define ( Mover las casillas )
+   If ( Equals (y, cero y) )
+      If ( Less (x, cero x) )      // mueve hacia abajo
+         Loop for ( i = cero x, #( i >= x ) , --i )
+             If ( Greater ( i, 1 ) )
+                 [{i} Minus(1), y] Get 'números', [i,y] Put 'números'
+             Else
+                 [{i} Plus(1), y] Get 'números', [i,y] Put 'números'
+             End If
+         Next
+      Else                         // por defecto: mueve hacia arriba
+         Loop for ( i = cero x, #( i <= x ) , ++i )
+             If ( Less ( i, BASE ) )
+                 [{i} Plus(1), y] Get 'números', [i,y] Put 'números'
+             Else
+                 [i,y] Get 'números', [{i} Minus(1),y] Put 'números'
+             End If
+         Next
+      End If
+      [x,y] Set '0', Put 'números'
+      Set 'x', Move to 'cero x'
+   Else                           // por defecto: está en la misma fila  
+      If ( Less ( y, cero y ) )   // mueve hacia la derecha
+         Loop for ( i = cero y, #( i >= y ) , --i )
+             If ( Greater ( i, 1) )
+                 [x, {i} Minus(1)] Get 'números', [x,i] Put 'números'
+             Else
+                 [x, y] Get 'números', [x, {i} Plus(1)] Put 'números'
+             End If
+         Next
+      Else                        // por defecto: mueve hacia la izquierda
+         Loop for ( i = cero y, #( i <= y ) , ++i )
+             If ( Less ( i, BASE ) )
+                 [x, {i} Plus(1)] Get 'números', [x,i] Put 'números'
+             Else
+                 [x,i] Get 'números', [x,{i} Minus(1)] Put 'números'
+             End If
+         Next
+      End If
+      [x,y] Set '0', Put 'números'
+      Set 'y', Move to 'cero y'
+   End If
+   Clr all marks
+Return
+
+/* DESPLIEGUE DE CUADRITOS Y NUMEROS */
+
+Define ( Imprime escenario )
+   Imprime las casillas
+   Imprime el índice en 'x,y'
+   Imprime la matriz
+Return
+
+Define ( Pone la matriz )
+   i=BASE, col = COLUMNA TABLA, celda=""
+   Clr all marks
+   py=1
+   Loop
+      j=BASE, fil = FILA TABLA, px=1
+      Loop
+         Locate 'Plus one(fil), Plus two (col)' 
+         Printnl( Get if ([px,py] Get 'números' ---Backup to (celda)---, celda, "  ") )
+         fil += 3 
+         --j, ++px
+      Back if (j) is not zero
+      col += 6, --i, ++py
+   Back if (i) is not zero
+Return
+
+Define ( Pone las casillas )
+   i=BASE, col = COLUMNA TABLA
+   Clr all marks
+   Loop
+      j=BASE, fil = FILA TABLA
+      Loop
+         Set 'fil, col', Gosub 'Pone un cuadrito'
+         fil += 3, --j
+      Back if (j) is not zero
+      col += 6, --i
+   Back if (i) is not zero
+Return
+
+Define (Pone un cuadrito, fil, col)
+   Locate 'fil, col', Print table 'casilla'
+Return
+
+Define ( Pone el índice, fil, col )
+   /* 5+(fil-1)*3 fila
+      10+(col-1)*6 col */
+   Clr all marks
+   Locate 'Minus one(fil) Mul by (3) Plus (FILA TABLA), Minus one(col) Mulby(6) Plus(COLUMNA TABLA)' 
+   Print table 'índice'
+Return
+
+/* CONFIGURACION DEL JUEGO */
+
+Define ( Crea la matriz de números )
+   
+   Sequence ( 0, 1, {BASE} Pow by '2', números )
+   Gosub 'Barajar el array'
+   Redim ( números, BASE,BASE )
+Return
+
+/* algoritmo de Fisher-Yates */
+Define ( Barajar el array )
+  Init zero( N, R, aux )
+  Let ( N := Length(números) )
+  Loop
+     Let (R := Ceil(Rand(N)))
+     aSwap (R,N,números)
+   /*  Let (aux := [R] Get 'números' )
+     [N] Get 'números', [R] Put 'números'
+     Set 'aux', [N] Put 'números' */
+     --N
+  Back if 'N' is positive
+  If ( [ {BASE} Powby(2)] Get 'números' ---Backup to 'aux'---, Not (Is zero?) )
+     aSwap( aScan(1,0,números), Mul(BASE,BASE), números )
+    // [aScan(1,0,números)] Set 'aux', Put 'números'
+    // [16] Set '0', Put 'números'
+  End If
+Return
+
+Define ( Crea una casilla )
+   C=0, Let (C:=Utf8(Chr(196)))
+   Set 'Utf8(Chr(218)),C,C,C,C,Utf8(Chr(191))', Apnd row 'casilla'
+   Set 'Utf8(Chr(179))," "," "," "," ",Utf8(Chr(179))', Apnd row 'casilla'
+   Set 'Utf8(Chr(192)),C,C,C,C,Utf8(Chr(217))', Apnd row 'casilla'
+Return
+
+Define ( Crea el índice )
+   C=0, Let (C:=Utf8(Chr(220)))
+   Set 'C,C,C,C,C,C', Apnd row 'índice'
+   Set 'Utf8(Chr(219))," "," "," "," ",Utf8(Chr(219))', Apnd row 'índice'
+   Let (C:=Utf8(Chr(223)))
+   Set 'C,C,C,C,C,C', Apnd row 'índice'
+Return
+
+/*
+
+         ┌────┐┌────┐┌────┐┌────┐
+         │ 14 ││ 5  ││ 3  ││ 12 │
+         └────┘└────┘└────┘└────┘
+         ┌────┐┌────┐┌────┐┌────┐
+         │ 13 ││ 9  ││ 6  ││ 11 │
+         └────┘└────┘└────┘└────┘
+         ┌────┐┌────┐┌────┐┌────┐
+         │ 15 ││ 10 ││ 8  ││ 2  │
+         └────┘└────┘└────┘└────┘
+         ┌────┐┌────┐┌────┐▄▄▄▄▄▄
+         │ 4  ││ 1  ││ 7  │█    █
+         └────┘└────┘└────┘▀▀▀▀▀▀
+         .....
+         ┌────┐┌────┐┌────┐┌────┐
+         │ 7  ││ 10 ││ 14 ││ 12 │
+         └────┘└────┘└────┘└────┘
+         ┌────┐┌────┐┌────┐┌────┐
+         │ 15 ││    ││ 4  ││ 2  │
+         └────┘└────┘└────┘└────┘
+         ┌────┐▄▄▄▄▄▄┌────┐┌────┐
+         │ 1  │█ 8  █│ 6  ││ 11 │
+         └────┘▀▀▀▀▀▀└────┘└────┘
+         ┌────┐┌────┐┌────┐┌────┐
+         │ 3  ││ 13 ││ 5  ││ 9  │
+         └────┘└────┘└────┘└────┘
+
+         ....
+
+         ┌────┐┌────┐┌────┐┌────┐
+         │ 1  ││ 2  ││ 3  ││ 4  │
+         └────┘└────┘└────┘└────┘
+         ┌────┐┌────┐┌────┐┌────┐
+         │ 5  ││ 6  ││ 7  ││ 8  │
+         └────┘└────┘└────┘└────┘
+         ┌────┐┌────┐┌────┐┌────┐
+         │ 9  ││ 10 ││ 11 ││ 12 │
+         └────┘└────┘└────┘└────┘
+         ┌────┐┌────┐┌────┐▄▄▄▄▄▄
+         │ 13 ││ 14 ││ 15 │█    █
+         └────┘└────┘└────┘▀▀▀▀▀▀
+
+              LO RESOLVISTE!
+
+*/

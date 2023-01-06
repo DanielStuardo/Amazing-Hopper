@@ -1,0 +1,7 @@
+
+#include <jambo.h>
+
+Main
+  sys = `cat jm/sus1.jambo`
+  Set( sys ) Prnl
+End

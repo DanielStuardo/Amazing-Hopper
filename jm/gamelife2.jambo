@@ -1,0 +1,223 @@
+
+#include <jambo.h>
+
+// rxvt -g 270x100 -fn "xft:FantasqueSansMono-Regular:pixelsize=3" -e hopper3 jm/gamelife2.jambo
+
+#define SIZER   90
+#define SIZEC   120
+
+Main
+    Cls
+    Hide cursor
+   // Printnl("+ dimension grid y neighbour...")
+    Dim (SIZER, SIZEC), as zeros 'grid, neighbour_count' //, disp grid'
+    
+    //v=" " //0, Let( v := Utf8("·"))
+   // Printnl("+ dimension disp grid")
+    Dim (SIZER, SIZEC), as fill '" ",disp grid'
+    
+   // Printnl("+ inicializo 'c'")
+    c=0 , Let( c := Utf8(Chr(254)))  // 219
+    //disp grid = c
+   // Printnl("+ inicializo 2do grupo")
+    moi=0, moj=0, poi=0, poj=0
+
+   // Printnl("+ M vacio")
+    m={}
+   // Printnl("+ setting de figura")
+    Set ' 0,1,1 ' Apnd row 'm'
+    Set ' 1,1,0 ' Apnd row 'm'
+    Set ' 0,1,0 ' Apnd row 'm'
+    
+    //Printnl("+ primera marca")
+    [44:46, 59:61] Set 'm', Put 'grid'// = m
+    //Printnl("+ borra marca")
+    
+    Clr all marks
+    
+    i=0, j=0, steps=0, r=0   //,NBR=0
+
+    Tok sep '""'
+    //Printnl("+ pone marca"),[i,j],Clr all marks, Printnl("+ borra marca\n"),
+    Locate (1,1)
+    Loop ///if( Less (steps, 1350) )
+       //Cls
+       //Locate (1,1), Print table 'disp grid'
+     //  Print("++ Indice i...")
+       i=1
+     //  Printnl ("Ok")
+       //                          Printnl("+ pone marca"),[i,j],Printnl("+ borra marca"),
+       Iterator ( ++i, Less equal(i,SIZER),\
+                  j=1, Iterator ( ++j, Less equal(j,SIZEC), \
+                         /* Set 'i,j', Gosub 'Count NBR',*/ [i,j], nbrc(grid), Put cell 'neighbour_count' ) )
+                         // Pause
+      /* Loop if( Less equal(i,SIZER) )
+          j=1
+          Loop if( Less equal(j,SIZEC) )
+             Set 'i,j', Gosub 'Count NBR', [i,j], Put 'neighbour_count'
+             ++j
+          Back
+          ++i
+       Back*/
+       
+       
+     /*  Map( {neighbour_count} Betwnexc(1,4) not , 0, grid)
+       Map( Not(grid) , v, disp grid)
+       Map( Equals ( neighbour_count, 3 ), 1, grid)
+       Map( Not(grid), c, disp grid)
+      */
+      Cartes ( Greater equal(grid, 1)---Back up to 'r'--- Mul by 'neighbour_count'; Out of range including '1,4' )
+      /*Move to (r), Set range 'r',*/ Get range, Set '0," "', Put 'disp grid', Put 'grid', ---Forget---
+      //Clr range
+      //Cartes ( Not(Greater equal(grid, 1)); Mul by 'neighbour_count'; Is equal to '3' )
+      Cartes ( Not(r) Mul by 'neighbour_count'; Is equal to '3' )
+      /*Move to (r), Set range 'r',*/ Get range, Set '1,c', Put 'disp grid', Put 'grid', ---Forget---
+      ---Clr range---
+     /*  i=1
+       Loop if( Less equal(i,SIZER) )
+          j=1
+          Loop if( Less equal(j,SIZEC) )
+             [i,j]
+             If ( Get 'grid' ) //Greater equal (Get 'grid', 1) )
+
+                //If ( Less equal(Get 'neighbour_count',1) Or( Greater equal( Get 'neighbour_count', 4 ) ) )
+                //If ( Not ( Get 'neighbour_count', Betwnexc(1,4) ) )
+                Get 'neighbour_count'
+                When ( Out of range including '1,4' ) {
+                   Set '0," "', Put 'disp grid', Put 'grid'
+                   //Set '0,0', Put 'disp grid', Put 'grid'
+                }
+             Else
+                Get 'neighbour_count'
+                When ( Is equal to '3' ) {
+                   Set '1,c', Put 'disp grid', Put 'grid'
+                   //Set '1,13', Put 'disp grid', Put 'grid'
+                }
+             End If
+             ++j
+          Back
+          ++i
+       Back 
+       */
+       Clr all marks
+       ///Locate (2,1), Print ("PASA")
+       Print table 'disp grid'
+       //Draw table 'disp grid'
+       // al no existir MARCAS, Print table establece marcas.
+       
+       //Break if ( Key pressed )
+       //++steps
+    ///Back 
+    Until ( Key pressed)
+    Pause
+    Show cursor
+End
+
+Subrutines
+
+Define 'Count NBR, i, j'
+    n_count = 0, t=0
+    //Clr all marks // por alguna razón, se activan los ofssets y no hay por donde
+    //Sub 'i,1', Move to 'moi'
+    //Sub 'j,1', Move to 'moj'
+
+    //When ( Must be( Minus one 'i' ---Backup to 'moi'---, Minus one 'j' ---Backup to 'moj'--- ) ) {
+    If ( Must be( Minus one 'i' ---Backup to 'moi'---, Minus one 'j' ---Backup to 'moj'--- ) )
+    //When ( Must be( moi, moj ) ) {
+
+       //When ( /*[ Minusone'i', Minusone'j']*/[moi,moj]Get 'grid' ) {///Greater equal ( [ Minusone'i', Minusone'j']Get 'grid', 1) )
+       If ( /*[ Minusone'i', Minusone'j']*/[moi,moj]Get 'grid' ) 
+          ++n_count
+       End If
+       //}
+    End If
+    //}
+
+    Plus one 'j', Move to 'poj'
+ //   Printnl ("j=",j," poj=",poj)
+
+
+//    When ( moi/*Minus one 'i'*/ ) { //Greater equal( Minus one 'i', 1) )
+    If ( moi/*Minus one 'i'*/ ) //Greater equal( Minus one 'i', 1) )
+       //If( [ Minusone'i', j] Get 'grid' )  //[ Minusone'i', j] Greater equal (Get 'grid', 1) ) 
+       //When ( [ moi, j ] Get 'grid' ) {
+       If ( [ moi, j ] Get 'grid' )
+          ++n_count
+       End If
+       //}
+       //When ( Less equal( /*Plus one 'j'*/ poj, SIZEC )) {
+       If ( Less equal( /*Plus one 'j'*/ poj, SIZEC ))
+          //When ( /*[ Minusone'i', Plusone'j']*/[ moi, poj] /*Greater equal ( */ Get 'grid' ) {//, 1) ) 
+          If ( /*[ Minusone'i', Plusone'j']*/[ moi, poj] /*Greater equal ( */ Get 'grid' ) 
+             ++n_count
+          End If
+          //}
+       End If
+       //}
+    End If
+    //}
+
+/*    If ( Minus one 'i', And( Less( Plus one 'j', SIZEC )) )
+       If( [ Minusone'i', Plusone'j'] Greater equal (Get 'grid', 1) ) 
+          ++n_count
+       End If
+    End If */
+
+    When ( /*Minus one 'j'*/ moj ) { //Greater equal ( Minus one 'j', 1) )
+       When( /*[ i, Minusone'j']*/[i, moj] Get 'grid' )  { //[ i, Minusone'j'] Greater equal (Get 'grid', 1) )
+          ++n_count
+       }
+    }
+
+//
+
+    
+    When ( Less equal ( poj, SIZEC ) ){
+//Locate (1,1), 
+       //Printnl ("i=",i," poj=",poj)
+      // Printnl("hola")
+       //Try
+       When( [i, poj] Get 'grid' ) {//[ i, Plusone'j'] Greater equal (Get 'grid', 1) )
+          ++n_count
+       }
+      /* Catch(t)
+           Printnl ("DATO = ",[i, poj] Get 'grid')
+           Pause
+       Finish*/
+    }
+
+/*    If ( Less( Plus one 'i', SIZER ) And( Minus one 'j' ) )
+
+       If( [ Plusone'i', Minusone'j'] Get 'grid' )  //[ Plusone'i', Minusone'j'] Greater equal (Get 'grid', 1) ) 
+          ++n_count
+       End If
+    End If*/
+
+    When ( Less equal (Plus one 'i' ---Backup to 'poi'---, SIZER ) ) {
+
+       When ( /*[ Plusone'i', j]*/[ poi, j] Get 'grid' ) { ///[ Plusone'i', j] Greater equal (Get 'grid', 1) )
+          ++n_count
+       }
+       
+       When ( Less equal ( /*Plus one 'j'*/ poj, SIZEC) ) {
+          When ( /*[ Plusone'i', Plusone'j']*/[poi, poj] Get 'grid' ) { ///[ Plusone'i', Plusone'j'] Greater equal (Get 'grid', 1) )
+             ++n_count
+          }
+       }
+       
+       When ( /*Minus one 'j'*/ moj ){
+          When ( /*[ Plusone'i', Minusone'j']*/[poi, moj] Get 'grid' ){  //[ Plusone'i', Minusone'j'] Greater equal (Get 'grid', 1) ) 
+             ++n_count
+          }
+       }
+    }
+
+/*    If ( Less (Plus one 'i', SIZER) And ( Less ( Plus one 'j', SIZEC) ) )
+
+       If( [ Plusone'i', Plusone'j'] Get 'grid' )  ///[ Plusone'i', Plusone'j'] Greater equal (Get 'grid', 1) )
+          ++n_count
+       End If
+    End If */
+
+Return 'n_count'
+

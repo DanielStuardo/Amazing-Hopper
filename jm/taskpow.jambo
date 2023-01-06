@@ -1,0 +1,14 @@
+
+#include <jambo.h>
+
+Main
+   n=0
+   x1=0,x2=0
+   Set decimal '0'
+//   Let ( n:= {5} Pow by '4' Pow by '3' Pow by '2' )
+//   Let ( n:= Pow(Pow(Pow(5,4),3),2) )
+   {3} Pow by '2' Move to 'x1'    Printnl("x1=",x1)
+   {4} Pow by 'x1' Move to 'x2'   Printnl("x2=",x2)
+   {5} Pow by 'x2' Move to 'n'
+   Printnl(" N = ", n)
+End

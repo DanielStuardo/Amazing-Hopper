@@ -1,0 +1,58 @@
+/* Chaos game */
+
+// rxvt -g 800x250 -fn "xft:FantasqueSansMono-Regular:pixelsize=1" -e hopper jm/chaosg3.jambo
+
+#include <jambo.h>
+
+#define LIMITE  50000
+Main
+//  Set video text
+  
+  ancho = 400, alto = 150
+  x=0,y=0,color=0
+  vertice=0, 
+  c=0, Let( c := Utf8(Chr(219)))
+  Let(x := Int(Rand(ancho)))
+  Let(y := Int(Rand(alto)))
+
+  mid ancho=0, Let( mid ancho:= Div(ancho,2))
+
+//  Dim(LIMITE,3) as zeros(pixeles)
+// SWITCH es muy lento!!
+  Cls
+  i=LIMITE
+  Void(pixeles)
+
+  Loop
+    On 'Ceil(Rand(3))' gosub( EQ1, EQ2, EQ3 )
+
+    Set( Int(y), Int(x), color),Apndrow(pixeles)
+    //Color back 'color', Locate ( Int(y), Int(x) ), Print (" ")
+    --i
+  Back if (i) is not zero
+
+//  Set video graph(2)
+//  Canvas-term  
+  Cls
+  i=1
+  Iterator(++i, Leq(i,LIMITE), Colorfore([i,3]Get(pixeles)), \
+                             Locate( [i,1]Get(pixeles), [i,2]Get(pixeles) ), Print(c) ) //; Prnl
+  Pause
+//  Set video text
+
+End
+Subrutines
+    EQ1:
+          Let(x := A half(x))
+          Let(y := A half(y))
+          Let(color:=9), Return
+
+    EQ2:
+          Let(x := Add( mid ancho, A half(Sub(mid ancho, x)) ) )
+          Let(y := Sub( alto, A half( Sub(alto, y))))
+          Let(color:=10), Return
+    EQ3:
+          Let(x := Sub(ancho,  A half( Sub(ancho, x))))
+          Let(y := A half(y))
+          Let(color:=4), Return
+

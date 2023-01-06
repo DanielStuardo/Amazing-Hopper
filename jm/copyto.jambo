@@ -1,0 +1,13 @@
+#include <jambo.h>
+
+Main
+   
+   x=0, mesg="", suma=0
+   
+   Move( 1, "mensaje", Add(10,-1) ) Into( x, mesg, suma )
+   
+   Printnl("X=",x)
+   Printnl("MESG=", mesg)
+   Printnl("SUMA=", suma)
+
+End

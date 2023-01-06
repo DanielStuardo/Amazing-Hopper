@@ -1,0 +1,9 @@
+
+#include <jambo.h>
+
+Main
+   Dim '10,10' as ceil rand '10,x'
+   v=0
+   [5,5] Of cell into 'x,v'
+   Printnl(v)
+End

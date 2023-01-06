@@ -1,0 +1,30 @@
+
+#include <jambo.h>
+
+Main
+   Init zero 't1,t2'
+   
+   Tic(t1)
+   Loop for (i=0; j=10000, Less(i,1000000), ++i;--j )
+       If ( var 'j' ---not positive jump---\
+            Less(i, 10000000))
+          ;
+       End If
+   Next
+   Toc(t1,t2), Printnl("I=",i," J=",j,"\nTIME = ",t2)
+
+   Tic(t1)
+   Loop for (i=0; j=10000, Less(i,1000000), ++i;--j )
+       If ( Positive 'j' And( Less(i, 10000000)) )
+          ;
+       End If
+   Next
+   Toc(t1,t2), Printnl("I=",i," J=",j,"\nTIME = ",t2)
+End
+
+/*
+I=1000000 J=-990000
+TIME = 0.342406
+I=1000000 J=-990000
+TIME = 0.647122
+*/

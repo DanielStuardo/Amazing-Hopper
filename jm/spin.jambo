@@ -1,0 +1,48 @@
+
+#define Backward   {"\033[1D"}print;
+
+#include <jambo.h>
+
+Main
+   Set break
+   Spinning rod animation={}, spin counter=0
+   Gosub ' Create Spinning '
+   
+   time process=0, tlimit=1000
+   time spin=0, tsplimit=100
+   Count process=5
+   
+   Loop while ( Count process )
+      Print ( "Process # ", Sub(6, Count process), "... " )
+      Tic (time process), Tic(time spin)
+      contador = 0
+      Loop  // simula el proceso
+         ++contador
+         Gosub 'Put spin'
+      Until ( Is time (tlimit ~= time process ) )
+      Gosub 'Delete spin'
+      
+      Set(" Contador = ", contador), Prnl
+      --Count process
+   Back
+   
+End
+
+Subrutines
+
+Define 'Put spin'
+   On time ( tsplimit ~= time spin ){
+      Backward
+      ++spin counter
+      When ( #( spin counter > 4) ) { Let (spin counter := 1) }
+      Print ( [spin counter] Get 'Spinning rod animation' )
+   }
+Return
+
+Define 'Delete spin'
+   Print ("\033[1DOk")
+Return
+
+Define 'Create Spinning'
+   Set ' "|","/", Utf8(Chr(196)), "\\" ', Apnd list 'Spinning rod animation'
+Return

@@ -1,0 +1,10 @@
+
+#include <jambo.h>
+
+#define TOPE 5
+Main
+   Dim (10) as int rand 'x'
+   
+   Mul( [1:5] of 'x', 20), [1:5] Put 'x'
+   Printnl ("X=\n",x)
+End

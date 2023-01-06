@@ -1,0 +1,19 @@
+
+#include <jambo.h>
+
+#defn Siambassonverdaderas(_X_,_Y_)   ##CODEIF,__firstop__=0;#ATOM#CMPLX;cpy(__firstop__),#ATOM#CMPLX;and;jnt(#ENDIF),
+#defn Essólolaprimeraopción           jmp(%%CODEIF), %ENDIF:, {__firstop__}, jnt(#ENDIF),
+#synon Else                           Essólolasegundaopción
+#synon EndIf                          FindelSi
+
+Main
+   True(v), False(w), False(first option)
+   
+   If ( var 'v' » 'first option', And ( w ) )
+       Printnl ("Son ambas opciones verdaderas")
+   Else If ( first option )
+       Printnl ("La primera opción es verdadera")
+   Else
+       Printnl ("La segunda opción es verdadera")
+   End If
+End

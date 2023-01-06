@@ -1,0 +1,19 @@
+
+
+
+
+main:
+w="amoroso",z="María tenía un corderito mañoso"
+t1=0,t2=0
+
+timecpu(t1);
+i=0,,____CODE_JUMP____298761569:,{i};{1000000};le?,jnt(____CODE_JUMP____366721333),
+z="María tenía un corderito mañoso"
+{0}{0}{"lorito"};{"corderito"};{0}{0}{w};upper;{"mañoso"};strtoutf8;{z};transform;transform,mov(z)
+++i,jmp(____CODE_JUMP____298761569),____CODE_JUMP____366721333:,
+timecpu(t2),{t2}minus(t1),clockpersec,div,mov(t2);
+{"Z="};{z};{"\n"}print;
+{"TIME = "};{t2};{"\n"}print;
+
+emptystack?do{{0}};return
+

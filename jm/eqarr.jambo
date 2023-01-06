@@ -1,0 +1,43 @@
+
+#include <jambo.h>
+
+Main
+   Dim (10,10) as int rand (10, v, w)
+   
+   t=0
+   Let ( t:=Equals (v,w) )
+   
+   Printnl ("V=\n",v,"\nW=\n",w,"\nRES=\n", Add(t,4), "\nSon iguales? ", Get if( Equal arrays (v,w), "Si","No") )
+
+   True(q)
+   Set ("La suma entre 2 valores booleanos es: ")
+   Add ( q , {5} Is less than ( 10) )
+   Prnl
+   
+   Compact ( v ), Move to 'v'
+   Printnl("Array compactado:\n", v, "\nLEN = ", Length(v))
+
+#defn Addto(_X_)   #IF plus(#FATOM) #ELSE #CMPLX; add; #EIF
+   
+   [4:6, 3:8] w = 100, Get 'w', Add to '0.5' Plus '3.897', Put 'w'
+   Printnl ("\nNuevo array = \n", w)
+   
+   Set ( 20,1,2,5,7,-5 ), sumall, Prnl
+   
+ //  Week of year 'Datenow', Prnl
+   Day of year 'Datenow', Prnl
+   
+   If ( This '10' Compared to '100' Is less?)
+       Printnl ("Es menor!")
+   End If
+
+   Clear 't'
+   t="2.3e+4"
+   Set ' t ', When ( Get notation? ){ Move to 't' }
+   Printnl( t )
+   
+   t="2356.67"
+   Set ' t ', Move on ( Get notation?, t ) 
+   Printnl( t )
+   
+End

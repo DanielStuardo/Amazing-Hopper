@@ -1,0 +1,56 @@
+
+#include <jambo.h>
+
+main:
+   .ctrlc
+/*   {"valor1=",25,"\nValor 2=",20,30} add,{"\n"} show
+   print
+   {10,20,30,40,50,60,"\n"} show
+   print
+  // {"multiplica = ",5} mulby '6', {"\n"} print
+
+   x=10, y=107.7
+   {x," valores!!!\nRADIO = ", y}, sqrt, mov(y),{y},{"\n"}print*/
+   w="maria tenia un corderito"
+   {w},upper,print
+   {"\nhola!\n",w,"\n"} print
+   pila=100, stack=200
+   {100.7,"\n"},sizestack, mov(pila), mov(stack),
+   {"Stack=", stack," Pila=",pila,"\n"} print
+  //{"Stack="," Pila=","\n"} print
+   i=0
+   t1=0, t2=0
+   Tic(t1)
+   ciclo:
+      //{"I= ",i,"\n"} print
+      ++i
+      {i,1000}jle(ciclo)
+   Toc(t1,t2)
+   Printnl("Tiempo = ", t2,"\n")
+   f={}
+   {10,20,30,40,50,60} show, Append row to 'f' //pushall(f)
+
+   {f},length,{"\n"},print
+   {f,"\n"} print
+   Set ("A","B","C","D","E","F") Append row to 'f'
+   {f} print
+   
+   [2,1] get 'f',{"\n"} print
+   {"NOMBRE"} put 'f', {f,"\n"} print
+   g=10, Plus one 'g', print
+   {"\n"} print
+   When( Less equal ([1,4] Get 'f', 40)  ){
+      When ( [1,4] Get 'f' ){
+          Printnl ("PASA")
+      }
+   }
+   Clr all marks
+   [1:2, 3:5] f = "PEPE"//{"PEPE"} Put 'f'
+   Print (f)
+   Clr all marks
+   
+   [1,1:6] Get 'f', Dup it, cat, Prnl
+   {1,6,2} Getcolsfrom(f), Prnl
+   //{f} Cat cols
+   
+{0}return

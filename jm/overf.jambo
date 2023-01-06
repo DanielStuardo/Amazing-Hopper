@@ -1,0 +1,13 @@
+
+#include <jambo.h>
+
+Main
+   Dim '5,5' as ceil rand '10,x'
+   Printnl (x)
+   "Celda overflow..."
+   [2,70] Of cell 'x', Prnl
+   [3,3] Of cell 'x', Prnl
+   [2,2,5] Of cell 'x', Prnl
+   [2,2,5] 100, Put cell 'x',
+   x, Prnl
+End
