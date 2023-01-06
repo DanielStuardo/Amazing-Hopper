@@ -17,6 +17,35 @@ Para una manual (casi) actualizado, puede visitar la Wiki de la misma página:
 
  https://rosettacode.org/wiki/Category:Amazing_Hopper
 
+#Help
+Escriba:
+
+hopper3        Para ayuda de analizador y ejecutor
+bhopper3       Para ayuda de ejecutor de binarios.
+
+Puede crear un binario cuando ya está seguro de que su programa funciona bien. Use VALGRIND para asegurarse más todavía.
+
+Un binario se crea así:
+
+hopper3 <filename.ext> -x -o bin/<filename>
+
+#Compilar un programa
+
+Para compilar un programa (y ejecutarlo) tiene dos opciones:
+1) hopper3 <filename.ext> 
+
+o si ya generó un binario:
+
+2) bhopper /bin/<filename>
+
+aunque también puede ejecutar en ambas modalidades como:
+
+./<filename[.ext]>
+
+#Otras opciones de compilación/ejecución:
+
+Consulte la ayuda.
+
 Dudas, consultas o ganas de colaborar con ideas o mejoras (que las necesita), contáctese con el autor en el correo:
 
 daniel.stuardo@gmail.com
