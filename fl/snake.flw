@@ -1,0 +1,814 @@
+// Snake
+ 
+// Implementing this task in Hopper-FLOW-MATIC++
+/*
+
+   rxvt -g 79x38 -fn "xft:FantasqueSansMono-Regular:pixelsize=19" -e hopper3 fl/snake.flw
+
+
+*/
+#include <flow.h>
+#include <flow-term.h>
+#include <keys.h>
+
+#define LIMIT_TIME      120
+#define INF_TIME        80  //70
+#define ONE_SECOND      1000
+#define TOTAL_TIME      100
+#define DECREMENT_TIME  10
+#define COLOR_FOOD      232
+#define BACK_FOOD       255
+#define TIME_LEVEL      90000 //90000  // un minuto y medio
+#define TIME_CHALLENGE  40000  // 40 segundos
+#define TIME_LOST       30000
+#define COLUMNA_PRINT   55
+#define SIZE_INITIAL    -7
+
+#enum  1,N,E,S,W
+#enum  1,SPACE,FOOD,BORDER
+
+DEF-MAIN 
+  // BREAK-ON
+   STACK 16
+   //SET-CLR-ALL-MARKS
+   
+   MSET(C, quit, nHead, dir, Size, SCORE, counter, T, TPlay,TSound, ConsPrey,Consumed stage )
+
+   SET(len,0)
+   
+   SET( w, 50) //50 ) //50
+   SET( h, 28) //28 ) // 24
+   SET( color food, COLOR_FOOD )
+   SET( back food, BACK_FOOD )
+   SET( TIME, 100 )
+   LET( Size :=  MUL(w,h) )
+   PRNL("SIZE=",Size," W=",w," H=",h)
+   SET( LEVEL,1 )
+   SET( REAL LEVEL,1 )
+   FALSE(swPierde)
+   TRUE(swExtra1,swExtra2)
+   
+   TRUE( tiles )
+   SET( back tiles,1 ), MSET(tile1, tile2)
+   VOID( head back tiles )
+   MEM("\033[48;5;28m","\033[48;5;29m","\033[48;5;62m","\033[48;5;63m","\033[48;5;70m","\033[48;5;71m","\033[48;5;4m","\033[48;5;27m" )
+   MEM("\033[48;5;99m","\033[48;5;97m","\033[48;5;17m","\033[48;5;18m","\033[48;5;62m","\033[48;5;63m")
+   APND-LST(head back tiles)
+   [back tiles] GET(head back tiles), MOVE-TO(tile1)
+   [PLUS-ONE(back tiles)] GET(head back tiles), MOVE-TO(tile2)
+   
+   VOID( big number, numL1, numL2, numL3 )
+
+   VOID( sounds ), SET( sound index, 1 )
+   MEM("Snake_music.wav","Snake_music_l3.wav","Snake_music_l5.wav","Snake_music_l4.wav","Snake_music_l6.wav")
+   APND-LST(sounds)
+   
+   GOSUB( set score )
+
+   MSET(tBoard1,tmpLimit,Maze,wM,hM,SizeM)
+   DIM( Size ) AS-ONES( board ), {board} MOVE-TO(tBoard1)
+
+  // load and prepare maze for challenge stage:
+/*   Maze = `awk -v semilla=7143 -v ancho=13 -v alto=14 -f maze.awk`  //8766 1231 8764
+         
+         LEN(GET-LINE(1,Maze)), MOVE-TO(wM)
+         CNT-LINES(Maze), MOVE-TO(hM)
+         
+         TRAN("3333","3331",Maze), MOVE-TO(Maze)
+         TRAN("343","313",Maze), MOVE-TO(Maze)
+         
+         LET( SizeM := MUL(wM,hM))
+         TRAN("",NL,Maze), MOVE-TO(Maze)
+      */  
+      SET(i,1)
+      LET( Maze := REPLICATE("3",50) )
+      
+      PERF-UP(i,26,1) 
+         LET( Maze := CAT( Maze, CAT( CAT("3", REPLICATE("1",48) ), "3") ) )
+      NEXT
+      LET( Maze := CAT( Maze, REPLICATE("3",50) ))
+      GOSUB( prepare maze )
+           
+   HIDE-CURSOR
+
+//   SET-VIDEO-GRAPH(15)
+   CLR-SCR
+
+   SET( TLimit := LIMIT_TIME )
+   MEM(SIZE_INITIAL),GOSUB( start )
+   SET( time out, TIME_LEVEL)
+
+   SYS( CAT(CAT("aplay fl/",[sound index]CGET(sounds)), "</dev/null >/dev/null 2>&1 &"))
+   GOSUB( titles )
+/*   GOSUB( show )
+   PAUSE, SHOW-CURSOR, SET-VIDEO-TEXT
+   STOP */
+   
+/* PLAY GAME!! */
+   SET(lives,3)
+   WHILE( lives )
+      GOSUB( show ) 
+      GOSUB( put titles )
+      GOSUB( ready ), SLEEP(1.5)
+      TIC( T ), TIC( TPlay ), TIC(TSound)
+      KBD-FREE
+      WHILE( NOT (quit) ) 
+         ON-TIME( TLimit ~= TPlay ){
+            GOSUB( show )
+            WHEN( KEY-PRESSED? ){ 
+               SCAN-CODE( C )
+               SELECT( C ) 
+                  CASE( K_UP )   { dir = N, EXIT }
+                  CASE( K_RIGHT ){ dir = E, EXIT }
+                  CASE( K_DOWN ) { dir = S, EXIT }
+                  CASE( K_LEFT ) { dir = W, EXIT }
+                  CASE( K_ESC )  { quit = 1, EXIT }
+                  CASE( 32 )  { PAUSE, EXIT }
+               SELEND
+            }
+            GOSUB( step )
+         }
+         ON-TIME( ONE_SECOND ~= T ) {
+            TIME-=DECREMENT_TIME, CLAMP(0,TOTAL_TIME,TIME)
+            {TIME, 12, COLUMNA_PRINT} GOSUB( put time )
+         }
+         ON-TIME( time out ~= TSound ){
+            // LEVEL CLEAR!!
+            GOSUB(LEVELCLEAR)
+          //  KBD-FREE
+          //  PUT-KEY(K_UP)
+            ///IF( EQ?(LEVEL,3), PUT-KEY(K_RIGHT), PUT-KEY(K_UP) )
+         }
+      WEND
+   
+      COND( OR(EQ?(LEVEL,3),EQ?(LEVEL,6)) )
+         //GOSUB(KILLSOUND)
+         GOSUB(you lost),SLEEP(3)
+         SET(quit,0), [nHead]{len}CPUT(board)
+         LOCATE(1,1), FILL-BOX(" ",29,54)
+         GOSUB( another play )
+      ELS
+         //GOSUB(KILLSOUND)
+         GOSUB(you lost),   SLEEP(3)
+         --lives
+         SET(quit,0)
+         TRUE(swPierde)
+         {len}GOSUB( start )
+         COND( IS-NOT-ZERO?(lives) )
+            SYS("aplay fl/Snake_music_vida_repechaje.wav </dev/null >/dev/null 2>&1 &")
+         CEND
+      CEND
+      
+     // KBD-FREE
+   WEND
+   
+/* GAME OVER */
+   GOSUB(game over ), SLEEP(2)
+//   SET-VIDEO-TEXT
+   SHOW-CURSOR
+   PRNL
+END
+
+RUTINES
+
+DEF-FUN( KILLSOUND )
+  SET( PID,0 )
+  LET( PID := ONLY-CHR("0123456789 ", EXEC( "pidof aplay" )))
+  COND( LEN(PID) )
+     SYS( CAT(CAT("kill ",PID), " </dev/null >/dev/null 2>&1"))
+  CEND
+RET
+
+// initialize the board, plant a very first food item
+DEF-FUN( start, initial pos )
+
+   COND( NOT-EQ?(LEVEL,3) )
+      {tBoard1} MOVE-TO(board)
+      {50,28},MUL(50,28), MOVE-TO( w, h, Size )
+      
+      [1:w] {BORDER} CPUT(board)  // top
+      [ SUB(MUL(h,w),MINUS-ONE(w)) : _end_] {BORDER} CPUT(board) // bottom
+      [1:w:_end_] {BORDER} CPUT(board)  // left
+
+      SET(i, 1)
+      FOR( LE?(i, h), ++i )
+         [ MUL(i, w )] {BORDER} PUT(board)  // right
+      NEXT
+      LET( time out:=TIME_LEVEL )
+   
+   ELS
+   //COND( EQ?(LEVEL,3) )
+      //MEM(hM, wM, SizeM), MOVE-TO(h,w,Size)
+      TRASH(board)
+      //{TLimit} MOVE-TO( tmpLimit )
+      //LET( TLimit := 150 )
+      //LET(time out := TIME_LABERYNTH)
+
+   CEND
+   
+   SELECT(LEVEL)
+      CASE(2){
+         SET(i,3)
+         PERF-UP(i,5,1)
+            // laterales extremos:
+             [ADD(MUL(i,w),5):ADD(MUL(i,w),8)] {BORDER} CPUT(board)
+             [ADD(MUL(i,w),SUB(w,7)):ADD(MUL(i,w),SUB(w,4))] {BORDER} CPUT(board)
+            // laterales fondo
+             [ADD(MUL(ADD(i,19),w),5):ADD(MUL(ADD(i,19),w),8)] {BORDER} CPUT(board)
+             [ADD(MUL(ADD(i,19),w),SUB(w,7)):ADD(MUL(ADD(i,19),w),SUB(w,4))] {BORDER} CPUT(board)
+
+         NEXT
+         EXIT
+      }
+      CASE(3){  // challenge stage!
+         SPLIT(Maze,board, "" ), VAL(board), MOVE-TO(board)
+         [1:w] {BORDER}CPUT(board)
+         SET(i,1)
+         
+         PERF-UP(i,19,1)
+             GOSUB(plant)
+         NEXT
+       /*  r=0
+         CART( EQ?(board,4) ), MOVE-TO(r), SET-RANGE(r), {SPACE},PUT(board)
+         CLR-RANGE, TRASH(r)*/
+         ///PUT-KEY(K_RIGHT)
+         LET(time out := TIME_CHALLENGE) 
+         EXIT
+      }
+      CASE(4){
+         SET(i,3)
+         PERF-UP(i,5,1)
+            // laterales medios
+             [ADD(MUL(ADD(i,9),w),5):ADD(MUL(ADD(i,9),w),8)] {BORDER} CPUT(board)
+             [ADD(MUL(ADD(i,9),w),SUB(w,7)):ADD(MUL(ADD(i,9),w),SUB(w,4))] {BORDER} CPUT(board)
+            // medio arriba
+             [ADD(MUL(i,w),17):ADD(MUL(i,w),20)] {BORDER} CPUT(board)
+             [ADD(MUL(i,w),31):ADD(MUL(i,w),34)] {BORDER} CPUT(board)
+            // medio abajo
+             [ADD(MUL(ADD(i,19),w),17):ADD(MUL(ADD(i,19),w),20)] {BORDER} CPUT(board)
+             [ADD(MUL(ADD(i,19),w),31):ADD(MUL(ADD(i,19),w),34)] {BORDER} CPUT(board)
+         NEXT
+         EXIT
+      }
+      
+      CASE(5){
+         SET(i,3)
+         PERF-UP(i,5,1)
+            // laterales extremos:
+             [ADD(MUL(i,w),5):ADD(MUL(i,w),8)] {BORDER} CPUT(board)
+             [ADD(MUL(i,w),SUB(w,7)):ADD(MUL(i,w),SUB(w,4))] {BORDER} CPUT(board)
+            // laterales medios
+             [ADD(MUL(ADD(i,9),w),5):ADD(MUL(ADD(i,9),w),8)] {BORDER} CPUT(board)
+             [ADD(MUL(ADD(i,9),w),SUB(w,7)):ADD(MUL(ADD(i,9),w),SUB(w,4))] {BORDER} CPUT(board)
+            // laterales fondo
+             [ADD(MUL(ADD(i,19),w),5):ADD(MUL(ADD(i,19),w),8)] {BORDER} CPUT(board)
+             [ADD(MUL(ADD(i,19),w),SUB(w,7)):ADD(MUL(ADD(i,19),w),SUB(w,4))] {BORDER} CPUT(board)
+            // medio arriba
+             [ADD(MUL(i,w),17):ADD(MUL(i,w),20)] {BORDER} CPUT(board)
+             [ADD(MUL(i,w),31):ADD(MUL(i,w),34)] {BORDER} CPUT(board)
+//            // medio abajo
+             [ADD(MUL(ADD(i,19),w),17):ADD(MUL(ADD(i,19),w),20)] {BORDER} CPUT(board)
+             [ADD(MUL(ADD(i,19),w),31):ADD(MUL(ADD(i,19),w),34)] {BORDER} CPUT(board)
+         NEXT
+         EXIT
+      }
+      CASE(6){
+         SET(i,1)
+         PERF-UP(i,29,1)
+            GOSUB(plant)
+         NEXT
+         LET(time out := TIME_CHALLENGE)      
+      }
+      
+      CASE(7){
+         SET(i,3)
+         PERF-UP(i,5,1)
+            // laterales extremos:
+             [ADD(MUL(i,w),5):ADD(MUL(i,w),8)] {BORDER} CPUT(board)
+             [ADD(MUL(i,w),SUB(w,7)):ADD(MUL(i,w),SUB(w,4))] {BORDER} CPUT(board)
+            // laterales medios
+             [ADD(MUL(ADD(i,9),w),5):ADD(MUL(ADD(i,9),w),8)] {BORDER} CPUT(board)
+             [ADD(MUL(ADD(i,9),w),SUB(w,7)):ADD(MUL(ADD(i,9),w),SUB(w,4))] {BORDER} CPUT(board)
+            // laterales fondo
+             [ADD(MUL(ADD(i,19),w),5):ADD(MUL(ADD(i,19),w),8)] {BORDER} CPUT(board)
+             [ADD(MUL(ADD(i,19),w),SUB(w,7)):ADD(MUL(ADD(i,19),w),SUB(w,4))] {BORDER} CPUT(board)
+            // medio arriba
+             [ADD(MUL(i,w),17):ADD(MUL(i,w),20)] {BORDER} CPUT(board)
+             [ADD(MUL(i,w),31):ADD(MUL(i,w),34)] {BORDER} CPUT(board)
+            // medio medio
+             [ADD(MUL(ADD(i,9),w),17):ADD(MUL(ADD(i,9),w),20)] {BORDER} CPUT(board)
+             [ADD(MUL(ADD(i,9),w),31):ADD(MUL(ADD(i,9),w),34)] {BORDER} CPUT(board)
+            // medio abajo
+             [ADD(MUL(ADD(i,19),w),17):ADD(MUL(ADD(i,19),w),20)] {BORDER} CPUT(board)
+             [ADD(MUL(ADD(i,19),w),31):ADD(MUL(ADD(i,19),w),34)] {BORDER} CPUT(board)
+         NEXT
+         EXIT
+      }
+   SELEND
+   
+   COND( NOT-EQ?(LEVEL,3) )
+      LET( nHead := MUL( w, SUB( SUB( h, 1 ), MOD(h,2) )) DIV-INTO(2) )
+      LET( dir := N )
+   ELS
+      LET( nHead := ADD( MUL( w, 13 ), 26 ) )
+      LET( dir := N )
+      //LET( nHead := ADD(w,2) )
+      //LET( dir := E )
+   CEND
+   [ nHead ] {initial pos} CPUT( board )
+
+   IF( swPierde, SRAND( ~SECONDS); FALSE(swPierde); {TIME_LOST} »» (time out),\
+                 SRAND( 26785 ) )
+
+   GOSUB( plant )
+   
+/*   COND( EQ?(LEVEL,3) )
+      r=0
+      CART( EQ?(board,4) ), MOVE-TO(r), SET-RANGE(r), {SPACE},PUT(board)
+      CLR-RANGE, TRASH(r)
+   CEND */
+RET
+
+DEF-FUN( you lost ) 
+   SET(i,1), SET(k,0), SET(n,1)
+   FOR( LE?(i, h), ++i)
+      SET(j,1)
+      FOR( LE?(j, w), ++j)
+         LET( k := [ n ] GET(board) )
+         COND( IS-NEG?( k ))
+             LOCATE(i,j)
+             PRN("\033[38;15;3m\033[48;5;9m~\OFF")
+         CEND
+         ++n
+      NEXT
+   NEXT
+   //SYS("aplay fl/death.wav </dev/null >/dev/null 2>&1 &")
+   SYS("aplay fl/Snake_dolor.wav </dev/null >/dev/null 2>&1 &")
+   
+RET
+
+DEF-FUN( show ) 
+
+   SET(i,1)
+   MSET(j, k)
+   SET(n,1)
+   LOCATE(1,1)
+   FOR( LE?(i, h), ++i)
+      SET(j,1),LOG-INV(tiles)
+      FOR( LE?(j, w), ++j)
+         LET( k := [ n ] GET(board) )
+         COND( IS-NEG?( k ))
+            COND( NOT-EQ?(n,nHead) )
+                //IF(GT?(k,-3),"\033[38;5;6m\033[48;5;11m+\OFF","\033[38;5;6m\033[48;5;11m \OFF")
+                //IF(GT?(k,-3),"\033[38;5;6m+\OFF","\033[38;5;6m\033[48;5;11m \OFF")
+                IF(GT?(k,-3),IF(tiles,{tile1},{tile2});{"\033[38;5;15m+\OFF"},"\033[38;5;6m\033[48;5;11m \OFF")
+            ELS    
+                COND( EQ?(dir,N))
+                    IF(tiles,"\033[38;5;9m\033[48;5;15mv\OFF","\033[38;5;9m\033[48;5;15m|\OFF")
+
+                ELS-COND( EQ?(dir,S))
+                    IF(tiles,"\033[38;5;9m\033[48;5;15m|\OFF","\033[38;5;9m\033[48;5;15m^\OFF")
+
+                ELS-COND( EQ?(dir,E))
+                    IF(tiles,"\033[38;5;9m\033[48;5;15m<\OFF","\033[38;5;9m\033[48;5;15m-\OFF")
+
+                ELS
+                    IF(tiles,"\033[38;5;9m\033[48;5;15m-\OFF","\033[38;5;9m\033[48;5;15m>\OFF")
+
+                CEND
+            CEND
+            
+         ELS-COND( {k} IS-EQ?(BORDER))
+            {"\033[38;5;82m\033[48;5;57m \OFF"}
+
+         ELS-COND( {k}IS-EQ?(FOOD) )
+            COLOR-FG(color food ),IF(tiles,{tile1},{tile2}) //back food)
+            {"@\OFF"}
+         ELS
+            IF(tiles,{tile1},{tile2})
+            {" \OFF"}
+         CEND
+         PRN
+         LOG-INV(tiles)
+         ++n
+      NEXT
+      PRNL
+   NEXT
+   color food+=2, 
+   back food-=2, WHEN( EQ?(color food, PLUS-ONE(BACK_FOOD))){
+                     LET( color food:=COLOR_FOOD)
+                     LET( back food:=BACK_FOOD)
+                 }
+RET
+
+// negative values denote the snake (a negated time-to-live in given cell)
+ 
+// reduce a time-to-live, effectively erasing the tail
+DEF-FUN( age )
+   
+   MSET( r, jAge, jR )
+   CART( IS-NEG?( board ) ) »» (r), SET-RANGE(r)
+
+   GET( board ) PLUS(1) »» (jAge)
+  
+  // this is necessary, because Hopper arrays begining in 1
+   CART( IS-ZERO?(jAge) ) »» (jR)
+   COND( IS-ARRAY?(jR) )
+      SET-RANGE(jR), SET(jAge, 1), SET-RANGE(r) 
+   CEND
+  // ******
+   {jAge} PUT(board), CLR-RANGE
+
+RET
+
+DEF-FUN( step )
+   LET( len := [nHead] GET(board) )
+   SELECT(dir)
+      CASE (N){ nHead -= w, EXIT }
+      CASE (S){ nHead += w, EXIT }
+      CASE (W){ --nHead, EXIT }
+      CASE (E){ ++nHead, EXIT }
+   SELEND
+   SELECT( [nHead]CGET(board))
+      CASE (SPACE){
+          --len, LET( len := IF( EQ?(len,0), 1, len) )
+          [nHead] { len }, CPUT(board) // keep in mind len is negative
+          GOSUB( age )
+          EXIT
+      }
+      CASE (FOOD){
+          COND( NOT(OR(EQ?(LEVEL,3),EQ?(LEVEL,6))))
+             --len, LET( len := IF( IS-ZERO?(len), 1, len) )
+          ELS
+             ++len  // quita celda del cuerpo: suma vida!
+          CEND
+          [nHead] { len }, CPUT(board)
+          WHEN(AND(NOT-EQ?(LEVEL,3),NOT-EQ?(LEVEL,6))){ GOSUB( plant ) }
+          
+          ADD(SCORE,TIME), MOVE-TO(SCORE)
+
+          {SCORE, 4, COLUMNA_PRINT} GOSUB( put score )
+          LET( TIME := 100 )
+          ++counter, COND( EQ?( counter, 25 ) )
+                        LET( TLimit := SUB( TLimit,5 ))
+                        CLAMP(INF_TIME, LIMIT_TIME, TLimit)
+                        LET( counter := 0 )
+                     CEND
+          WHEN( OR(EQ?(LEVEL,3),EQ?(LEVEL,6))){ ++Consumed stage }
+          ++ConsPrey
+          COLOR-FG(10)
+          LOCATE(20,COLUMNA_PRINT) PRN("SPEED: ")
+          LOC-ROW(21),  PRN( ROUND(MUL(INV(TLimit),LIMIT_TIME),2), " M/S     " )
+                        
+          LOC-ROW(23)   PRN("CONSUMED PREY:")
+          LOC-ROW(24)   PRN(ConsPrey,"\OFF")
+          
+          LET( color food:=COLOR_FOOD)
+          LET( back food:=BACK_FOOD)
+          
+          //SYS("aplay fl/eat1.wav </dev/null >/dev/null 2>&1 &")
+          SYS("aplay fl/Snake_mascada.wav </dev/null >/dev/null 2>&1 &")
+          
+          TIC( T ),{TIME, 12, COLUMNA_PRINT} GOSUB( put time )
+
+          EXIT
+      }
+      CASE-NEGATIVE {
+          GOSUB(KILLSOUND)
+          SYS("aplay fl/Snake_mascada.wav </dev/null >/dev/null 2>&1")
+          LET( quit := 1 )
+          EXIT
+      }  
+      DEFAULT {
+          GOSUB(KILLSOUND)
+          SYS("aplay fl/Snake_golpe.wav </dev/null >/dev/null 2>&1")
+
+          LET( quit := 1 )
+      }
+   SELEND
+RET
+
+DEF-FUN( LEVELCLEAR )
+   GOSUB(KILLSOUND)
+   GOSUB( level clear )
+   SYS("aplay fl/Snake_level_clear.wav </dev/null >/dev/null 2>&1")
+   SLEEP(1)
+   
+   WHEN( OR( EQ?(LEVEL,3), EQ?(LEVEL,6))){
+      WHEN( EQ?(Consumed stage,20)){
+          GOSUB( show )
+          SYS( "aplay fl/Snake_bono.wav </dev/null >/dev/null 2>&1 &" )
+          GOSUB(GANA BONO),SLEEP(3)
+          ADD(SCORE,1000), MOVE-TO(SCORE)
+          {SCORE, 4, COLUMNA_PRINT} GOSUB( put score )
+      }
+   }
+   GOSUB( another play )
+RET
+
+DEF-FUN( another play )
+   ++sound index, WHEN( EQ?(sound index,6)){ LET(sound index := 2) }
+   back tiles+=2, WHEN( EQ?(back tiles,15)){ LET(back tiles:=1) }
+
+   [back tiles] GET(head back tiles), MOVE-TO(tile1)
+   [PLUS-ONE(back tiles)] GET(head back tiles), MOVE-TO(tile2)
+   
+   ++LEVEL, WHEN( GT?(LEVEL,7)){ LET(LEVEL:=1) }
+   
+  /// WHEN( EQ?(LEVEL,4) ){ {tmpLimit} MOVE-TO( TLimit ) }
+   
+   ++ REAL LEVEL
+   COLOR-FG(15),LOCATE(26,COLUMNA_PRINT) SET-ITALIC, PRN("LEVEL: ",REAL LEVEL,"\OFF")
+
+   LET( len := [nHead] GET(board) )
+   [1:Size] MEM(1) CPUT(board)
+   CLR-INTERVAL
+   MEM(len), GOSUB( start )
+   
+   GOSUB( show )
+   COND( OR( EQ?(LEVEL,3), EQ?(LEVEL,6)))
+      GOSUB(challenge stage)
+   ELS
+      GOSUB( ready )
+   CEND
+   SLEEP(2)
+   SYS( CAT(CAT("aplay fl/",[sound index]CGET(sounds)), "</dev/null >/dev/null 2>&1 &"))
+   LET( TIME := TOTAL_TIME )
+   {TIME, 12, COLUMNA_PRINT} GOSUB( put time )
+RET
+
+// put a piece of food at random empty position
+DEF-FUN( plant )
+   SET(r, 0)
+   LOOP( search position )
+      LET( r := MOD( CEIL(RAND(MINUS-ONE(Size))), Size ) )
+   BACK-IF-NOT-EQ( [r] GET(board), SPACE, search position)
+   [r] {FOOD} CPUT( board )
+RET
+
+DEF-FUN( put titles )
+   LOCATE(2,COLUMNA_PRINT) PRN("\033[38;5;15mSCORE\OFF")
+   {SCORE, 4, COLUMNA_PRINT} GOSUB( put score )
+   LOCATE(10,COLUMNA_PRINT) PRN("\033[38;5;11mTIME\OFF")
+   {TIME, 12, COLUMNA_PRINT} GOSUB( put time )
+   
+   COLOR-FG(15)
+   LOCATE(26,COLUMNA_PRINT) SET-ITALIC,  PRN("LEVEL: ",REAL LEVEL,"\OFF")
+   LOCATE(27,COLUMNA_PRINT) SET-INVERSE, PRN("LIVES: ",lives,"\OFF")
+
+RET
+
+DEF-FUN( put time, B, posx, posy )
+   MSET( i,j,x )
+   MSET( sb, lsb,nB, p4 )
+   SET( k,1 )
+
+   LOCATE (posx, posy) FILL-BOX(" ",5,20)
+   LET( sb := STR(B) )
+   LET( lsb := LEN(sb) )
+   SET( rx, posy )
+   LET( p4 := ADD( posx, 4 ))
+   
+   COLOR-FG(11)
+   PERF-UP(k, lsb, 1) 
+      LET( nB := VAL( MID( 1, k, sb )) ) 
+      SET(x, 1), SET( i, posx )
+      FOR( LE?(i, p4), ++i )
+         SET( j, rx )
+         FOR( LE?(j, ADD( rx, 2 ) ), ++j )
+            LOCATE(i, j) PRN( STR-TO-UTF8(CHAR( [ PLUS-ONE(nB), x] CGET(big number) MUL-BY(219) )))
+            ++x
+         NEXT
+       NEXT
+       rx += 4
+   NEXT
+   PRN("\OFF")
+RET
+
+DEF-FUN( put score, SCORE, posx, posy )
+    MSET( ln,s, sp )
+    SET-ROUND(0)
+    LET( sp := STR( SCORE ))
+    LET( ln := LEN(sp))
+
+    LOCATE ( posx, posy ) FILL-BOX(" ",4,20)
+    SET(i, 1)
+    COLOR-FG(15)
+
+    PERF-UP( i, ln, 1)
+       LET( s := VAL( MID( 1, i, sp )) )
+       /*MID( 1, i, sp ), {"\n"} print*/
+       [ PLUS-ONE(s) ]
+       LOCATE( posx, posy ),      PRN ( STR-TO-UTF8( GET(numL1) ))
+       LOC-ROW( PLUS-ONE(posx) ), PRN ( STR-TO-UTF8( GET(numL2) ))
+       LOC-ROW( PLUS-TWO(posx) ), PRN ( STR-TO-UTF8( GET(numL3) ))
+       posy += 2
+    NEXT
+    PRN("\OFF")
+    COND( swExtra1 )
+        COND( GE?(SCORE,5000) )
+           ++lives
+           FALSE(swExtra1)
+           SYS( "aplay fl/Snake_bono.wav </dev/null >/dev/null 2>&1 &" )
+           LOCATE(27,COLUMNA_PRINT) SET-INVERSE, PRN("LIVES: ",lives,"\OFF")
+        CEND
+    ELS-COND(swExtra2)
+        COND( GE?(SCORE,10000) )
+           ++lives
+           FALSE(swExtra2)
+           SYS( "aplay fl/Snake_bono.wav </dev/null >/dev/null 2>&1 &" )
+           LOCATE(27,COLUMNA_PRINT) SET-INVERSE, PRN("LIVES: ",lives,"\OFF")
+        CEND
+    CEND
+    UNSET-ROUND
+RET
+
+DEF-FUN( set score )
+
+   {"┌┐"," ┐","┌┐","┌┐","┐┐","┌┐","┌┐","┌┐","┌┐","┌┐"} APND-LST(numL1)
+   {"││"," │","┌┘"," ┤","└┤","└┐","├┐"," │","├┤","└┤"} APND-LST(numL2)
+   {"└┘"," ┴","└┘","└┘"," ┘","└┘","└┘"," ┴","└┘","└┘"} APND-LST(numL3)
+
+   {1,1,1,1,0,1,1,0,1,1,0,1,1,1,1} APND-ROW( big number )
+   {1,1,0,0,1,0,0,1,0,0,1,0,1,1,1} APND-ROW( big number )
+   {1,1,1,0,0,1,1,1,1,1,0,0,1,1,1} APND-ROW( big number )
+   {1,1,1,0,0,1,0,1,1,0,0,1,1,1,1} APND-ROW( big number )
+   {1,0,1,1,0,1,1,1,1,0,0,1,0,0,1} APND-ROW( big number )
+   {1,1,1,1,0,0,1,1,1,0,0,1,1,1,1} APND-ROW( big number )
+   {1,0,0,1,0,0,1,1,1,1,0,1,1,1,1} APND-ROW( big number )
+   {1,1,1,0,0,1,0,0,1,0,0,1,0,0,1} APND-ROW( big number )
+   {1,1,1,1,0,1,1,1,1,1,0,1,1,1,1} APND-ROW( big number )
+   {1,1,1,1,0,1,1,1,1,0,0,1,0,0,1} APND-ROW( big number )
+
+RET
+
+DEF-FUN( ready )
+   {"\033[38;5;4m\033[48;5;11m"}
+   LOC-COL(16)
+   LOC-ROW(13); PRN( STR-TO-UTF8("  ▄   ▄▄  ▄  ▄▄  ▄ ▄ "))
+   LOC-ROW(14); PRN( STR-TO-UTF8(" █▄▀ █▀  █▄█ █ █ ▀▄▀ "))
+   LOC-ROW(15); PRN( STR-TO-UTF8(" ▀ ▀  ▀▀ ▀ ▀ ▀▄▀  ▀  "))
+   PRN("\OFF")
+RET
+
+DEF-FUN( level clear )
+   {"\033[38;5;4m\033[48;5;11m"}
+   LOC-COL(17) 
+   LOC-ROW(12); PRN( STR-TO-UTF8( " ▄   ▄▄ ▄ ▄  ▄▄ ▄   ")) 
+   LOC-ROW(13); PRN( STR-TO-UTF8( " █  █▀  █ █ █▀  █   "))  
+   LOC-ROW(14); PRN( STR-TO-UTF8( "  ▀  ▀▀  ▀   ▀▀  ▀  "))
+   LOC-ROW(15); PRN( STR-TO-UTF8( "  ▄ ▄   ▄▄  ▄   ▄   "))
+   LOC-ROW(16); PRN( STR-TO-UTF8( " █  █  █▀  █▄█ █▄▀  "))
+   LOC-ROW(17); PRN( STR-TO-UTF8( "  ▀  ▀  ▀▀ ▀ ▀ ▀ ▀  "))
+   PRN("\OFF")
+RET
+
+DEF-FUN( challenge stage )
+   {"\033[38;5;4m\033[48;5;11m"}
+   LOC-COL(9) 
+   LOC-ROW(12); PRN( STR-TO-UTF8( "  ▄ ▄ ▄  ▄  ▄  ▄   ▄▄  ▄   ▄▄  ▄▄ "))
+   LOC-ROW(13); PRN( STR-TO-UTF8( " █  █▄█ █▄█ █  █  █▀  █ █ █ ▄ █▀  "))
+   LOC-ROW(14); PRN( STR-TO-UTF8( "  ▀ ▀ ▀ ▀ ▀  ▀  ▀  ▀▀ ▀ ▀  ▀▀  ▀▀ "))
+   LOC-ROW(15); PRN( STR-TO-UTF8( "         ▄ ▄ ▄  ▄   ▄▄  ▄▄        "))
+   LOC-ROW(16); PRN( STR-TO-UTF8( "        ▀▄  █  █▄█ █ ▄ █▀         "))
+   LOC-ROW(17); PRN( STR-TO-UTF8( "        ▀   ▀  ▀ ▀  ▀▀  ▀▀        "))
+   PRN("\OFF")
+RET
+
+DEF-FUN( GANA BONO )
+   {"\033[38;5;11m\033[48;5;196m"}
+   LOC-COL(17)
+   LOC-ROW(12); PRN( STR-TO-UTF8("  ▄   ▄   ▄  ▄ ▄  ▄ "))
+   LOC-ROW(13); PRN( STR-TO-UTF8(" █▄▀ █ █ █ █ █ █ ▀▄ "))
+   LOC-ROW(14); PRN( STR-TO-UTF8(" ▀▄▀  ▀  ▀ ▀  ▀  ▀  "))
+   LOC-ROW(15); PRN( STR-TO-UTF8("  ▄     ▄   ▄   ▄   "))
+   LOC-ROW(16); PRN( STR-TO-UTF8("   █   █ █ █ █ █ █  "))
+   LOC-ROW(17); PRN( STR-TO-UTF8("   █ ▄ ▀▄▀ ▀▄▀ ▀▄▀  "))
+   PRN("\OFF")   
+RET
+
+DEF-FUN( game over )
+    {"\033[38;5;15m\033[48;5;9m"}
+    LOC-COL(17)
+    LOC-ROW(12); PRN( STR-TO-UTF8("  ▄▄  ▄   ▄ ▄   ▄▄ "))
+    LOC-ROW(13); PRN( STR-TO-UTF8(" █ ▄ █▄█ █ █ █ █▀  "))
+    LOC-ROW(14); PRN( STR-TO-UTF8("  ▀▀ ▀ ▀ ▀ ▀ ▀  ▀▀ "))
+    LOC-ROW(15); PRN( STR-TO-UTF8("   ▄  ▄ ▄  ▄▄  ▄   "))
+    LOC-ROW(16); PRN( STR-TO-UTF8("  █ █ █ █ █▀  █▄▀  "))
+    LOC-ROW(17); PRN( STR-TO-UTF8("   ▀   ▀   ▀▀ ▀ ▀  "))
+    PRN("\OFF")
+RET
+
+DEF-FUN( titles )
+    #define COLOR_INI   232
+    #define COLOR_FIN   255
+    SET(k,1)
+    PERF-UP(k,2,1)
+       SET(j,COLOR_INI), SET(jbg,COLOR_FIN)
+       PERF-UP(j,COLOR_FIN,1)
+          COLOR(j, jbg--)
+          LOC-COL(17)
+          LOC-ROW(12); PRN(STR-TO-UTF8("                      "))
+          LOC-ROW(13); PRN(STR-TO-UTF8("   ▄  ▄   ▄  ▄ ▄  ▄▄  "))
+          LOC-ROW(14); PRN(STR-TO-UTF8("  ▀▄ █ █ █▄█ █▄  █▀   "))
+          LOC-ROW(15); PRN(STR-TO-UTF8("  ▀  ▀ ▀ ▀ ▀ ▀ ▀  ▀▀  "))
+          LOC-ROW(16); PRN(STR-TO-UTF8("   ▄  ▄   ▄▄  ▄▄ ▄▄   "))
+          LOC-ROW(17); PRN(STR-TO-UTF8("  ▀▄ █▄█ █▀  █▀  █ █  "))
+          LOC-ROW(18); PRN(STR-TO-UTF8("  ▀  ▀    ▀▀  ▀▀ ▀▄▀  "))
+          LOC-ROW(19); PRN(STR-TO-UTF8("                      "))
+          MICROSECS(20000)
+       NEXT
+       SET(j,COLOR_FIN), SET(jbg,COLOR_INI)
+       PERF-DOWN(j,COLOR_INI,1)
+          COLOR(j, jbg++)
+          LOC-COL(17)
+          LOC-ROW(12); PRN(STR-TO-UTF8("                      "))
+          LOC-ROW(13); PRN(STR-TO-UTF8("   ▄  ▄   ▄  ▄ ▄  ▄▄  "))
+          LOC-ROW(14); PRN(STR-TO-UTF8("  ▀▄ █ █ █▄█ █▄  █▀   "))
+          LOC-ROW(15); PRN(STR-TO-UTF8("  ▀  ▀ ▀ ▀ ▀ ▀ ▀  ▀▀  "))
+          LOC-ROW(16); PRN(STR-TO-UTF8("   ▄  ▄   ▄▄  ▄▄ ▄▄   "))
+          LOC-ROW(17); PRN(STR-TO-UTF8("  ▀▄ █▄█ █▀  █▀  █ █  "))
+          LOC-ROW(18); PRN(STR-TO-UTF8("  ▀  ▀    ▀▀  ▀▀ ▀▄▀  "))
+          LOC-ROW(19); PRN(STR-TO-UTF8("                      "))
+          MICROSECS(20000)
+       NEXT
+    NEXT
+    PRN("\OFF")
+RET
+
+DEF-FUN( prepare maze )
+    REPL(12,ADD(MUL(w, 3),20),"333333333333",Maze),  MOVE-TO(Maze)
+    REPL(12,ADD(MUL(w, 24),20),"333333333333",Maze),  MOVE-TO(Maze)
+    
+    REPL(12,ADD(MUL(w, 6),7),"333333333333",Maze),  MOVE-TO(Maze)
+    REPL(12,ADD(MUL(w, 6),33),"333333333333",Maze),  MOVE-TO(Maze)
+
+    REPL(12,ADD(MUL(w, 21),7),"333333333333",Maze),  MOVE-TO(Maze)
+    REPL(12,ADD(MUL(w, 21),33),"333333333333",Maze),  MOVE-TO(Maze)
+    
+    SET(i,7)
+    PERF-UP(i,10,1)
+       REPL(1,ADD(MUL(w, i),7),"3",Maze),  MOVE-TO(Maze) 
+       REPL(1,ADD(MUL(w, i),44),"3",Maze),  MOVE-TO(Maze)
+       REPL(1,ADD(MUL(w, ADD(i,10)),44),"3",Maze),  MOVE-TO(Maze) 
+       REPL(1,ADD(MUL(w, ADD(i,10)),7),"3",Maze),  MOVE-TO(Maze) 
+    NEXT
+        
+/*         [SUB(MUL(wM, SUB(hM,1)),12)],{"4"} CPUT(Maze)
+         [SUB(MUL(wM, SUB(hM,2)),12)],{"4"} CPUT(Maze)
+         [SUB(MUL(wM, SUB(hM,3)),12)],{"4"} CPUT(Maze)
+         [SUB(MUL(wM, SUB(hM,4)),41)],{"4"} CPUT(Maze)
+         [SUB(MUL(wM, SUB(hM,2)),47)],{"4"} CPUT(Maze)
+         [SUB(MUL(wM, SUB(hM,6)),46)],{"3"} CPUT(Maze)
+         [SUB(MUL(wM, SUB(hM,11)),40)],{"4"} CPUT(Maze)
+
+         REPL(1,ADD(MUL(wM, 2),7),"3",Maze),  MOVE-TO(Maze)
+         REPL(3,ADD(MUL(wM, 6),6),"414",Maze),  MOVE-TO(Maze)
+         
+         REPL(5,ADD(MUL(wM, 16),4),"41414",Maze),  MOVE-TO(Maze)
+         REPL(5,ADD(MUL(wM, 18),4),"41414",Maze),  MOVE-TO(Maze)
+         REPL(5,ADD(MUL(wM, 19),4),"41414",Maze),  MOVE-TO(Maze)
+         REPL(5,ADD(MUL(wM, 20),4),"41414",Maze),  MOVE-TO(Maze)
+         
+         REPL(3,ADD(MUL(wM, 24),8),"414",Maze),  MOVE-TO(Maze)
+         REPL(4,ADD(MUL(wM, 22),13),"1414",Maze),  MOVE-TO(Maze)
+         REPL(5,ADD(MUL(wM, 22),21),"14141",Maze),  MOVE-TO(Maze)
+         REPL(5,ADD(MUL(wM, 21),21),"14141",Maze),  MOVE-TO(Maze)
+         REPL(8,ADD(MUL(wM, 20),21),"14141414",Maze),  MOVE-TO(Maze)
+         REPL(8,ADD(MUL(wM, 19),21),"14141414",Maze),  MOVE-TO(Maze)
+         REPL(3,ADD(MUL(wM, 16),30),"414",Maze),  MOVE-TO(Maze)
+         
+         REPL(8,ADD(MUL(wM, 10),26),"41414141",Maze),  MOVE-TO(Maze)
+         REPL(9,ADD(MUL(wM, 11),25),"141414141",Maze),  MOVE-TO(Maze)
+         REPL(9,ADD(MUL(wM, 12),25),"141414141",Maze),  MOVE-TO(Maze)
+         REPL(9,ADD(MUL(wM, 13),25),"141414141",Maze),  MOVE-TO(Maze)
+         REPL(9,ADD(MUL(wM, 14),25),"141414141",Maze),  MOVE-TO(Maze)
+         REPL(9,ADD(MUL(wM, 15),25),"141414141",Maze),  MOVE-TO(Maze)
+         REPL(9,ADD(MUL(wM, 16),25),"141414141",Maze),  MOVE-TO(Maze)
+         REPL(9,ADD(MUL(wM, 17),25),"141414141",Maze),  MOVE-TO(Maze)
+         REPL(9,ADD(MUL(wM, 18),25),"141414141",Maze),  MOVE-TO(Maze)
+         REPL(9,ADD(MUL(wM, 19),25),"141414141",Maze),  MOVE-TO(Maze)
+         
+         REPL(11,ADD(MUL(wM, 3),6),"41414141414",Maze),  MOVE-TO(Maze)
+         REPL(11,ADD(MUL(wM, 4),6),"41414141414",Maze),  MOVE-TO(Maze)
+         REPL(11,ADD(MUL(wM, 5),6),"41414141414",Maze),  MOVE-TO(Maze)
+
+         REPL(4,SUB(MUL(wM, 3),20),"1414",Maze),  MOVE-TO(Maze)
+         REPL(4,SUB(MUL(wM, 3),35),"4141",Maze),  MOVE-TO(Maze)
+         REPL(4,SUB(MUL(wM, 15),12),"1414",Maze),  MOVE-TO(Maze)
+         REPL(1,SUB(MUL(wM, 15),28),"4",Maze),  MOVE-TO(Maze)
+         REPL(1,SUB(MUL(wM, 3),8),"4",Maze),  MOVE-TO(Maze)
+         REPL(1,SUB(MUL(wM, 5),4),"4",Maze),  MOVE-TO(Maze)
+         REPL(7,SUB(MUL(wM, 7),15),"4141414",Maze),  MOVE-TO(Maze)
+         REPL(3,SUB(MUL(wM, 7),27),"414",Maze),  MOVE-TO(Maze)
+         REPL(3,SUB(MUL(wM, 5),31),"414",Maze),  MOVE-TO(Maze)
+         REPL(3,SUB(MUL(wM, 11),35),"414",Maze),  MOVE-TO(Maze)
+         
+         REPL(4,SUB(MUL(wM, SUB(hM,6)),12),"1414",Maze),  MOVE-TO(Maze)
+         REPL(4,SUB(MUL(wM, SUB(hM,14)),20),"1414",Maze), MOVE-TO(Maze)
+         REPL(4,SUB(MUL(wM, SUB(hM,7)),12),"1414",Maze),  MOVE-TO(Maze)
+         REPL(5,SUB(MUL(wM, SUB(hM,18)),9),"41414",Maze), MOVE-TO(Maze)
+         REPL(1,SUB(MUL(wM, SUB(hM,20)),32),"4",Maze),    MOVE-TO(Maze)
+         REPL(1,SUB(MUL(wM, SUB(hM,21)),32),"4",Maze),    MOVE-TO(Maze)
+*/
+RET

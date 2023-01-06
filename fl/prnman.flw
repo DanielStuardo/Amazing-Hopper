@@ -1,0 +1,16 @@
+
+#include<flow.h>
+#include<flow-term.h>
+
+DEF-MAIN(argv,argc)
+  SET(m,0)
+  CLR-SCR
+  LET( m:=STR(LOAD-MAT("mandel.dat")))
+  TRAN(" ","0",m), MOVE-TO(m)
+  TRAN("\W1\OFF","1",m), MOVE-TO(m)
+  SET-VIDEO-GRAPH(1)
+  TOK-SEP("")
+  PRNL(m)
+  PAUSE
+  SET-VIDEO-TEXT
+END

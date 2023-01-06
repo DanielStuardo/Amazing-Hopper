@@ -1,0 +1,17 @@
+#include <flow.h>
+
+DEF-MAIN(v,c)
+   SET(a, TRUE), SET(b, FALSE)
+   PRNL("valor logico: ", a, ", ", b)
+   FALSE(a,b)
+   PRNL("valor logico: ", a, ", ", b)
+
+   PRNL
+
+   STOR({TRUE,FALSE},a,b)
+   PRNL("valor logico: ", a, ", ", b)
+   LOG-INV(a,b)
+   PRNL("valor logico: ", a, ", ", b)
+   
+   PRNF( STR-TO-UTF8("Estimado señor: $0, con fecha de hoy, $1...\n"), "Juanito", DATE-NOW-STR )
+END

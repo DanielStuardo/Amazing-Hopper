@@ -1,0 +1,8 @@
+#include <flow.h>
+
+DEF-MAIN(argv,argc)
+  MSET(t,u)
+  TIC(t)
+  TOC(t,u)
+  PRNL("T = ",u )
+END

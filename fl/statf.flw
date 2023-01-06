@@ -1,0 +1,31 @@
+#include <flow.h>
+#include <flow-term.h>
+#include <flow-flow.h>
+
+DEF-MAIN(argv,argc)
+   BREAK-ON
+   IF( DO( MAIN PROCESS ) PLUS(1), PRN("OK\n"), PRN("NO OK\n") )
+END
+
+RUTINES
+
+DEF-FUN( MAINPROCESS )
+   
+   CNVS-TERMINAL, AMBER-PEN, CLR-SCR
+   
+   TOK-SEP( "$" )
+   DATA-FILE( "sample.txt", dats )
+   
+   VOID( Head ), MEM("# lines: ","Size: ","Length max: ","# max token: ") APND-LST(Head)
+   //CAT-COLS( DATOS DE ARCHIVO, STR(dats), Head )
+   DIM(4,2) AS-ALPHA( DATOS DE ARCHIVO )
+   [1:end,1] PAD-LEFT(" ",15, Head)      PUT( DATOS DE ARCHIVO )
+   [1:end,2] PAD-LEFT(" ",5, STR(dats)) CPUT( DATOS DE ARCHIVO )
+
+   VAR( DATOS DE ARCHIVO, "Fin de Archivo"), GOSUB(IMPRIMIR)
+   
+RET(0)
+
+DEF-FUN( IMPRIMIR, MSG, MSG2 )
+   PRN( TOK-SEP("") VAR( MSG ), NL, MSG2, NL )
+RET

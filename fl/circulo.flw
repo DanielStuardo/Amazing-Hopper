@@ -1,0 +1,62 @@
+#include <flow.h>
+
+DEF-MAIN(argv,argc)
+
+   SET( Pen, 0 )
+   LET( Pen := "P")
+   
+   MSET( bx, by )
+   SET( theta, M_PI_2 )  // pi/2 constant --> flow.h
+
+   SET( l, 1 )
+   SET( px,  50.0 )//65 )
+   SET( py,  15.0 ) //7 )
+  
+   //LET( bx := ADD( px, MUL( MUL( l, 50 ), SIN(theta) ) ) ) //23
+   //LET( by := SUB( py, MUL( MUL( l, 50 ), COS(theta) ) ) )  //23
+   
+   
+   
+   CLR-SCR
+//   HIDE-CURSOR
+   MEM ( px, py, 10 ) GOSUB( Pone un círculo )
+//   SHOW-CURSOR
+
+END
+
+SUBRUTINES
+
+DEF-FUN( Pone un círculo, xc, yc, ratio )
+
+  MSET( x, p )
+
+  SET( y, ratio )
+  LOCATE( yc,xc ), PRNL("O") 
+  {yc, xc, y, x} GOSUB( Plot Points )
+  LET( p := SUB( 1, ratio ) )
+  LOOP( Print Circle )
+     ++x
+     COND( LT?( p, 0 ) ) 
+          LET( p := ADD( p, MUL(2,x) ) PLUS(1) )
+     ELS
+          --y
+          LET( p := ADD( p, MUL(2, SUB(x,y))) PLUS(1) )
+     CEND
+     {yc, xc, y, x} GOSUB( Plot Points )
+  //BACK-IF-LT( y, x, Print Circle )
+  IF-LT(x,y) BACK-TO( Print Circle )
+RET
+
+DEF-FUN( Plot Points, xc, yc ,x1 ,y1 )
+//  COLOR-BG(14)
+  v=0,w=0
+  LOCATE( ADD(xc,x1) ---COPY(v)---, ADD( yc, y1) ---COPY(w)--- ), PRN( Pen ), LOCATE(1,1) PRN(v,", ",w) //PAUSE
+  LOCATE( SUB(xc,x1) ---COPY(v)---, ADD( yc, y1) ---COPY(w)--- ), PRN( Pen ), LOCATE(2,1) PRN(v,", ",w) //PAUSE
+  LOCATE( ADD(xc,x1) ---COPY(v)---, SUB( yc, y1) ---COPY(w)--- ), PRN( Pen ), LOCATE(3,1) PRN(v,", ",w) //PAUSE
+  LOCATE( SUB(xc,x1) ---COPY(v)---, SUB( yc, y1) ---COPY(w)--- ), PRN( Pen ), LOCATE(4,1) PRN(v,", ",w) //PAUSE
+  LOCATE( ADD(xc,y1) ---COPY(v)---, ADD( yc, x1) ---COPY(w)--- ), PRN( Pen ), LOCATE(5,1) PRN(v,", ",w) //PAUSE
+  LOCATE( SUB(xc,y1) ---COPY(v)---, ADD( yc, x1) ---COPY(w)--- ), PRN( Pen ), LOCATE(6,1) PRN(v,", ",w) //PAUSE
+  LOCATE( ADD(xc,y1) ---COPY(v)---, SUB( yc, x1) ---COPY(w)--- ), PRN( Pen ), LOCATE(7,1) PRN(v,", ",w) //PAUSE
+  LOCATE( SUB(xc,y1) ---COPY(v)---, SUB( yc, x1) ---COPY(w)--- ), PRNL( Pen ), LOCATE(8,1) PRN(v,", ",w) PAUSE
+//  PRNL("\OFF")
+RET

@@ -1,0 +1,116 @@
+
+#include <flow.h>
+#include <flow-term.h>
+#define BORDER 3
+#define SPACE 1
+#define FOOD  2
+DEF-MAIN
+   lst = `awk -v semilla=8766 -v ancho=13 -v alto=14 -f maze.awk`, board=0
+// 7631 9012 49012 8766
+   SET-VIDEO-GRAPH(15)
+   CLR-SCR
+   MSET(h,w,Size)
+   
+   //MSTOR(0, h,w,Size)
+   LEN(GET-LINE(1,lst)), MOVE-TO(w)
+   CNT-LINES(lst), MOVE-TO(h)
+   LET( Size := MUL(w,h))
+   TRAN("",NL,lst), MOVE-TO(lst)
+   SPLIT(lst,board, "" ), VAL(board), MOVE-TO(board)
+   [1:w] {BORDER}CPUT(board)
+   SET(i,1)
+   PERF-UP(i,19,1)
+       GOSUB(plant)
+   NEXT
+   r=0
+   CART( EQ?(board,4) ), MOVE-TO(r), SET-RANGE(r), board=1,CLR-RANGE
+   
+   
+   
+   GOSUB( show )
+   PRNL(h,NL,w)
+   PAUSE
+
+   PRN("\033[H")
+   PRN("\033[E")
+   SET-VIDEO-TEXT
+ //  LOCATE(1,70), PRN-TABLE(lst)
+ //  TOK-SEP(NL)
+//   PRNL(board)
+//   PRNL(ADIMS(board),NL,AROWS(board))
+END
+
+SUBRUTINES
+
+DEF-FUN( plant )
+   SET(r, 0)
+   LOOP( search position )
+      LET( r := MOD( CEIL(RAND(MINUS-ONE(Size))), Size ) )
+   BACK-IF-NOT-EQ( [r] GET(board), SPACE, search position)
+   [r] {FOOD} CPUT( board )
+RET
+
+DEF-FUN( show ) 
+
+   SET(i,1)
+   MSET(j, k)
+   SET(n,1)
+    LOCATE(1,1)
+   FOR( LE?(i, h), ++i)
+      SET(j,1) //,LOG-INV(tiles)
+      
+      FOR( LE?(j, w), ++j)
+         LET( k := [ n ] GET(board) )
+/*         COND( IS-NEG?( k ))
+            COND( NOT-EQ?(n,nHead) )
+                IF(GT?(k,-3),"\033[38;5;6m\033[48;5;11m+\OFF","\033[38;5;6m\033[48;5;11mo\OFF")
+                //PRN("\033[38;5;6m\033[48;5;11mo\OFF")
+                //PRN
+            ELS    
+                COND( EQ?(dir,N))
+                    //PRN("\033[38;5;9m\033[48;5;15mv\OFF")
+                    IF(tiles,"\033[38;5;9m\033[48;5;15mv\OFF","\033[38;5;9m\033[48;5;15m|\OFF")
+                    //PRN
+                ELS-COND( EQ?(dir,S))
+                    //PRN("\033[38;5;9m\033[48;5;15m^\OFF")
+                    IF(tiles,"\033[38;5;9m\033[48;5;15m|\OFF","\033[38;5;9m\033[48;5;15m^\OFF")
+                ELS-COND( EQ?(dir,E))
+                    //PRN("\033[38;5;9m\033[48;5;15m<\OFF")
+                    IF(tiles,"\033[38;5;9m\033[48;5;15m<\OFF","\033[38;5;9m\033[48;5;15m-\OFF")
+                   // PRN
+                ELS
+                    //PRN("\033[38;5;9m\033[48;5;15m>\OFF")
+                    IF(tiles,"\033[38;5;9m\033[48;5;15m-\OFF","\033[38;5;9m\033[48;5;15m>\OFF")
+                   // PRN
+                CEND
+            CEND
+            
+         ELS-*/
+         COND( {k} IS-EQ?(BORDER))
+            //PRN("\033[38;5;82m\033[48;5;57m#\OFF")
+            {"\033[38;5;82m\033[48;5;57m \OFF"}
+            //PRN( [k] GET(symbol),"\OFF")
+         ELS-COND( {k}IS-EQ?(FOOD) )
+           // COLOR(color food,back food)
+            //PRN( [k] GET(symbol),"\OFF")
+            //PRN("@\OFF")
+            {"@\OFF"}
+         ELS
+            //IF(tiles,{tile1},{tile2})         
+            //PRN( [k] GET(symbol),"\OFF")
+            //PRN(" \OFF")
+            {" \OFF"}
+         CEND
+         PRN
+       //  LOG-INV(tiles)
+         ++n
+      NEXT
+      PRNL
+   NEXT
+//   color food+=2, 
+//   back food-=2, WHEN( EQ?(color food, PLUS-ONE(BACK_FOOD))){
+//                     LET( color food:=COLOR_FOOD)
+//                     LET( back food:=BACK_FOOD)
+//                 }
+RET
+

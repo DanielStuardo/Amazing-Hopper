@@ -1,0 +1,36 @@
+#include <flow.h>
+#include <flow-term.h>
+#include <flow-flow.h>
+
+DEF-MAIN(argv,argc)
+   BREAK-ON
+   DO( MAIN PROCESS )
+END
+
+RUTINES
+
+DEF-FUN( MAINPROCESS )
+   
+   CNVS-TERMINAL, AMBER-PEN, CLR-SCR
+
+   VOID(X)
+   VAR(2,2,3,5,7) GET-SQR-ADD, PRNL
+   MEM(1,2,3,4,5,6,7,8,9,10) APND-LST(X)
+
+   MSET(SUMM,TX), SET(I,1)
+
+   ITERATE( ++I, \
+            LE?(I,LENGTH(X)), \
+            LET( SUMM, [I]GET(X) COPY-TO(TX), VAR(TX), GET-SQR-ADD, PLUS (SUMM) ))
+
+   PRNL( SUMM, NL )
+   
+   LET( SUMM := SUMMATORY ( VAR(X) POW-BY(2), MUL-BY(2) ) )
+   PRNL( SUMM, NL )
+   
+   TOK-SEP(NL)
+   PRNL ( GOSUB( HOLAMUNDO) )
+RET
+DEF-FUN(HOLAMUNDO)
+   MEM("HOLA MUNDO!")
+   RET

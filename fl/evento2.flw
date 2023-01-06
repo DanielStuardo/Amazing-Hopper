@@ -1,0 +1,30 @@
+/* Kernighans large earthquake problem. */
+
+#include <flow.h>
+
+DEF-MAIN(argv,argc)
+   MSET(total lines, line, Event,t1,t2 )
+   TOK-INIT
+   COND( IS-FILE?("datos.txt") )
+      LOAD-STR("datos.txt", Event)
+      LET( total lines:=CNT-LINES(Event) )
+      SET( i, 1 )
+      TIC(t1)
+      PERF-UP( i, total lines, 1)
+          TOK-SEP(NL), TOK(i)
+          LET( line := TOK-GET( Event ) )
+          TRY
+              TOK-SEP(" "), TOK(3)
+              WHEN( GT?( VAL(TOK-GET( line )), 6 ) ){
+                 PRNL( line )
+              }
+          CATCH(e)
+              // nothing: line is blank
+              //PRNL( ~GET-STR-ERROR )
+          FINISH
+      NEXT
+      TOC( t1, t2 ), PRNL( "Time = ", t2 )
+   ELS
+      PRNL("Error: File not found" )
+   CEND
+END

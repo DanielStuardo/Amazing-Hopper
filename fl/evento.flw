@@ -1,0 +1,28 @@
+
+/* Kernighans large earthquake problem. */
+
+#include <flow.h>
+
+#define MAX_LINE 1000
+
+DEF-MAIN(argv,argc)
+   MSET(fd, Event )
+   OPEN-INPUT("datos.txt")(fd)
+   COND( IS-NOT-FILE-ERROR? )
+      TOK-SEP( " " ), [3]
+      TIC(t1)
+      WHILE( NOT( EOF(fd) ) )
+         LET( Event := USING(MAX_LINE) READ-AS-ROW(fd), DUPLICATE-IT )
+         WHEN( IS-NOT-LENGTH-ZERO? ){
+            WHEN( GT?( GET(Event), 6 ) ){
+               PRNL( [1:2] CGET(Event),TAB,TAB, [3] GET(Event) )
+            }
+         }
+         CLEAR( Event )
+      WEND
+      TOC( t1, t2 ), PRNL( "Time = ", t2 )
+      CLOSE(fd)
+   ELS
+      PRNL("Error: ", ~GET-STR-FILE-ERROR )
+   CEND
+END

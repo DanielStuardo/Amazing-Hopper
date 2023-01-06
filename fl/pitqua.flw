@@ -1,0 +1,46 @@
+
+#include <flow.h>
+
+DEF-MAIN(argv, argc)
+   SET(N, 2200)
+   DIM( MUL(MUL(N,N),2) ) AS-ZEROS( temp )
+   DIM( N ) AS-ZEROS( found )
+   
+   MSET( a,T1,T2 )
+   TIC(T1)
+  // PRNL( " Creating sequence initial...\n" )
+   SEQ-SPC(1,N,N,a), LET( a := MUL(a,a) )
+
+   SET(i,1),SET(r,0)
+  // PRNL( " Creating sequence intermedia...\n" )
+   PERF-UP(i,N,1)
+       //SEQ-SPC(i,N,ADD(SUB(N,i),1),b)
+       //LET( b := MUL(b,b) )
+       LET( r := ADD( [i] GET( a ), [i:end] CGET(a) ) )
+       SET-RANGE( r ), SET(temp, 1), CLR-RANGE
+       //MCLEAR( r)  // los CLEAR aumentan exponencialmente el tiepo de ejecucion!!!!
+   NEXT
+   //PRNL(temp)
+  // PRNL( "Obteniendo los datos...\n" )
+   SET(c,1), SET(s,3), MSET(s1,s2,d)
+   PERF-UP(c, N, 1)
+       LET( s1 := s )
+       s += 2
+       LET( s2 := s )
+       LET( d := ADD(c,1) )
+       PERF-UP(d, N, 1)
+           COND ( [s1] GET(temp) ) 
+              [d] {1} PUT(found)
+           CEND
+           s1 += s2
+           s2 += 2
+       NEXT
+   NEXT
+   TOC(T1, T2), PRNL(" Time = ", T2 )
+   PRNL( "Imprimiendo resultados:\n" )
+   CART( IS-ZERO?( found ) ) MOVE-TO( r )
+   PRNL( r )
+   
+   
+   MCLEAR(temp, found, a, r)
+END

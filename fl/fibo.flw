@@ -1,0 +1,28 @@
+
+#include <flow.h>
+
+DEF-MAIN(argv,argc)
+   BREAK-ON
+   STACK 1024
+//   IF( EQ?(argc,2), DO( Fibonacci, VAL(ARGV(2)) ),
+   IF( EQ?(argc,2), VAL(ARGV(2)) GOSUB( Fibonacci),  \
+                    "Uso: Hopper fibo.ccu <numero-fib> " )
+
+/*   COND( EQ?(argc,2) )
+      DO( Fibonacci, VAL(ARGV(2)) )
+   ELS
+      MEM("Uso: Hopper fibo.ccu <numero-fib> ")
+   CEND */
+   PRNL
+   SET(V,0)
+   //ADD( DO(Fibonacci, 10), DO(Fibonacci,10) ),MOV(V), PRNL(V) // falla ciclo eterno! no coloral en LET
+   LET( V := ADD( VAR(10) GOSUB(Fibonacci), VAR(10) GOSUB(Fibonacci) ) )
+   PRNL(V)
+END
+
+RUTINES
+
+DEF-FUN( Fibonacci, n )
+RET(   IF( LE?(n,2), 1, \
+       ADD( DO( Fibonacci, SUB(n,1)), DO( Fibonacci, SUB(n,2)) ) )  )
+

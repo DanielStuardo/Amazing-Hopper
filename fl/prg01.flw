@@ -1,0 +1,135 @@
+
+
+
+#include <flow.h>
+#include <flow-term.h>
+
+DEF-MAIN(argv,argc)
+   BREAK-ON
+   STACK 20
+   IF( DO( MAIN PROCESS ) PLUS(1), PRN("OK\n"), PRN("NO OK\n") )
+END
+
+RUTINES
+
+DEF-FUN( MAINPROCESS )
+   
+   CNVS-TERMINAL, AMBER-PEN, CLR-SCR
+   
+   TOK-SEP( "$" )
+   DATA-FILE( "sample.txt", dats )
+   
+   VOID( Head /*, datos de archivo */), MEM("# lines: ","Size: ","Length max: ","# max token: ") APND-LST(Head)
+   //CAT-COLS( datos de archivo, STR(dats), Head )
+   
+   DIM(4,2) AS-ALPHA( DATOS DE ARCHIVO )
+   [1:end,1] PAD-LEFT(" ",15, Head)       PUT( DATOS DE ARCHIVO )
+   [1:end,2] PAD-LEFT(" ",5, STR(dats)) CPUT( DATOS DE ARCHIVO )
+   PRN( TOK-SEP("") VAR(DATOS DE ARCHIVO)/*datos de archivo*/, NL )
+   TOK-SEP(",")
+   
+   SET(i,1)
+   SET(X,0)
+   MSET(a,b,c)
+   STOR( DO( getdata ), a,b,c), PRNL("A=",a,", B=",b,", C=",c)
+   MSTOR( -100, a,b,c), PRNL("A=",a,", B=",b,", C=",c)
+   
+   VOID( V,W ) //, SET(V,0.3)
+   
+   DO( getdata ), APND-LST(V)
+   LET( V, STR(V) )
+   MEM("A=","B=","C=") APND-LST (W)
+   LET( V, DISTR(V,W) )
+   PRNL(V)
+   
+   PRNL( "Elementos 3 y 7: ",[ 3: ADD(2,2) :7 ] CGET(V) )
+   
+   FALSE(X)   // idem a LET( X,NOT(i) )
+   LET( i, IF( X, SET(i,100), SET(i,-100) ) ADD(i, ADD(SQRT(10),i) ) )
+   
+   PRN( IF( LE?(i,20), "Es menor o igual\n", "Es mayor...\n" ) )
+   PRN( "I = ",i, NL )
+
+   
+   LET( i, SET(i,1) #( i + sqrt(10) + i ) )
+   
+   IF( LE?(i,20), "Es menor o igual\n", "Es mayor...\n" )
+   PRN( "I = ",i, NL )
+  
+   COND( OR ( LE?( DO( SUMA,10, CALL(SUMA,1,0.5) ) CPY(i), 10), TRUE ))
+      PRN("Se cumple ",i,"\n" )
+   ELS-COND( 0 )
+      PRN( ADD( 100,-1 )," Es el valor\n" )
+   ELS-COND( 1 )
+      PRNL( "--NADA--" )
+   ELS
+      PRN("No se cumple ",i,"\n")
+   CEND
+   PRN( UCAS("Argumentos: "), UCAS(argv), " Total: ",argc, NL)
+   PRN( UCAS( CAT( "Hola", " mundo!!\n" ) ) )
+   MEM( NL ), PRN
+   
+   WHEN( 1 ){
+      PRNL( MEM( 100 ), PLUS(30) )
+      ADD(100,30),PRNL
+   
+      % #( 100 - 30 ) %, PRNL
+      PRNL( % #(100-30) % )
+   }
+   PRNL( SET(i,10) ADD(i,10) MOV(i) MEM(i) )
+   PRNL( SET(i,10) ADD(i,10) CPY(i), ", ",SQRT(i),", ", IF( MEM(i) IS-LE?(10),"TRUE","FALSE") )
+   PRNL( IF( LE?( 10,100 ), "TRUE", "FALSE" ) )
+   
+   SET(i,0)
+   LOOP(imprime enteros)
+      PRNL("I = ",i++ )
+   //BACK-IF( LE?(i,100) )
+   BACK-IF( AND( TRUE, LE?(i,10) ), imprime enteros )
+
+   SET(i,10.0)
+   LOOP(imprime decimales)
+      PRNL("I = ", i ), LET(i, ADD(i, 0.1))
+   BACK-IF-LE( MEM(i,21), imprime decimales )
+   
+   SET(j,0)
+   WHILE( LE?(j,10) )
+      PRNL("J = ",j++)
+   WEND
+   
+   SET(j,0)
+   PERF-UP( j, 10, 1 )
+      PRNL("J = ",j)
+   NEXT
+   
+   SET(j,10), PERF-DOWN( j, 0, 1 )
+                 PRNL("J = ",j)
+              NEXT
+   
+   SET(k,0)
+   FOR( MEM(k) IS-LE? (10), ++k )
+      PRNL("\tk = ",k)
+   NEXT
+   SET(k,10)
+   LOOP(imprime solo positivos)
+      PRNL("K = ",k )
+   BACK-IF-NOT-ZERO( k--, imprime solo positivos )
+
+   STOR({100,10},k,i), PERFORM( Mensaje en una botella, VAR(i), "Hola mundo!", k++ ) 
+   
+   DIM (10,20) AS-EYES(Q)
+   PRNL(Q, NL)
+RET(SUB(i,i))
+
+DEF-FUN( getdata )
+   MEM(0.1,0.2,0.3)
+RET
+
+DEF-FUN( SUMA, X, Y )
+  ADD(X,Y)
+RET
+
+DEF-FUN( Mensaje en una botella, msg, i )
+  PRNL( msg," : ", i) 
+RET
+
+

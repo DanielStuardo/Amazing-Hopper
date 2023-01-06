@@ -1,0 +1,546 @@
+// Snake
+ 
+// Implementing this task in Hopper-FLOW-MATIC++
+
+#include <flow.h>
+#include <flow-term.h>
+#include <keys.h>
+
+#define LIMIT_TIME      120
+#define INF_TIME        70
+#define ONE_SECOND      1000
+#define TOTAL_TIME      100
+#define DECREMENT_TIME  10
+#define COLOR_FOOD      232
+#define BACK_FOOD       255
+#define TIME_LEVEL      60000
+
+#enum  1,N,E,S,W
+#enum  1,SPACE,FOOD,BORDER
+
+DEF-MAIN(argv, argc)
+   //BREAK-ON
+   STACK 16
+   CLR-SCR
+   MSET(C, quit, nHead, dir, Size, SCORE, counter, T, TPlay,TSound, ConsPrey )
+   SET( symbol, " $@" )
+
+   SET( w, 50 ) //50
+   SET( h, 28 ) // 24
+   SET( color food, COLOR_FOOD )
+   SET( back food, BACK_FOOD )
+   SET( TIME, 100 )
+   LET( Size :=  MUL(w,h) )
+   SET( TLimit := LIMIT_TIME )
+   SET( LEVEL,1 )
+   
+   TRUE( tiles )
+   SET( back tiles,1 ), MSET(tile1, tile2)
+   VOID( head back tiles )
+   MEM("\033[48;5;28m","\033[48;5;29m","\033[48;5;62m","\033[48;5;63m","\033[48;5;52m","\033[48;5;88m","\033[48;5;4m","\033[48;5;27m" )
+   MEM("\033[48;5;99m","\033[48;5;97m")
+   APND-LST(head back tiles)
+   [back tiles] GET(head back tiles), MOVE-TO(tile1)
+   [PLUS-ONE(back tiles)] GET(head back tiles), MOVE-TO(tile2)
+   
+   VOID( big number, numL1, numL2, numL3 )
+   //GOSUB( set sounds )
+   VOID( sounds ), SET( sound index, 1 )
+   MEM("Snake_music.wav","Snake_music_l3.wav","Snake_music_l4.wav"), APND-LST(sounds)
+   
+   GOSUB( set score )
+
+   DIM( Size ) AS-ONES( board )
+   HIDE-CURSOR
+
+   SET-VIDEO-GRAPH(15)
+   
+   SYS( CAT(CAT("aplay fl/",[sound index]CGET(sounds)), "</dev/null >/dev/null 2>&1 &"))
+   
+   GOSUB( titles )
+   GOSUB( put titles )
+   MEM(-5),GOSUB( start )
+   GOSUB( show )
+   GOSUB( ready ), SLEEP(1.5)
+   TIC( T ), TIC( TPlay ), TIC(TSound)
+   WHILE( NOT (quit) ) 
+      ON-TIME( TLimit ~= TPlay ){
+         GOSUB( show )
+         WHEN( KEY-PRESSED? ){ 
+            SCAN-CODE( C )
+            SELECT( C ) 
+               CASE( K_UP )   { dir = N, EXIT }
+               CASE( K_RIGHT ){ dir = E, EXIT }
+               CASE( K_DOWN ) { dir = S, EXIT }
+               CASE( K_LEFT ) { dir = W, EXIT }
+               CASE( K_ESC )  { quit = 1, EXIT }
+               CASE( 32 )  { PAUSE, EXIT }
+            SELEND
+         }
+         GOSUB( step )
+      }
+      ON-TIME( ONE_SECOND ~= T ) {
+         TIME-=DECREMENT_TIME, CLAMP(0,TOTAL_TIME,TIME)
+         {TIME, 12, 52} GOSUB( put time )
+      }
+      ON-TIME( TIME_LEVEL ~= TSound ){
+         // LEVEL CLEAR!!
+         GOSUB(LEVELCLEAR)
+      }
+   WEND
+   GOSUB(KILLSOUND)
+   GOSUB(you lost),   SLEEP(1)
+   GOSUB(game over ), SLEEP(4),PAUSE
+   LOCATE(ADD(h,1),1) PRNL
+   SHOW-CURSOR
+   SET-VIDEO-TEXT
+   PRNL
+END
+
+RUTINES
+
+DEF-FUN( KILLSOUND )
+  SET( PID,0 )
+  LET( PID := ONLY-CHR("0123456789 ", EXEC( "pidof aplay" )))
+  COND( LEN(PID) )
+     SYS( CAT(CAT("kill ",PID), " </dev/null >/dev/null 2>&1"))
+  CEND
+RET
+
+// initialize the board, plant a very first food item
+DEF-FUN( start, initial pos )
+   SET( i,1 )
+
+   [1:w] {BORDER} CPUT(board)  // top
+   [ SUB(MUL(h,w),MINUS-ONE(w)) : end] {BORDER} CPUT(board) // bottom
+   [1:w:end] {BORDER} CPUT(board)  // left
+
+   SET(i, 1)
+   FOR( LE?(i, h), ++i )
+      [ MUL(i, w )] {BORDER} PUT(board)  // right
+   NEXT
+   SELECT(LEVEL)
+      CASE(2){
+         SET(i,3)
+         PERF-UP(i,5,1)
+            // laterales extremos:
+             [ADD(MUL(i,w),5):ADD(MUL(i,w),8)] {BORDER} CPUT(board)
+             [ADD(MUL(i,w),SUB(w,7)):ADD(MUL(i,w),SUB(w,4))] {BORDER} CPUT(board)
+            // laterales medios
+//             [ADD(MUL(ADD(i,9),w),5):ADD(MUL(ADD(i,9),w),8)] {BORDER} CPUT(board)
+//             [ADD(MUL(ADD(i,9),w),SUB(w,7)):ADD(MUL(ADD(i,9),w),SUB(w,4))] {BORDER} CPUT(board)
+            // laterales fondo
+             [ADD(MUL(ADD(i,19),w),5):ADD(MUL(ADD(i,19),w),8)] {BORDER} CPUT(board)
+             [ADD(MUL(ADD(i,19),w),SUB(w,7)):ADD(MUL(ADD(i,19),w),SUB(w,4))] {BORDER} CPUT(board)
+            // medio arriba
+//             [ADD(MUL(i,w),17):ADD(MUL(i,w),20)] {BORDER} CPUT(board)
+//             [ADD(MUL(i,w),31):ADD(MUL(i,w),34)] {BORDER} CPUT(board)
+//            // medio medio
+//             [ADD(MUL(ADD(i,9),w),17):ADD(MUL(ADD(i,9),w),20)] {BORDER} CPUT(board)
+//             [ADD(MUL(ADD(i,9),w),31):ADD(MUL(ADD(i,9),w),34)] {BORDER} CPUT(board)
+//            // medio abajo
+//             [ADD(MUL(ADD(i,19),w),17):ADD(MUL(ADD(i,19),w),20)] {BORDER} CPUT(board)
+//             [ADD(MUL(ADD(i,19),w),31):ADD(MUL(ADD(i,19),w),34)] {BORDER} CPUT(board)
+         NEXT
+         EXIT
+      }
+      CASE(3){
+         SET(i,3)
+         PERF-UP(i,5,1)
+            // laterales extremos:
+             [ADD(MUL(i,w),5):ADD(MUL(i,w),8)] {BORDER} CPUT(board)
+             [ADD(MUL(i,w),SUB(w,7)):ADD(MUL(i,w),SUB(w,4))] {BORDER} CPUT(board)
+            // laterales medios
+             [ADD(MUL(ADD(i,9),w),5):ADD(MUL(ADD(i,9),w),8)] {BORDER} CPUT(board)
+             [ADD(MUL(ADD(i,9),w),SUB(w,7)):ADD(MUL(ADD(i,9),w),SUB(w,4))] {BORDER} CPUT(board)
+            // laterales fondo
+             [ADD(MUL(ADD(i,19),w),5):ADD(MUL(ADD(i,19),w),8)] {BORDER} CPUT(board)
+             [ADD(MUL(ADD(i,19),w),SUB(w,7)):ADD(MUL(ADD(i,19),w),SUB(w,4))] {BORDER} CPUT(board)
+            // medio arriba
+//             [ADD(MUL(i,w),17):ADD(MUL(i,w),20)] {BORDER} CPUT(board)
+//             [ADD(MUL(i,w),31):ADD(MUL(i,w),34)] {BORDER} CPUT(board)
+//            // medio medio
+//             [ADD(MUL(ADD(i,9),w),17):ADD(MUL(ADD(i,9),w),20)] {BORDER} CPUT(board)
+//             [ADD(MUL(ADD(i,9),w),31):ADD(MUL(ADD(i,9),w),34)] {BORDER} CPUT(board)
+//            // medio abajo
+//             [ADD(MUL(ADD(i,19),w),17):ADD(MUL(ADD(i,19),w),20)] {BORDER} CPUT(board)
+//             [ADD(MUL(ADD(i,19),w),31):ADD(MUL(ADD(i,19),w),34)] {BORDER} CPUT(board)
+         NEXT
+         EXIT
+      }
+      CASE(4){
+         SET(i,3)
+         PERF-UP(i,5,1)
+            // laterales extremos:
+             [ADD(MUL(i,w),5):ADD(MUL(i,w),8)] {BORDER} CPUT(board)
+             [ADD(MUL(i,w),SUB(w,7)):ADD(MUL(i,w),SUB(w,4))] {BORDER} CPUT(board)
+            // laterales medios
+             [ADD(MUL(ADD(i,9),w),5):ADD(MUL(ADD(i,9),w),8)] {BORDER} CPUT(board)
+             [ADD(MUL(ADD(i,9),w),SUB(w,7)):ADD(MUL(ADD(i,9),w),SUB(w,4))] {BORDER} CPUT(board)
+            // laterales fondo
+             [ADD(MUL(ADD(i,19),w),5):ADD(MUL(ADD(i,19),w),8)] {BORDER} CPUT(board)
+             [ADD(MUL(ADD(i,19),w),SUB(w,7)):ADD(MUL(ADD(i,19),w),SUB(w,4))] {BORDER} CPUT(board)
+            // medio arriba
+             [ADD(MUL(i,w),17):ADD(MUL(i,w),20)] {BORDER} CPUT(board)
+             [ADD(MUL(i,w),31):ADD(MUL(i,w),34)] {BORDER} CPUT(board)
+            // medio medio
+             [ADD(MUL(ADD(i,9),w),17):ADD(MUL(ADD(i,9),w),20)] {BORDER} CPUT(board)
+             [ADD(MUL(ADD(i,9),w),31):ADD(MUL(ADD(i,9),w),34)] {BORDER} CPUT(board)
+            // medio abajo
+             [ADD(MUL(ADD(i,19),w),17):ADD(MUL(ADD(i,19),w),20)] {BORDER} CPUT(board)
+             [ADD(MUL(ADD(i,19),w),31):ADD(MUL(ADD(i,19),w),34)] {BORDER} CPUT(board)
+         NEXT
+         EXIT
+      }
+   SELEND
+   
+   LET( nHead := MUL( w, SUB( SUB( h, 1 ), MOD(h,2) )) DIV-INTO(2) )
+   [ nHead ] {initial pos} CPUT( board )
+   LET( dir := N )
+   SRAND( ~SECONDS)
+   GOSUB( plant )
+RET
+
+DEF-FUN( you lost ) 
+   SET(i,1), SET(k,0), SET(n,1)
+  // LOCATE(1,1)
+   FOR( LE?(i, h), ++i)
+      SET(j,1)
+      FOR( LE?(j, w), ++j)
+         LET( k := [ n ] GET(board) )
+         COND( IS-NEG?( k ))
+             LOCATE(i,j)
+             PRNL("\033[38;15;3m\033[48;5;9m~\OFF")
+         CEND
+         ++n
+      NEXT
+   NEXT
+   SYS("aplay fl/death.wav </dev/null >/dev/null 2>&1 &")
+   
+RET
+
+DEF-FUN( show ) 
+
+   SET(i,1)
+   MSET(j, k)
+
+   SET(n,1)
+   LOCATE(1,1)
+   FOR( LE?(i, h), ++i)
+      SET(j,1),LOG-INV(tiles)
+      FOR( LE?(j, w), ++j)
+         LET( k := [ n ] GET(board) )
+         COND( IS-NEG?( k ))
+            PRN("\033[38;5;3m\033[48;5;15mO\OFF")
+         ELS-COND( {k} IS-EQ?(BORDER))
+               {"\033[38;5;82m\033[48;5;57m"}
+               PRN( [k] GET(symbol),"\OFF")
+         ELS-COND( {k}IS-EQ?(FOOD) )
+               COLOR(color food,back food)
+               PRN( [k] GET(symbol),"\OFF")
+         ELS
+               IF(tiles,{tile1},{tile2})         
+               PRN( [k] GET(symbol),"\OFF")
+         CEND
+         LOG-INV(tiles)
+         ++n
+      NEXT
+      PRNL
+   NEXT
+   color food+=2, 
+   back food-=2,  WHEN( EQ?(color food, PLUS-ONE(BACK_FOOD))){
+                     LET( color food:=COLOR_FOOD)
+                     LET( back food:=BACK_FOOD)
+                 }
+RET
+
+// negative values denote the snake (a negated time-to-live in given cell)
+ 
+// reduce a time-to-live, effectively erasing the tail
+DEF-FUN( age )
+   
+   MSET( r, jAge, jR )
+   CART( IS-NEG?( board ) ) »» (r), SET-RANGE(r)
+
+   GET( board ) PLUS(1) »» (jAge)
+  // this is necessary, because Hopper arrays begining in 1
+   CART( IS-ZERO?(jAge) ) »» (jR)
+   COND( IS-ARRAY?(jR) )
+      SET-RANGE(jR), SET(jAge, 1), SET-RANGE(r) 
+   CEND
+  // ******
+   {jAge} PUT(board), CLR-RANGE
+//   MCLEAR( jr, j, r) 
+/*   SET(i,1), SET(j,0)
+   FOR( LT?( i, Size), ++i )
+      COND( IS-NEG?( [i]CGET(board) ) )
+         [i] GET( board ), PLUS(1) »» (j)
+         COND( IS-ZERO?(j) )
+            {1}
+         ELS
+            {j}
+         CEND
+         CPUT(board)
+      CEND
+   NEXT */
+RET
+
+DEF-FUN( step )
+   SET(len,0)
+   LET( len := [nHead] GET(board) )
+   SELECT(dir)
+      CASE (N){ nHead -= w, EXIT }
+      CASE (S){ nHead += w, EXIT }
+      CASE (W){ --nHead, EXIT }
+      CASE (E){ ++nHead, EXIT }
+   SELEND
+   SELECT( [nHead]CGET(board))
+      CASE (SPACE){
+          --len, LET( len := IF( EQ?(len,0), 1, len) )
+          [nHead] { len }, CPUT(board) // keep in mind len is negative
+          GOSUB( age )
+          EXIT
+      }
+      CASE (FOOD){
+          --len, LET( len := IF( EQ?(len,0), 1, len) )
+          [nHead] { len }, CPUT(board)
+          GOSUB( plant )
+          ADD(SCORE,TIME), MOVE-TO(SCORE)
+
+          {SCORE, 4, 52} GOSUB( put score )
+          LET( TIME := 100 )
+          ++counter, COND( GT?( counter, 5 ) )
+                        LET( TLimit := SUB( TLimit,5 ))
+                        CLAMP(INF_TIME, LIMIT_TIME, TLimit)
+                        LET( counter := 0 )
+                     CEND
+          ++ConsPrey
+          COLOR-FG(10)
+          LOCATE(20,52) PRNL("SPEED: ")
+          LOC-ROW(21),  PRNL( ROUND(MUL(INV(TLimit),LIMIT_TIME),2), " M/S     " )
+                        
+          LOC-ROW(23)   PRNL("CONSUMED PREY:")
+          LOC-ROW(24)   PRNL(ConsPrey,"\OFF")
+          
+          LET( color food:=COLOR_FOOD)
+          LET( back food:=BACK_FOOD)
+          
+          SYS("aplay fl/eat1.wav </dev/null >/dev/null 2>&1 &")
+          
+          TIC( T ),{TIME, 12, 52} GOSUB( put time )
+
+          EXIT
+      }
+      LET( quit := 1 )
+      
+   SELEND
+RET
+
+DEF-FUN( LEVELCLEAR )
+   GOSUB(KILLSOUND)
+   GOSUB( level clear )
+   SYS("aplay fl/Snake_level_clear.wav </dev/null >/dev/null 2>&1")
+   SLEEP(1)
+   ++sound index, WHEN( EQ?(sound index,4)){ LET(sound index := 1) }
+   back tiles+=2, WHEN( EQ?(back tiles,11)){ LET(back tiles:=1) }
+   [back tiles] GET(head back tiles), MOVE-TO(tile1)
+   [PLUS-ONE(back tiles)] GET(head back tiles), MOVE-TO(tile2)
+   
+   ++LEVEL, WHEN( GT?(LEVEL,4)){ LET(LEVEL:=4) }
+   SET(len,0)
+   LET( len := [nHead] GET(board) )
+   [1:Size] MEM(1) CPUT(board)
+   CLR-INTERVAL
+   MEM(len), GOSUB( start )
+   
+   GOSUB( show )
+   GOSUB( ready ), SLEEP(2)
+   SYS( CAT(CAT("aplay fl/",[sound index]CGET(sounds)), "</dev/null >/dev/null 2>&1 &"))
+   LET( TIME := TOTAL_TIME )
+   {TIME, 12, 52} GOSUB( put time )
+RET
+
+// put a piece of food at random empty position
+DEF-FUN( plant )
+   SET(r, 0)
+   LOOP( search position )
+      LET( r := MOD( CEIL(RAND(MINUS-ONE(Size))), Size ) )
+   BACK-IF-NOT-EQ( [r] GET(board), SPACE, search position)
+   [r] {FOOD} CPUT( board )
+RET
+
+DEF-FUN( put titles )
+   LOCATE(2,52) PRNL("\033[38;5;15mSCORE\OFF")
+   {SCORE, 4, 52} GOSUB( put score )
+   LOCATE(10,52) PRNL("\033[38;5;11mTIME\OFF")
+   {TIME, 12, 52} GOSUB( put time )
+   
+   COLOR-FG(15)
+   LOCATE(26,52) SET-ITALIC, PRNL("  S P E E D")
+   LOC-ROW(27)               PRNL("S N A K E!\OFF")
+
+RET
+
+DEF-FUN( put time, B, posx, posy )
+   MSET( i,j,x )
+   MSET( sb, lsb,nB, p4 )
+   SET( k,1 )
+
+   LOCATE (posx, posy) FILL-BOX(" ",5,20)
+   LET( sb := STR(B) )
+   LET( lsb := LEN(sb) )
+   SET( rx, posy )
+   LET( p4 := ADD( posx, 4 ))
+   
+   COLOR-FG(11)
+   PERF-UP(k, lsb, 1) 
+      LET( nB := VAL( MID( 1, k, sb )) ) 
+      SET(x, 1), SET( i, posx )
+      FOR( LE?(i, p4), ++i )
+         SET( j, rx )
+         FOR( LE?(j, ADD( rx, 2 ) ), ++j )
+            LOCATE(i, j) PRNL( STR-TO-UTF8(CHAR( [ PLUS-ONE(nB), x] CGET(big number) MUL-BY(219) )))
+            ++x
+         NEXT
+       NEXT
+       rx += 4
+   NEXT
+   PRNL("\OFF")
+RET
+
+DEF-FUN( put score, SCORE, posx, posy )
+    MSET( ln,s, sp )
+
+    LET( sp := STR( SCORE ))
+    LET( ln := LEN(sp))
+
+    LOCATE ( posx, posy ) FILL-BOX(" ",4,20)
+    SET(i, 1)
+    COLOR-FG(15)
+    PERF-UP( i, ln, 1)
+       LET( s := VAL( MID( 1, i, sp )) )
+       [ PLUS-ONE(s) ]
+       LOCATE( posx, posy )  
+       PRNL ( STR-TO-UTF8( GET(numL1) ))
+       LOC-ROW( PLUS-ONE(posx) ) //,posy )
+       PRNL ( STR-TO-UTF8( GET(numL2) ))
+       LOC-ROW( PLUS-TWO(posx) ) //,posy )
+       PRNL ( STR-TO-UTF8( GET(numL3) ))
+       posy += 2
+    NEXT
+    PRNL("\OFF")
+/*    if swExtra1
+       if puntos>=10000
+          swExtra1<-false
+          ++vidas
+          if swSound
+             cmd(PATHs+"rat_extra.wav </dev/null >/dev/null 2>&1 &")
+          endif
+          .pone_vidas()
+       endif
+    elseif swExtra2
+       if puntos>=20000
+          swExtra2<-false
+          ++vidas
+          if swSound
+             cmd(PATHs+"rat_extra.wav </dev/null >/dev/null 2>&1 &")
+          endif
+          .pone_vidas()
+       endif
+    endif */
+RET
+
+/*DEF-FUN( set sounds )
+   Let( cPLAY := "aplay" )
+   Let( snake eat := "eat1.wav")
+RET*/
+
+DEF-FUN( set score )
+
+   {"┌┐"," ┐","┌┐","┌┐","┐┐","┌┐","┌┐","┌┐","┌┐","┌┐"} APND-LST(numL1)
+   {"││"," │","┌┘"," ┤","└┤","└┐","├┐"," │","├┤","└┤"} APND-LST(numL2)
+   {"└┘"," ┴","└┘","└┘"," ┘","└┘","└┘"," ┴","└┘","└┘"} APND-LST(numL3)
+
+   {1,1,1,1,0,1,1,0,1,1,0,1,1,1,1} APND-ROW( big number )
+   {1,1,0,0,1,0,0,1,0,0,1,0,1,1,1} APND-ROW( big number )
+   {1,1,1,0,0,1,1,1,1,1,0,0,1,1,1} APND-ROW( big number )
+   {1,1,1,0,0,1,0,1,1,0,0,1,1,1,1} APND-ROW( big number )
+   {1,0,1,1,0,1,1,1,1,0,0,1,0,0,1} APND-ROW( big number )
+   {1,1,1,1,0,0,1,1,1,0,0,1,1,1,1} APND-ROW( big number )
+   {1,0,0,1,0,0,1,1,1,1,0,1,1,1,1} APND-ROW( big number )
+   {1,1,1,0,0,1,0,0,1,0,0,1,0,0,1} APND-ROW( big number )
+   {1,1,1,1,0,1,1,1,1,1,0,1,1,1,1} APND-ROW( big number )
+   {1,1,1,1,0,1,1,1,1,0,0,1,0,0,1} APND-ROW( big number )
+
+RET
+
+DEF-FUN( ready )
+   {"\033[38;5;4m\033[48;5;11m"}
+   LOC-COL(16)
+   LOC-ROW(13); PRNL( STR-TO-UTF8("  ▄   ▄▄  ▄  ▄▄  ▄ ▄ "))
+   LOC-ROW(14); PRNL( STR-TO-UTF8(" █▄▀ █▀  █▄█ █ █ ▀▄▀ "))
+   LOC-ROW(15); PRNL( STR-TO-UTF8(" ▀ ▀  ▀▀ ▀ ▀ ▀▄▀  ▀  "))
+   PRNL("\OFF")
+RET
+
+DEF-FUN( level clear )
+   {"\033[38;5;4m\033[48;5;11m"}
+   LOC-COL(17) 
+   LOC-ROW(12); PRNL( STR-TO-UTF8( " ▄   ▄▄ ▄ ▄  ▄▄ ▄   ")) 
+   LOC-ROW(13); PRNL( STR-TO-UTF8( " █  █▀  █ █ █▀  █   "))  
+   LOC-ROW(14); PRNL( STR-TO-UTF8( "  ▀  ▀▀  ▀   ▀▀  ▀  "))
+   LOC-ROW(15); PRNL( STR-TO-UTF8( "  ▄ ▄   ▄▄  ▄   ▄   "))
+   LOC-ROW(16); PRNL( STR-TO-UTF8( " █  █  █▀  █▄█ █▄▀  "))
+   LOC-ROW(17); PRNL( STR-TO-UTF8( "  ▀  ▀  ▀▀ ▀ ▀ ▀ ▀  "))
+   PRNL("\OFF")
+RET
+
+DEF-FUN( game over )
+    {"\033[38;5;15m\033[48;5;9m"}
+    LOC-COL(17)
+    LOC-ROW(12); PRNL( STR-TO-UTF8("  ▄▄  ▄   ▄ ▄   ▄▄ "))
+    LOC-ROW(13); PRNL( STR-TO-UTF8(" █ ▄ █▄█ █ █ █ █▀  "))
+    LOC-ROW(14); PRNL( STR-TO-UTF8("  ▀▀ ▀ ▀ ▀ ▀ ▀  ▀▀ "))
+    LOC-ROW(15); PRNL( STR-TO-UTF8("   ▄  ▄ ▄  ▄▄  ▄   "))
+    LOC-ROW(16); PRNL( STR-TO-UTF8("  █ █ █ █ █▀  █▄▀  "))
+    LOC-ROW(17); PRNL( STR-TO-UTF8("   ▀   ▀   ▀▀ ▀ ▀  "))
+    PRNL("\OFF")
+RET
+
+DEF-FUN( titles )
+    #define COLOR_INI   232
+    #define COLOR_FIN   255
+    SET(k,1)
+    PERF-UP(k,2,1)
+    SET(j,COLOR_INI), SET(jbg,COLOR_FIN)
+    PERF-UP(j,COLOR_FIN,1)
+       COLOR(j, jbg--)
+       LOC-COL(17)
+       LOC-ROW(12); PRNL(STR-TO-UTF8("                      "))
+       LOC-ROW(13); PRNL(STR-TO-UTF8("   ▄  ▄   ▄  ▄ ▄  ▄▄  "))
+       LOC-ROW(14); PRNL(STR-TO-UTF8("  ▀▄ █ █ █▄█ █▄  █▀   "))
+       LOC-ROW(15); PRNL(STR-TO-UTF8("  ▀  ▀ ▀ ▀ ▀ ▀ ▀  ▀▀  "))
+       LOC-ROW(16); PRNL(STR-TO-UTF8("   ▄  ▄   ▄▄  ▄▄ ▄▄   "))
+       LOC-ROW(17); PRNL(STR-TO-UTF8("  ▀▄ █▄█ █▀  █▀  █ █  "))
+       LOC-ROW(18); PRNL(STR-TO-UTF8("  ▀  ▀    ▀▀  ▀▀ ▀▄▀  "))
+       LOC-ROW(19); PRNL(STR-TO-UTF8("                      "))
+       MICROSECS(20000)
+    NEXT
+    SET(j,COLOR_FIN), SET(jbg,COLOR_INI)
+    PERF-DOWN(j,COLOR_INI,1)
+       COLOR(j, jbg++)
+       LOC-COL(17)
+       LOC-ROW(12); PRNL(STR-TO-UTF8("                      "))
+       LOC-ROW(13); PRNL(STR-TO-UTF8("   ▄  ▄   ▄  ▄ ▄  ▄▄  "))
+       LOC-ROW(14); PRNL(STR-TO-UTF8("  ▀▄ █ █ █▄█ █▄  █▀   "))
+       LOC-ROW(15); PRNL(STR-TO-UTF8("  ▀  ▀ ▀ ▀ ▀ ▀ ▀  ▀▀  "))
+       LOC-ROW(16); PRNL(STR-TO-UTF8("   ▄  ▄   ▄▄  ▄▄ ▄▄   "))
+       LOC-ROW(17); PRNL(STR-TO-UTF8("  ▀▄ █▄█ █▀  █▀  █ █  "))
+       LOC-ROW(18); PRNL(STR-TO-UTF8("  ▀  ▀    ▀▀  ▀▀ ▀▄▀  "))
+       LOC-ROW(19); PRNL(STR-TO-UTF8("                      "))
+       MICROSECS(20000)
+    NEXT
+    NEXT
+    PRNL("\OFF")
+RET
+

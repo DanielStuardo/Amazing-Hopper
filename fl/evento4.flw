@@ -1,0 +1,47 @@
+/* Kernighans large earthquake problem. */
+
+// las fechas del archivo son MES/DIA/AÑO, y hopper solo trabaja con DIA/MES/AÑO
+// por lo que se hace necesario hacer un SWAP para comprobar que las fechas son válidas
+#include <flow.h>
+#include <flow-flow.h>
+#include <flow-regexp.h>
+
+#define MAX_LINE                  1000
+#define SwapDayByMonth(_N_,_M_)   TOK-SEP("/"), TOK(_N_), TOK-SWAP(_M_,Event), TOK-SEP(" ")
+
+DEF-MAIN(argv,argc)
+   MSET(fd, Event, T, rmatch )
+   TOK-INIT
+   
+   SET(flag, REG_EXTENDED)
+   flag |= REG_NEWLINE
+   flag |= REG_NOSUB
+   SET(rmatch, "^([7-9]|6\.0*[1-9]).*$")
+   REG-COMP(flag,rmatch)(T)
+   
+   OPEN-INPUT("datos.txt")(fd)
+   COND( IS-NOT-FILE-ERROR? )
+      TOK-SEP( " " )
+      TIC(t1)
+      WHILE( NOT( EOF(fd) ) )
+         LET( Event := USING(MAX_LINE) READ-LINE(fd) APPLY-TRM )
+         
+         WHEN( LEN(Event) ){
+            WHEN( EQ?(TOK-COUNT( Event ),3) ){
+               Swap Day By Month(1,2)
+               WHEN( IS-DATE-VALID?( TOK(1) TOK-GET(Event) )){
+                  TOK(3)
+                  COND( REG-VALID(0, TOK-GET(Event), T) )
+                     PRNL( Event )
+                  CEND
+               }
+            }
+         }
+      WEND
+      TOC( t1, t2 ), PRNL( "Time = ", t2 )
+      CLOSE(fd)
+   ELS
+      PRNL("Error: ", ~GET-STR-FILE-ERROR )
+   CEND
+   REG-FREE( T )
+END

@@ -1,0 +1,810 @@
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+main:
+.ctrlc
+.stack16
+
+C=0;quit=0;nHead=0;dir=0;Size=0;SCORE=0;counter=0;T=0;TPlay=0;TSound=0;ConsPrey=0;Consumedstage=0;
+
+len=0;
+
+w=50;
+h=28;
+colorfood=232;
+backfood=255;
+TIME=100;
+{w}mulby(h);,mov(Size)
+{"SIZE="};{Size};{" W="};{w};{" H="};{h};;{"\n"}print;
+LEVEL=1;
+REALLEVEL=1;
+false(swPierde);
+true(swExtra1);true(swExtra2);
+
+true(tiles);
+backtiles=1;,tile1=0;tile2=0;
+headbacktiles={};
+{"\033[48;5;28m","\033[48;5;29m","\033[48;5;62m","\033[48;5;63m","\033[48;5;70m","\033[48;5;71m","\033[48;5;4m","\033[48;5;27m"};
+{"\033[48;5;99m","\033[48;5;97m","\033[48;5;17m","\033[48;5;18m","\033[48;5;62m","\033[48;5;63m"};
+pushall(headbacktiles)
+{back tiles};loc1;get(headbacktiles),mov(tile1);,
+plusone(back tiles);;loc1;get(headbacktiles),mov(tile2);,
+
+bignumber={};numL1={};numL2={};numL3={};
+
+sounds={};,soundindex=1;
+{"Snake_music.wav","Snake_music_l3.wav","Snake_music_l5.wav","Snake_music_l4.wav","Snake_music_l6.wav"};
+pushall(sounds)
+
+jsub(setscore)
+
+tBoard1=0;tmpLimit=0;Maze=0;wM=0;hM=0;SizeM=0;
+{Size};,__TMPARR__=-1,onesarray(__TMPARR__);board=0,cpy(board);,kill;,{board}mov(tBoard1);,
+
+
+
+
+
+
+
+
+
+
+
+
+
+i=1;
+{"3"};{50};replicate;;,mov(Maze)
+
+____CODE_JUMP____381216164:,{i}lethan(26),jnt(____CODE_JUMP____964308567),
+{Maze};{"3"};{"1"};{48};replicate;;cat;;{"3"};cat;;cat;;,mov(Maze)
+i+=1,jmp(____CODE_JUMP____381216164),____CODE_JUMP____964308567:,
+{Maze};{"3"};{50};replicate;;cat;;,mov(Maze)
+jsub(preparemaze)
+
+{"\033[?25l"},print;
+
+{"gsettings set org.gnome.Terminal.Legacy.Profile:/org/gnome/terminal/legacy/profiles:/:b1dcc9dd-5262-4d8d-a863-c897e6d979b9/ font 'Ubuntu Mono "};{15};xtostr;;cat;;{"'"};cat;;execv;
+{"\033[2J\033[1;1H\n"},print;
+
+TLimit=120;
+{-7};,jsub(start)
+timeout=90000;
+
+{"aplay fl/"};{sound index};loc1;get(sounds);clearinterval;;cat;;{"</dev/null >/dev/null 2>&1 &"};cat;;execv;
+jsub(titles)
+
+
+
+
+
+lives=3;
+____CODE_JUMP____706146335:,{lives},jnt(____CODE_JUMP____213217084)
+jsub(show)
+jsub(puttitles)
+jsub(ready),{1.5};sleep;
+timecpu(T),timecpu(TPlay),timecpu(TSound)
+;kbfree;
+____CODE_JUMP____942928038:,{quit};not;,jnt(____CODE_JUMP____549719409)
+{TLimit};timer(TPlay);do{
+jsub(show)
+;kbhit?,do{
+,lastkey(C),{C}{194}{1}{207}{1}between?,do{{C}chr,pause,lastkey(C),{C}chr,cat,utf8tostr,jmp(__GETCHAR__329866587)},{C}chr,utf8tostr,__GETCHAR__329866587:,asc,mov(C),kbfree,;
+,;__MARK__971195465=0,{C},mov(__MARK__971195465)
+{5},{__MARK__971195465}eq?,do{dir=1,jmp(____CODE_JUMP____107916852),}
+{4},{__MARK__971195465}eq?,do{dir=         2.0000000000000000,jmp(____CODE_JUMP____107916852),}
+{24},{__MARK__971195465}eq?,do{dir=         3.0000000000000000,jmp(____CODE_JUMP____107916852),}
+{19},{__MARK__971195465}eq?,do{dir=         4.0000000000000000,jmp(____CODE_JUMP____107916852),}
+{27},{__MARK__971195465}eq?,do{quit=1,jmp(____CODE_JUMP____107916852),}
+{32},{__MARK__971195465}eq?,do{;pause;,jmp(____CODE_JUMP____107916852),}
+____CODE_JUMP____107916852:,__MARK__971195465:,
+}
+jsub(step)
+}
+{1000};timer(T);do{
+TIME-=10,{0};{100};clamp(TIME)
+{TIME,12,55}jsub(puttime)
+}
+{timeout};timer(TSound);do{
+
+jsub(LEVELCLEAR)
+
+
+
+}
+,jmp(____CODE_JUMP____942928038),____CODE_JUMP____549719409:,
+
+,{LEVEL}eqto(3),{LEVEL}eqto(6);or;,jnt(____CODE_JUMP____260552082),
+
+jsub(youlost),{3};sleep;
+quit=0;,{nHead};loc1;{len}put(board);clearinterval;
+{1};{1};;goxy;,{" "};{29};{54};fillbox;
+jsub(anotherplay)
+jmp(____CODE_JUMP____770534938),____CODE_JUMP____260552082:,true,jnt(____CODE_JUMP____437503445),
+
+jsub(youlost),{3};sleep;
+--lives
+quit=0;
+true(swPierde);
+{len}jsub(start)
+,{lives};zero?;not,jnt(____CODE_JUMP____458332946),
+{"aplay fl/Snake_music_vida_repechaje.wav </dev/null >/dev/null 2>&1 &"};execv;
+____CODE_JUMP____460710404:,____CODE_JUMP____458332946:,
+____CODE_JUMP____770534938:,____CODE_JUMP____437503445:,
+
+
+,jmp(____CODE_JUMP____706146335),____CODE_JUMP____213217084:,
+
+
+jsub(gameover),{7};sleep;
+{"gsettings set org.gnome.Terminal.Legacy.Profile:/org/gnome/terminal/legacy/profiles:/:b1dcc9dd-5262-4d8d-a863-c897e6d979b9/ font 'Ubuntu Mono 12'"};execv;
+{"\033[?25h"},print;
+{"\n"}print;
+{0}return
+
+.locals
+
+KILLSOUND:,;
+PID=0;
+{"0123456789 "};{"pidof aplay"};exec;;onlychar;;,mov(PID)
+,{PID};len;,jnt(____CODE_JUMP____936284007),
+{"kill "};{PID};cat;;{" </dev/null >/dev/null 2>&1"};cat;;execv;
+____CODE_JUMP____520835108:,____CODE_JUMP____936284007:,
+back
+
+
+start:,initialpos=0;mov(initialpos);;
+
+,{LEVEL}neqto(3),jnt(____CODE_JUMP____499945807),
+{tBoard1}mov(board);,
+{50,28},{50}mulby(28),mov(Size);mov(h);mov(w);,
+
+{1};loc1;{w};offset1;{         3.0000000000000000}put(board);clearinterval;
+ {h}mulby(w);minusone(w);;sub; ;loc1;{ 999999999};offset1;{         3.0000000000000000}put(board);clearinterval;
+{1};loc1;{w};interval1;{999999999};offset1;{         3.0000000000000000}put(board);clearinterval;
+
+i=1;
+____CODE_JUMP____334205558:,{i}lethan(h),jnt(____CODE_JUMP____960654919),
+ {i}mulby(w);loc1;{         3.0000000000000000}put(board)
+++i,jmp(____CODE_JUMP____334205558),____CODE_JUMP____960654919:,
+{90000};,mov(timeout)
+
+jmp(____CODE_JUMP____251166927),____CODE_JUMP____499945807:,true,jnt(____CODE_JUMP____470325144),
+
+
+{0}mov(board);
+
+
+
+
+____CODE_JUMP____251166927:,____CODE_JUMP____470325144:,
+
+,;__MARK__455158788=0,{LEVEL},mov(__MARK__455158788)
+{2},{__MARK__455158788}eq?,do{
+i=3;
+____CODE_JUMP____743519252:,{i}lethan(5),jnt(____CODE_JUMP____364758992),
+
+{i}mulby(w);plus(5);loc1;{i}mulby(w);plus(8);offset1;{         3.0000000000000000}put(board);clearinterval;
+{i}mulby(w);{w}minus(7);add;;loc1;{i}mulby(w);{w}minus(4);add;;offset1;{         3.0000000000000000}put(board);clearinterval;
+
+{i}plus(19);mulby(w);plus(5);loc1;{i}plus(19);mulby(w);plus(8);offset1;{         3.0000000000000000}put(board);clearinterval;
+{i}plus(19);mulby(w);{w}minus(7);add;;loc1;{i}plus(19);mulby(w);{w}minus(4);add;;offset1;{         3.0000000000000000}put(board);clearinterval;
+
+i+=1,jmp(____CODE_JUMP____743519252),____CODE_JUMP____364758992:,
+jmp(____CODE_JUMP____760879819),
+}
+{3},{__MARK__455158788}eq?,do{
+__TKN_SPLIT__=0;gettoksep;mov(__TKN_SPLIT__);{""}toksep;{Maze};split(board);{__TKN_SPLIT__};toksep;,{board};xtonum;,mov(board);,
+{1};loc1;{w};offset1;{         3.0000000000000000}put(board);clearinterval;
+i=1;
+
+____CODE_JUMP____101742157:,{i}lethan(19),jnt(____CODE_JUMP____908009486),
+jsub(plant)
+i+=1,jmp(____CODE_JUMP____101742157),____CODE_JUMP____908009486:,
+
+
+
+
+{40000};,mov(timeout)
+jmp(____CODE_JUMP____760879819),
+}
+{4},{__MARK__455158788}eq?,do{
+i=3;
+____CODE_JUMP____829556776:,{i}lethan(5),jnt(____CODE_JUMP____453293195),
+
+{i}plus(9);mulby(w);plus(5);loc1;{i}plus(9);mulby(w);plus(8);offset1;{         3.0000000000000000}put(board);clearinterval;
+{i}plus(9);mulby(w);{w}minus(7);add;;loc1;{i}plus(9);mulby(w);{w}minus(4);add;;offset1;{         3.0000000000000000}put(board);clearinterval;
+
+{i}mulby(w);plus(17);loc1;{i}mulby(w);plus(20);offset1;{         3.0000000000000000}put(board);clearinterval;
+{i}mulby(w);plus(31);loc1;{i}mulby(w);plus(34);offset1;{         3.0000000000000000}put(board);clearinterval;
+
+{i}plus(19);mulby(w);plus(17);loc1;{i}plus(19);mulby(w);plus(20);offset1;{         3.0000000000000000}put(board);clearinterval;
+{i}plus(19);mulby(w);plus(31);loc1;{i}plus(19);mulby(w);plus(34);offset1;{         3.0000000000000000}put(board);clearinterval;
+i+=1,jmp(____CODE_JUMP____829556776),____CODE_JUMP____453293195:,
+jmp(____CODE_JUMP____760879819),
+}
+
+{5},{__MARK__455158788}eq?,do{
+i=3;
+____CODE_JUMP____355138408:,{i}lethan(5),jnt(____CODE_JUMP____64948743),
+
+{i}mulby(w);plus(5);loc1;{i}mulby(w);plus(8);offset1;{         3.0000000000000000}put(board);clearinterval;
+{i}mulby(w);{w}minus(7);add;;loc1;{i}mulby(w);{w}minus(4);add;;offset1;{         3.0000000000000000}put(board);clearinterval;
+
+{i}plus(9);mulby(w);plus(5);loc1;{i}plus(9);mulby(w);plus(8);offset1;{         3.0000000000000000}put(board);clearinterval;
+{i}plus(9);mulby(w);{w}minus(7);add;;loc1;{i}plus(9);mulby(w);{w}minus(4);add;;offset1;{         3.0000000000000000}put(board);clearinterval;
+
+{i}plus(19);mulby(w);plus(5);loc1;{i}plus(19);mulby(w);plus(8);offset1;{         3.0000000000000000}put(board);clearinterval;
+{i}plus(19);mulby(w);{w}minus(7);add;;loc1;{i}plus(19);mulby(w);{w}minus(4);add;;offset1;{         3.0000000000000000}put(board);clearinterval;
+
+{i}mulby(w);plus(17);loc1;{i}mulby(w);plus(20);offset1;{         3.0000000000000000}put(board);clearinterval;
+{i}mulby(w);plus(31);loc1;{i}mulby(w);plus(34);offset1;{         3.0000000000000000}put(board);clearinterval;
+
+{i}plus(19);mulby(w);plus(17);loc1;{i}plus(19);mulby(w);plus(20);offset1;{         3.0000000000000000}put(board);clearinterval;
+{i}plus(19);mulby(w);plus(31);loc1;{i}plus(19);mulby(w);plus(34);offset1;{         3.0000000000000000}put(board);clearinterval;
+i+=1,jmp(____CODE_JUMP____355138408),____CODE_JUMP____64948743:,
+jmp(____CODE_JUMP____760879819),
+}
+{6},{__MARK__455158788}eq?,do{
+i=1;
+____CODE_JUMP____834509361:,{i}lethan(29),jnt(____CODE_JUMP____319446976),
+jsub(plant)
+i+=1,jmp(____CODE_JUMP____834509361),____CODE_JUMP____319446976:,
+{40000};,mov(timeout)
+}
+
+{7},{__MARK__455158788}eq?,do{
+i=3;
+____CODE_JUMP____771095078:,{i}lethan(5),jnt(____CODE_JUMP____47726445),
+
+{i}mulby(w);plus(5);loc1;{i}mulby(w);plus(8);offset1;{         3.0000000000000000}put(board);clearinterval;
+{i}mulby(w);{w}minus(7);add;;loc1;{i}mulby(w);{w}minus(4);add;;offset1;{         3.0000000000000000}put(board);clearinterval;
+
+{i}plus(9);mulby(w);plus(5);loc1;{i}plus(9);mulby(w);plus(8);offset1;{         3.0000000000000000}put(board);clearinterval;
+{i}plus(9);mulby(w);{w}minus(7);add;;loc1;{i}plus(9);mulby(w);{w}minus(4);add;;offset1;{         3.0000000000000000}put(board);clearinterval;
+
+{i}plus(19);mulby(w);plus(5);loc1;{i}plus(19);mulby(w);plus(8);offset1;{         3.0000000000000000}put(board);clearinterval;
+{i}plus(19);mulby(w);{w}minus(7);add;;loc1;{i}plus(19);mulby(w);{w}minus(4);add;;offset1;{         3.0000000000000000}put(board);clearinterval;
+
+{i}mulby(w);plus(17);loc1;{i}mulby(w);plus(20);offset1;{         3.0000000000000000}put(board);clearinterval;
+{i}mulby(w);plus(31);loc1;{i}mulby(w);plus(34);offset1;{         3.0000000000000000}put(board);clearinterval;
+
+{i}plus(9);mulby(w);plus(17);loc1;{i}plus(9);mulby(w);plus(20);offset1;{         3.0000000000000000}put(board);clearinterval;
+{i}plus(9);mulby(w);plus(31);loc1;{i}plus(9);mulby(w);plus(34);offset1;{         3.0000000000000000}put(board);clearinterval;
+
+{i}plus(19);mulby(w);plus(17);loc1;{i}plus(19);mulby(w);plus(20);offset1;{         3.0000000000000000}put(board);clearinterval;
+{i}plus(19);mulby(w);plus(31);loc1;{i}plus(19);mulby(w);plus(34);offset1;{         3.0000000000000000}put(board);clearinterval;
+i+=1,jmp(____CODE_JUMP____771095078),____CODE_JUMP____47726445:,
+jmp(____CODE_JUMP____760879819),
+}
+____CODE_JUMP____760879819:,__MARK__455158788:,
+
+,{LEVEL}neqto(3),jnt(____CODE_JUMP____320814488),
+{w}{h}minus(1);{h}module(2);sub;;mul;;divby(2);,mov(nHead)
+{1};,mov(dir)
+jmp(____CODE_JUMP____262375014),____CODE_JUMP____320814488:,true,jnt(____CODE_JUMP____377593032),
+{w}mulby(13);plus(26);,mov(nHead)
+{1};,mov(dir)
+
+
+____CODE_JUMP____262375014:,____CODE_JUMP____377593032:,
+{ nHead };loc1;{initialpos}put(board);clearinterval;
+
+{swPierde};jnt(____CODE_JUMP____370291866);;seconds;;seed;;false(swPierde);;{30000};mov(timeout);jmp(____CODE_JUMP____292009953);____CODE_JUMP____370291866:;{26785};seed;;____CODE_JUMP____292009953:
+
+
+jsub(plant)
+
+
+
+
+
+
+back
+
+youlost:,;
+i=1;,k=0;,n=1;
+____CODE_JUMP____148127970:,{i}lethan(h),jnt(____CODE_JUMP____630843949),
+j=1;
+____CODE_JUMP____729513399:,{j}lethan(w),jnt(____CODE_JUMP____608838375),
+{ n };loc1;get(board);,mov(k)
+,{k};neg?;,jnt(____CODE_JUMP____250348507),
+{i};{j};;goxy;
+{"\033[38;15;3m\033[48;5;9m~\OFF"};;print;
+____CODE_JUMP____89176895:,____CODE_JUMP____250348507:,
+++n
+++j,jmp(____CODE_JUMP____729513399),____CODE_JUMP____608838375:,
+++i,jmp(____CODE_JUMP____148127970),____CODE_JUMP____630843949:,
+
+{"aplay fl/Snake_dolor.wav </dev/null >/dev/null 2>&1 &"};execv;
+
+back
+
+show:,;
+
+i=1;
+j=0;k=0;
+n=1;
+{1};{1};;goxy;
+____CODE_JUMP____545122382:,{i}lethan(h),jnt(____CODE_JUMP____340343822),
+j=1;,{tiles};not;mov(tiles);
+____CODE_JUMP____750294315:,{j}lethan(w),jnt(____CODE_JUMP____879327941),
+{ n };loc1;get(board);,mov(k)
+,{k};neg?;,jnt(____CODE_JUMP____220619459),
+,{n}neqto(nHead),jnt(____CODE_JUMP____756157531),
+
+
+{k}gthan(-3);jnt(____CODE_JUMP____964138712);{tiles};jnt(____CODE_JUMP____4966753);{tile1};jmp(____CODE_JUMP____857899689);____CODE_JUMP____4966753:;{tile2};____CODE_JUMP____857899689:;{"\033[38;5;15m+\OFF"};jmp(____CODE_JUMP____872148199);____CODE_JUMP____964138712:;{"\033[38;5;6m\033[48;5;11m \OFF"};____CODE_JUMP____872148199:
+jmp(____CODE_JUMP____640207760),____CODE_JUMP____756157531:,true,jnt(____CODE_JUMP____834523529),
+,{dir}eqto(1),jnt(____CODE_JUMP____227286607),
+{tiles};jnt(____CODE_JUMP____899472273);{"\033[38;5;9m\033[48;5;15mv\OFF"};jmp(____CODE_JUMP____145702246);____CODE_JUMP____899472273:;{"\033[38;5;9m\033[48;5;15m|\OFF"};____CODE_JUMP____145702246:
+
+jmp(____CODE_JUMP____311192885),____CODE_JUMP____227286607:,{dir}eqto(         3.0000000000000000),jnt(____CODE_JUMP____546733583),
+{tiles};jnt(____CODE_JUMP____670567352);{"\033[38;5;9m\033[48;5;15m|\OFF"};jmp(____CODE_JUMP____193428692);____CODE_JUMP____670567352:;{"\033[38;5;9m\033[48;5;15m^\OFF"};____CODE_JUMP____193428692:
+
+jmp(____CODE_JUMP____311192885),____CODE_JUMP____546733583:,{dir}eqto(         2.0000000000000000),jnt(____CODE_JUMP____809108598),
+{tiles};jnt(____CODE_JUMP____991381840);{"\033[38;5;9m\033[48;5;15m<\OFF"};jmp(____CODE_JUMP____571021724);____CODE_JUMP____991381840:;{"\033[38;5;9m\033[48;5;15m-\OFF"};____CODE_JUMP____571021724:
+
+jmp(____CODE_JUMP____311192885),____CODE_JUMP____809108598:,true,jnt(____CODE_JUMP____179400465),
+{tiles};jnt(____CODE_JUMP____283391794);{"\033[38;5;9m\033[48;5;15m-\OFF"};jmp(____CODE_JUMP____719149696);____CODE_JUMP____283391794:;{"\033[38;5;9m\033[48;5;15m>\OFF"};____CODE_JUMP____719149696:
+
+____CODE_JUMP____311192885:,____CODE_JUMP____179400465:,
+____CODE_JUMP____640207760:,____CODE_JUMP____834523529:,
+
+jmp(____CODE_JUMP____300998742),____CODE_JUMP____220619459:,{k}eqto(         3.0000000000000000),jnt(____CODE_JUMP____810244414),
+{"\033[38;5;82m\033[48;5;57m \OFF"}
+
+jmp(____CODE_JUMP____300998742),____CODE_JUMP____810244414:,{k}eqto(         2.0000000000000000),jnt(____CODE_JUMP____12905193),
+{"\033[38;5;"},{colorfood},{"m"}print;,{tiles};jnt(____CODE_JUMP____327988071);{tile1};jmp(____CODE_JUMP____899421310);____CODE_JUMP____327988071:;{tile2};____CODE_JUMP____899421310:
+{"@\OFF"}
+jmp(____CODE_JUMP____300998742),____CODE_JUMP____12905193:,true,jnt(____CODE_JUMP____263253701),
+{tiles};jnt(____CODE_JUMP____873110454);{tile1};jmp(____CODE_JUMP____239765133);____CODE_JUMP____873110454:;{tile2};____CODE_JUMP____239765133:
+{" \OFF"}
+____CODE_JUMP____300998742:,____CODE_JUMP____263253701:,
+;print;
+{tiles};not;mov(tiles);
+++n
+++j,jmp(____CODE_JUMP____750294315),____CODE_JUMP____879327941:,
+{"\n"}print;
+++i,jmp(____CODE_JUMP____545122382),____CODE_JUMP____340343822:,
+colorfood+=2,
+backfood-=2,{colorfood}plusone(255);;eq?,do{
+{232};,mov(colorfood)
+{255};,mov(backfood)
+}
+back
+
+
+
+
+age:,;
+
+r=0;jAge=0;jR=0;
+{board};neg?;;cartesian;;mov(r),range(r)
+
+get(board);plus(1);mov(jAge)
+
+
+{jAge};zero?;;cartesian;;mov(jR)
+,{jR};array?;,jnt(____CODE_JUMP____752438396),
+range(jR),jAge=1;,range(r)
+____CODE_JUMP____13548017:,____CODE_JUMP____752438396:,
+
+{jAge}put(board),;clearrange;
+
+back
+
+step:,;
+{nHead};loc1;get(board);,mov(len)
+,;__MARK__234167477=0,{dir},mov(__MARK__234167477)
+{1},{__MARK__234167477}eq?,do{nHead-=w,jmp(____CODE_JUMP____540763875),}
+{         3.0000000000000000},{__MARK__234167477}eq?,do{nHead+=w,jmp(____CODE_JUMP____540763875),}
+{         4.0000000000000000},{__MARK__234167477}eq?,do{--nHead,jmp(____CODE_JUMP____540763875),}
+{         2.0000000000000000},{__MARK__234167477}eq?,do{++nHead,jmp(____CODE_JUMP____540763875),}
+____CODE_JUMP____540763875:,__MARK__234167477:,
+,;__MARK__296921407=0,{nHead};loc1;get(board);clearinterval;,mov(__MARK__296921407)
+{1},{__MARK__296921407}eq?,do{
+--len,{len}eqto(0);jnt(____CODE_JUMP____198306189);{1};jmp(____CODE_JUMP____397612911);____CODE_JUMP____198306189:;{len};____CODE_JUMP____397612911:;,mov(len)
+{nHead};loc1;{len},put(board);clearinterval;
+jsub(age)
+jmp(____CODE_JUMP____392646157),
+}
+{         2.0000000000000000},{__MARK__296921407}eq?,do{
+,{LEVEL}eqto(3),{LEVEL}eqto(6);or;;not;,jnt(____CODE_JUMP____70454388),
+--len,{len};zero?;;jnt(____CODE_JUMP____232136440);{1};jmp(____CODE_JUMP____466013982);____CODE_JUMP____232136440:;{len};____CODE_JUMP____466013982:;,mov(len)
+jmp(____CODE_JUMP____154821097),____CODE_JUMP____70454388:,true,jnt(____CODE_JUMP____297740996),
+++len
+____CODE_JUMP____154821097:,____CODE_JUMP____297740996:,
+{nHead};loc1;{len},put(board);clearinterval;
+{LEVEL}neqto(3),{LEVEL}neqto(6);and;,do{jsub(plant)}
+{SCORE}plus(TIME),mov(SCORE);,
+
+{SCORE,4,55}jsub(putscore)
+{100};,mov(TIME)
+++counter,,{counter}eqto(25),jnt(____CODE_JUMP____611716229),
+{TLimit}minus(5);,mov(TLimit)
+{80};{120};clamp(TLimit)
+{0};,mov(counter)
+____CODE_JUMP____131608714:,____CODE_JUMP____611716229:,
+{LEVEL}eqto(3),{LEVEL}eqto(6);or;,do{++Consumedstage}
+++ConsPrey
+{"\033[38;5;"},{10},{"m"}print;
+{20};{55};;goxy;{"SPEED: "};;print;
+{21};gox;,{TLimit};powby(-1);mulby(120);roundby(2);{" M/S     "};;print;
+
+{23};gox;{"CONSUMED PREY:"};;print;
+{24};gox;{ConsPrey};{"\OFF"};;print;
+
+{232};,mov(colorfood)
+{255};,mov(backfood)
+
+
+{"aplay fl/Snake_mascada.wav </dev/null >/dev/null 2>&1 &"};execv;
+
+timecpu(T),{TIME,12,55}jsub(puttime)
+
+jmp(____CODE_JUMP____392646157),
+}
+{__MARK__296921407}neg?,do{
+jsub(KILLSOUND)
+{"aplay fl/Snake_mascada.wav </dev/null >/dev/null 2>&1"};execv;
+{1};,mov(quit)
+jmp(____CODE_JUMP____392646157),
+}
+true,do{
+jsub(KILLSOUND)
+{"aplay fl/Snake_golpe.wav </dev/null >/dev/null 2>&1"};execv;
+
+{1};,mov(quit)
+}
+____CODE_JUMP____392646157:,__MARK__296921407:,
+back
+
+LEVELCLEAR:,;
+jsub(KILLSOUND)
+jsub(levelclear)
+{"aplay fl/Snake_level_clear.wav </dev/null >/dev/null 2>&1"};execv;
+{1};sleep;
+
+{LEVEL}eqto(3),{LEVEL}eqto(6);or;,do{
+{Consumedstage}eqto(20),do{
+jsub(show)
+{"aplay fl/Snake_bono.wav </dev/null >/dev/null 2>&1 &"};execv;
+jsub(GANABONO),{3};sleep;
+{SCORE}plus(1000),mov(SCORE);,
+{SCORE,4,55}jsub(putscore)
+}
+}
+jsub(anotherplay)
+back
+
+anotherplay:,;
+++soundindex,{soundindex}eqto(6),do{{2};,mov(soundindex)}
+backtiles+=2,{backtiles}eqto(15),do{{1};,mov(backtiles)}
+
+{back tiles};loc1;get(headbacktiles),mov(tile1);,
+plusone(back tiles);;loc1;get(headbacktiles),mov(tile2);,
+
+++LEVEL,{LEVEL}gthan(7),do{{1};,mov(LEVEL)}
+
+
+
+++REALLEVEL
+{"\033[38;5;"},{15},{"m"}print;,{26};{55};;goxy;{"\CUR"}print;,{"LEVEL: "};{REALLEVEL};{"\OFF"};;print;
+
+{nHead};loc1;get(board);,mov(len)
+{1};loc1;{Size};offset1;{1};put(board);clearinterval;
+;clearinterval;
+{len};,jsub(start)
+
+jsub(show)
+,{LEVEL}eqto(3),{LEVEL}eqto(6);or;,jnt(____CODE_JUMP____802176066),
+jsub(challengestage)
+jmp(____CODE_JUMP____844474580),____CODE_JUMP____802176066:,true,jnt(____CODE_JUMP____805144922),
+jsub(ready)
+____CODE_JUMP____844474580:,____CODE_JUMP____805144922:,
+{2};sleep;
+{"aplay fl/"};{sound index};loc1;get(sounds);clearinterval;;cat;;{"</dev/null >/dev/null 2>&1 &"};cat;;execv;
+{100};,mov(TIME)
+{TIME,12,55}jsub(puttime)
+back
+
+
+plant:,;
+r=0;
+;searchposition:
+minusone(Size);;rand;;ceil;;module(Size);,mov(r)
+{r};loc1;get(board);{1};jneq(searchposition)
+{r};loc1;{         2.0000000000000000}put(board);clearinterval;
+back
+
+puttitles:,;
+{2};{55};;goxy;{"\033[38;5;15mSCORE\OFF"};;print;
+{SCORE,4,55}jsub(putscore)
+{10};{55};;goxy;{"\033[38;5;11mTIME\OFF"};;print;
+{TIME,12,55}jsub(puttime)
+
+{"\033[38;5;"},{15},{"m"}print;
+{26};{55};;goxy;{"\CUR"}print;,{"LEVEL: "};{REALLEVEL};{"\OFF"};;print;
+{27};{55};;goxy;{"\INV"}print;,{"LIVES: "};{lives};{"\OFF"};;print;
+
+back
+
+puttime:,posy=0;mov(posy);posx=0;mov(posx);B=0;mov(B);;
+i=0;j=0;x=0;
+sb=0;lsb=0;nB=0;p4=0;
+k=1;
+
+{posx};{posy};;goxy;{" "};{5};{20};fillbox;
+{B};xtostr;;,mov(sb)
+{sb};len;;,mov(lsb)
+rx=posy;
+{posx}plus(4);,mov(p4)
+
+{"\033[38;5;"},{11},{"m"}print;
+____CODE_JUMP____653583178:,{k}lethan(lsb),jnt(____CODE_JUMP____793557907),
+{1};{k};{sb};copy;;xtonum;;,mov(nB)
+x=1;,i=posx;
+____CODE_JUMP____376166647:,{i}lethan(p4),jnt(____CODE_JUMP____832983644),
+j=rx;
+____CODE_JUMP____76949702:,{j}{rx}plus(2);le?,jnt(____CODE_JUMP____95316343),
+{i};{j};;goxy;plusone(nB);;{ x};loc2;get(bignumber);clearinterval;;mulby(219);chr;;strtoutf8;;;print;
+++x
+++j,jmp(____CODE_JUMP____76949702),____CODE_JUMP____95316343:,
+++i,jmp(____CODE_JUMP____376166647),____CODE_JUMP____832983644:,
+rx+=4
+k+=1,jmp(____CODE_JUMP____653583178),____CODE_JUMP____793557907:,
+{"\OFF"};;print;
+back
+
+putscore:,posy=0;mov(posy);posx=0;mov(posx);SCORE=0;mov(SCORE);;
+ln=0;s=0;sp=0;
+
+{SCORE};xtostr;;,mov(sp)
+{sp};len;;,mov(ln)
+
+{posx};{posy};;goxy;{" "};{4};{20};fillbox;
+i=1;
+{"\033[38;5;"},{15},{"m"}print;
+____CODE_JUMP____643228059:,{i}lethan(ln),jnt(____CODE_JUMP____89854896),
+{1};{i};{sp};copy;;xtonum;;,mov(s)
+ plusone(s); ;loc1;
+{posx};{posy};;goxy;,get(numL1);strtoutf8;;;print;
+plusone(posx);;gox;,get(numL2);strtoutf8;;;print;
+plustwo(posx);;gox;,get(numL3);strtoutf8;;;print;
+posy+=2
+i+=1,jmp(____CODE_JUMP____643228059),____CODE_JUMP____89854896:,
+{"\OFF"};;print;
+,{swExtra1},jnt(____CODE_JUMP____542649369),
+,{SCORE}gethan(5000),jnt(____CODE_JUMP____296414869),
+++lives
+false(swExtra1);
+{"aplay fl/Snake_bono.wav </dev/null >/dev/null 2>&1 &"};execv;
+{27};{55};;goxy;{"\INV"}print;,{"LIVES: "};{lives};{"\OFF"};;print;
+____CODE_JUMP____353108598:,____CODE_JUMP____296414869:,
+jmp(____CODE_JUMP____423304415),____CODE_JUMP____542649369:,{swExtra2},jnt(____CODE_JUMP____782414502),
+,{SCORE}gethan(10000),jnt(____CODE_JUMP____48853266),
+++lives
+false(swExtra2);
+{"aplay fl/Snake_bono.wav </dev/null >/dev/null 2>&1 &"};execv;
+{27};{55};;goxy;{"\INV"}print;,{"LIVES: "};{lives};{"\OFF"};;print;
+____CODE_JUMP____366656616:,____CODE_JUMP____48853266:,
+____CODE_JUMP____423304415:,____CODE_JUMP____782414502:,
+back
+
+setscore:,;
+
+{"┌┐"," ┐","┌┐","┌┐","┐┐","┌┐","┌┐","┌┐","┌┐","┌┐"}pushall(numL1)
+{"││"," │","┌┘"," ┤","└┤","└┐","├┐"," │","├┤","└┤"}pushall(numL2)
+{"└┘"," ┴","└┘","└┘"," ┘","└┘","└┘"," ┴","└┘","└┘"}pushall(numL3)
+
+{1,1,1,1,0,1,1,0,1,1,0,1,1,1,1}addrow(bignumber)
+{1,1,0,0,1,0,0,1,0,0,1,0,1,1,1}addrow(bignumber)
+{1,1,1,0,0,1,1,1,1,1,0,0,1,1,1}addrow(bignumber)
+{1,1,1,0,0,1,0,1,1,0,0,1,1,1,1}addrow(bignumber)
+{1,0,1,1,0,1,1,1,1,0,0,1,0,0,1}addrow(bignumber)
+{1,1,1,1,0,0,1,1,1,0,0,1,1,1,1}addrow(bignumber)
+{1,0,0,1,0,0,1,1,1,1,0,1,1,1,1}addrow(bignumber)
+{1,1,1,0,0,1,0,0,1,0,0,1,0,0,1}addrow(bignumber)
+{1,1,1,1,0,1,1,1,1,1,0,1,1,1,1}addrow(bignumber)
+{1,1,1,1,0,1,1,1,1,0,0,1,0,0,1}addrow(bignumber)
+
+back
+
+ready:,;
+{"\033[38;5;4m\033[48;5;11m"}
+{16};goy;
+{13};gox;;{"  ▄   ▄▄  ▄  ▄▄  ▄ ▄ "};strtoutf8;;;print;
+{14};gox;;{" █▄▀ █▀  █▄█ █ █ ▀▄▀ "};strtoutf8;;;print;
+{15};gox;;{" ▀ ▀  ▀▀ ▀ ▀ ▀▄▀  ▀  "};strtoutf8;;;print;
+{"\OFF"};;print;
+back
+
+levelclear:,;
+{"\033[38;5;4m\033[48;5;11m"}
+{17};goy;
+{12};gox;;{" ▄   ▄▄ ▄ ▄  ▄▄ ▄   "};strtoutf8;;;print;
+{13};gox;;{" █  █▀  █ █ █▀  █   "};strtoutf8;;;print;
+{14};gox;;{"  ▀  ▀▀  ▀   ▀▀  ▀  "};strtoutf8;;;print;
+{15};gox;;{"  ▄ ▄   ▄▄  ▄   ▄   "};strtoutf8;;;print;
+{16};gox;;{" █  █  █▀  █▄█ █▄▀  "};strtoutf8;;;print;
+{17};gox;;{"  ▀  ▀  ▀▀ ▀ ▀ ▀ ▀  "};strtoutf8;;;print;
+{"\OFF"};;print;
+back
+
+challengestage:,;
+{"\033[38;5;4m\033[48;5;11m"}
+{9};goy;
+{12};gox;;{"  ▄ ▄ ▄  ▄  ▄  ▄   ▄▄  ▄   ▄▄  ▄▄ "};strtoutf8;;;print;
+{13};gox;;{" █  █▄█ █▄█ █  █  █▀  █ █ █ ▄ █▀  "};strtoutf8;;;print;
+{14};gox;;{"  ▀ ▀ ▀ ▀ ▀  ▀  ▀  ▀▀ ▀ ▀  ▀▀  ▀▀ "};strtoutf8;;;print;
+{15};gox;;{"         ▄ ▄ ▄  ▄   ▄▄  ▄▄        "};strtoutf8;;;print;
+{16};gox;;{"        ▀▄  █  █▄█ █ ▄ █▀         "};strtoutf8;;;print;
+{17};gox;;{"        ▀   ▀  ▀ ▀  ▀▀  ▀▀        "};strtoutf8;;;print;
+{"\OFF"};;print;
+back
+
+GANABONO:,;
+{"\033[38;5;11m\033[48;5;196m"}
+{17};goy;
+{12};gox;;{"  ▄   ▄   ▄  ▄ ▄  ▄ "};strtoutf8;;;print;
+{13};gox;;{" █▄▀ █ █ █ █ █ █ ▀▄ "};strtoutf8;;;print;
+{14};gox;;{" ▀▄▀  ▀  ▀ ▀  ▀  ▀  "};strtoutf8;;;print;
+{15};gox;;{"  ▄     ▄   ▄   ▄   "};strtoutf8;;;print;
+{16};gox;;{"   █   █ █ █ █ █ █  "};strtoutf8;;;print;
+{17};gox;;{"   █ ▄ ▀▄▀ ▀▄▀ ▀▄▀  "};strtoutf8;;;print;
+{"\OFF"};;print;
+back
+
+gameover:,;
+{"\033[38;5;15m\033[48;5;9m"}
+{17};goy;
+{12};gox;;{"  ▄▄  ▄   ▄ ▄   ▄▄ "};strtoutf8;;;print;
+{13};gox;;{" █ ▄ █▄█ █ █ █ █▀  "};strtoutf8;;;print;
+{14};gox;;{"  ▀▀ ▀ ▀ ▀ ▀ ▀  ▀▀ "};strtoutf8;;;print;
+{15};gox;;{"   ▄  ▄ ▄  ▄▄  ▄   "};strtoutf8;;;print;
+{16};gox;;{"  █ █ █ █ █▀  █▄▀  "};strtoutf8;;;print;
+{17};gox;;{"   ▀   ▀   ▀▀ ▀ ▀  "};strtoutf8;;;print;
+{"\OFF"};;print;
+back
+
+titles:,;
+
+
+k=1;
+____CODE_JUMP____323178379:,{k}lethan(2),jnt(____CODE_JUMP____600824093),
+j=232;,jbg=255;
+____CODE_JUMP____441499423:,{j}lethan(255),jnt(____CODE_JUMP____620099787),
+{"\033[38;5;"},{j},{"m"},{"\033[48;5;"},jbg--,{"m"}print;
+{17};goy;
+{12};gox;;{"                      "};strtoutf8;;;print;
+{13};gox;;{"   ▄  ▄   ▄  ▄ ▄  ▄▄  "};strtoutf8;;;print;
+{14};gox;;{"  ▀▄ █ █ █▄█ █▄  █▀   "};strtoutf8;;;print;
+{15};gox;;{"  ▀  ▀ ▀ ▀ ▀ ▀ ▀  ▀▀  "};strtoutf8;;;print;
+{16};gox;;{"   ▄  ▄   ▄▄  ▄▄ ▄▄   "};strtoutf8;;;print;
+{17};gox;;{"  ▀▄ █▄█ █▀  █▀  █ █  "};strtoutf8;;;print;
+{18};gox;;{"  ▀  ▀    ▀▀  ▀▀ ▀▄▀  "};strtoutf8;;;print;
+{19};gox;;{"                      "};strtoutf8;;;print;
+{20000};microsecs;
+j+=1,jmp(____CODE_JUMP____441499423),____CODE_JUMP____620099787:,
+j=255;,jbg=232;
+____CODE_JUMP____799130283:,{j}gethan(232),jnt(____CODE_JUMP____839112334),
+{"\033[38;5;"},{j},{"m"},{"\033[48;5;"},jbg++,{"m"}print;
+{17};goy;
+{12};gox;;{"                      "};strtoutf8;;;print;
+{13};gox;;{"   ▄  ▄   ▄  ▄ ▄  ▄▄  "};strtoutf8;;;print;
+{14};gox;;{"  ▀▄ █ █ █▄█ █▄  █▀   "};strtoutf8;;;print;
+{15};gox;;{"  ▀  ▀ ▀ ▀ ▀ ▀ ▀  ▀▀  "};strtoutf8;;;print;
+{16};gox;;{"   ▄  ▄   ▄▄  ▄▄ ▄▄   "};strtoutf8;;;print;
+{17};gox;;{"  ▀▄ █▄█ █▀  █▀  █ █  "};strtoutf8;;;print;
+{18};gox;;{"  ▀  ▀    ▀▀  ▀▀ ▀▄▀  "};strtoutf8;;;print;
+{19};gox;;{"                      "};strtoutf8;;;print;
+{20000};microsecs;
+j-=1,jmp(____CODE_JUMP____799130283),____CODE_JUMP____839112334:,
+k+=1,jmp(____CODE_JUMP____323178379),____CODE_JUMP____600824093:,
+{"\OFF"};;print;
+back
+
+preparemaze:,;
+{12};{w}mulby(3);plus(20);{"333333333333"};{Maze};replace;,mov(Maze);,
+{12};{w}mulby(24);plus(20);{"333333333333"};{Maze};replace;,mov(Maze);,
+
+{12};{w}mulby(6);plus(7);{"333333333333"};{Maze};replace;,mov(Maze);,
+{12};{w}mulby(6);plus(33);{"333333333333"};{Maze};replace;,mov(Maze);,
+
+{12};{w}mulby(21);plus(7);{"333333333333"};{Maze};replace;,mov(Maze);,
+{12};{w}mulby(21);plus(33);{"333333333333"};{Maze};replace;,mov(Maze);,
+
+i=7;
+____CODE_JUMP____774920884:,{i}lethan(10),jnt(____CODE_JUMP____869584671),
+{1};{w}mulby(i);plus(7);{"3"};{Maze};replace;,mov(Maze);,
+{1};{w}mulby(i);plus(44);{"3"};{Maze};replace;,mov(Maze);,
+{1};{w}{i}plus(10);mul;;plus(44);{"3"};{Maze};replace;,mov(Maze);,
+{1};{w}{i}plus(10);mul;;plus(7);{"3"};{Maze};replace;,mov(Maze);,
+i+=1,jmp(____CODE_JUMP____774920884),____CODE_JUMP____869584671:,
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+back
+

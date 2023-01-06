@@ -1,0 +1,22 @@
+
+#define-a AND-         ;
+#synon  AND-         THEN-,NOW-,GET-,SET-,INTO-,FROM-
+
+#include <flow.h>
+
+
+DEF-MAIN(argv, argc)
+   CLR-SCR
+   NOW-SET(y,0)
+   DIM(5,5) AS-INT-RAND(100,x)
+   LOCATE(1,1) 
+   PRN-TABLE( x ), THEN-PRNL
+   
+   INTO-BLK-[1:2:end,3] PRNL( GELLS(x)»(y) )
+   //SEG-[]
+   NOW-CPELLS  (DIV(y,5), x) 
+   
+   LOCATE(9,1), 
+   PRN-TABLE( x )
+   
+END

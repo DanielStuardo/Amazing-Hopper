@@ -1,0 +1,8 @@
+
+#include <flow.h>
+
+DEF-MAIN
+   {100} PLUS(100), PRNL
+   
+   ADD(300,10), PLUS(90), PRNL
+END

@@ -1,0 +1,12 @@
+
+#include <flow.h>
+
+DEF-MAIN
+   c=237
+   STR-TO-UTF8(UTF8-TO-STR(CHAR(5))) »» (c)
+   PRNL("C= ",c)
+   UTF8-TO-STR(STR-TO-UTF8(CHAR(5))) »» (c)
+   PRNL("C= ",c)
+   PRNL("-",STR-TO-UTF8(CHAR(157)),"-",ASCII(c))
+   PRNL("-",STR-TO-UTF8(CHAR(237)),"-",ASCII(c))
+END

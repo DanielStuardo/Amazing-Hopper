@@ -1,0 +1,39 @@
+
+
+#define   AT-END(*)  ;*;
+
+                                      
+#include <flow.h>
+#include <flow-term.h>
+
+#define-a AND-         ;
+#synon  AND-         THEN-,NOW-,GET-,SET-,INTO-,IN-
+
+DEF-MAIN(argv, argc)
+
+  SET( c, 0), LET( c := STR-TO-UTF8(CHAR(219)))
+  SET( maxcol,1200)
+  SET( maxrow,210 )
+  SET-VIDEO-GRAPH
+//  RESIZ-TERM(,_Y_)
+  
+//  SIZE-TERM(maxcol, maxrow)
+  SET(k,255)
+
+  WHILE( k )  // IS-NOT-ZERO?(k))
+  CLR-SCR
+  BREAK-IF-KEY-PRESSED
+  DIM(1000) AS-INT-RAND(maxrow,x)
+  DIM(1000) AS-INT-RAND(maxcol,y)
+  CAT-COLS(x,y,x)
+  
+  SET(i,1), AND-COLOR-FG( k )
+  ITERATE(++i, LE?(i,1000), THEN-LOCATE( [i,1]GET(x), [i,2]GET(x) ), PRN(c) ); AT-END( PRNL )
+  MSTOR( 0, x,y)
+  //SLEEP(0.1)
+  --k
+  //LET( k := IF( IS-ZERO?(k), 255, k))
+
+  WEND
+  PAUSE, AND-SET-VIDEO-TEXT
+END
