@@ -33,7 +33,7 @@ Puede crear un binario cuando ya está seguro de que su programa funciona bien. 
 
 Un binario se crea así:
 
-hopper3 <filename.ext> -x -o bin/<filename>
+hopper3 <filename.ext> -x -o bin/nombre_de_archivo
 
 #Compilar un programa
 
