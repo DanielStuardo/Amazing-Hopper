@@ -1,0 +1,24 @@
+    ___ _____ ___  ___        __   ___
+   /      |   |  \  |  |\  | /    /
+   \__    |   |  |  |  | \ | | __ \__ 
+      \   |   |__/  |  |  \| |  |    \
+   ___/   |   |  \ _|_ |   | \__| ___/  
+
+$$END INTRO
+$$BEGIN Asignacion de cadenas
+
+_________________________________________
+=============== ASIGNACION ==============
+
+1. Inicializar una variable con una cadena:
+
+    str = "Este es un string"
+
+2. Asignar una cadena a una variable existente:
+
+    {"Este es un string"}, mov(str)
+
+   Si la variable no ha sido inicializada, HOPPER arrojará un error.
+
+$$END Asignacion de cadenas
+
