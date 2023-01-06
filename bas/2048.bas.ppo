@@ -1,0 +1,424 @@
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+main:
+.ctrlc
+.stack16
+
+contadordemovimientos=0
+score=0,SIZE=4
+totalarg;,eqto(2);do{{[2]},xtonum,SIZE=0,mov(SIZE)}
+
+,{SIZE};{4};{1};{6};{1};between?;not;,jnt(____CODE_JUMP____303779888),
+{"Usage: hopper 2048.bas [4(default)-6]\n"};;print;
+{0}return
+____CODE_JUMP____410722706:,____CODE_JUMP____303779888:,
+
+{SIZE};{SIZE};,__TMPARR__=-1,zerosarray(__TMPARR__);table=0,cpy(table);,kill;
+
+
+
+oldTable=0,showStructure=1
+
+{""};toksep;
+jsub(selectPositionofaleatorytail)
+jsub(selectPositionofaleatorytail)
+{"\033[2J\033[1;1H\n"},print;
+{"\033[?25l"},print;
+jsub(showTable)
+c=0,go=1,swFin=1
+
+
+____CODE_JUMP____903564022:,{go},jnt(____CODE_JUMP____866730650)
+;_VCH400842373_=0;__GETCHAR__400842373:;pause;lastkey(_VCH400842373_);{_VCH400842373_}dup;{194}{1}{207}{1}between?;do{jmp(__GETCHAR__400842373)};kbfree;;,mov(c)
+oldTable=table
+,;__MARK__635159175=0,{c},mov(__MARK__635159175)
+{4},{__MARK__635159175}eq?,do{{1};jsub(checkMoveRightDown),jmp(____CODE_JUMP____530472558),}
+{24},{__MARK__635159175}eq?,do{{0};jsub(checkMoveRightDown),jmp(____CODE_JUMP____530472558),}
+{19},{__MARK__635159175}eq?,do{{1};jsub(checkMoveLeftUp),jmp(____CODE_JUMP____530472558),}
+{5},{__MARK__635159175}eq?,do{{0};jsub(checkMoveLeftUp),jmp(____CODE_JUMP____530472558),}
+{27},{__MARK__635159175}eq?,do{go=0,swFin=0}
+____CODE_JUMP____530472558:,__MARK__635159175:,
+
+jsub(checkWinnerorGameOver)
+{go};do{
+,{oldTable}neqarrto(table),jnt(____CODE_JUMP____36616968),
+jsub(selectPositionofaleatorytail)
+++contadordemovimientos
+____CODE_JUMP____997939052:,____CODE_JUMP____36616968:,
+jsub(showTable)
+}
+,jmp(____CODE_JUMP____903564022),____CODE_JUMP____866730650:,
+
+,{swFin},jnt(____CODE_JUMP____413907536),
+jsub(showTable)
+{"          \LG"};{"YOU WIN!!!\OFF"};;print;
+jmp(____CODE_JUMP____344173884),____CODE_JUMP____413907536:,true,jnt(____CODE_JUMP____182222339),
+{"          \LR"};{"GAME OVER\OFF"};;print;
+____CODE_JUMP____344173884:,____CODE_JUMP____182222339:,
+puts("\n")
+{"\033[?25h"},print;
+pause;
+
+{0}return
+
+.locals
+
+MovingRightDown:,tmpTab=0,mov(tmpTab)
+ht=0,sizet=0,x1=0,l1=0
+
+{SIZE};,
+{tmpTab}mov(x1)
+{1};{60};;goxy;,{","}toksep,;puts(x1),;puts("             \n"),{""}toksep
+{tmpTab};compact;
+cpy(ht),
+length;,cpy(l1)
+{6};{60};;goxy;,;puts("                             "),
+{7};{60};;goxy;,;puts("                             "),
+{8};{60};;goxy;,;puts("                             "),
+{2};{60};;goxy;,{","}toksep,;puts(ht),;puts("             \n"),{""}toksep
+{3};{60};;goxy;,;puts(l1),;puts("             \n")
+{20};{1};;goxy;
+;sub;,
+mov(sizet)
+
+,{sizet};zero?;not;,jnt(____CODE_JUMP____745650651),
+clear(tmpTab)
+{sizet};,__TMPARR__=-1,zerosarray(__TMPARR__);tmpTab=0,cpy(tmpTab);,kill;
+{ht};{tmpTab};array(6);
+____CODE_JUMP____630859235:,____CODE_JUMP____745650651:,
+{tmpTab};back;
+
+MovingLeftUp:,tmpTab=0,mov(tmpTab)
+sizet=0,l1=0,x1=0
+{SIZE};,
+{tmpTab}mov(x1)
+{6};{60};;goxy;,{","}toksep,;puts(x1),;puts("             \n"),{""}toksep
+{tmpTab};compact;,
+clear(tmpTab)
+cpy(tmpTab);
+length;,cpy(l1)
+{1};{60};;goxy;,;puts("                             "),
+{2};{60};;goxy;,;puts("                             "),
+{3};{60};;goxy;,;puts("                             "),
+{7};{60};;goxy;,{","}toksep,;puts(tmpTab),;puts("             \n"),{""}toksep
+{8};{60};;goxy;,;puts(l1),;puts("             \n")
+{20};{1};;goxy;
+;sub;;
+mov(sizet)
+
+
+
+{sizet};zero?;not;;do{
+ht=0
+{sizet};,__TMPARR__=-1,zerosarray(__TMPARR__);ht=0,cpy(ht);,kill;
+{ht};{tmpTab};array(6);
+}
+{tmpTab};back;
+
+checkPointRightDown:,tmpTab=0,mov(tmpTab)
+v1=0,v2=0,tScore=0,totScore=0
+k=SIZE,____CODE_JUMP____416566594:,{k};gthan(1),jnt(____CODE_JUMP____136166317),
+;{k};loc1;get(tmpTab);mov(v1)
+; {k}; ;minus(1);loc1;,get(tmpTab),mov(v2)
+,{v1};eqto(v2),jnt(____CODE_JUMP____753509207),
+{v1}plus(v2),cpy(tScore);
+;{k};loc1;put(tmpTab)
+; {k}; ;minus(1) ;loc1;,{0};;;put(tmpTab)
+{tScore};;plus(totScore);,mov(totScore)
+____CODE_JUMP____831041926:,____CODE_JUMP____753509207:,
+--k,jmp(____CODE_JUMP____416566594),____CODE_JUMP____136166317:,
+{tmpTab};{totScore};;back
+
+checkMoveRightDown:,_DIRECTION_=0,mov(_DIRECTION_)
+tmpTab=0
+i=1,____CODE_JUMP____963148828:,{i};lethan(SIZE),jnt(____CODE_JUMP____228361290),
+,{_DIRECTION_},jnt(____CODE_JUMP____727627820),
+;{i};{1};loc2;{0};{SIZE};offset2;
+jmp(____CODE_JUMP____976287163),____CODE_JUMP____727627820:,true,jnt(____CODE_JUMP____834176474),
+;{1};{i};loc2;{SIZE};{0};offset2;
+____CODE_JUMP____976287163:,____CODE_JUMP____834176474:,
+get(table);,mov(tmpTab)
+
+,{tmpTab};stats(0),jnt(____CODE_JUMP____740441592),
+;clearmark;
+
+{tmpTab};jsub(MovingRightDown);,mov(tmpTab)
+;clearmark;
+{tmpTab};jsub(checkPointRightDown);plus(score),mov(score);mov(tmpTab);,
+;clearmark;
+{tmpTab};jsub(MovingRightDown);,mov(tmpTab)
+,{_DIRECTION_},jnt(____CODE_JUMP____492285827),
+;{i};{1};loc2;{0};{SIZE};offset2;
+jmp(____CODE_JUMP____929680720),____CODE_JUMP____492285827:,true,jnt(____CODE_JUMP____915015953),
+;{1};{i};loc2;{SIZE};{0};offset2;
+____CODE_JUMP____929680720:,____CODE_JUMP____915015953:,
+{tmpTab};;,put(table)
+____CODE_JUMP____428856470:,____CODE_JUMP____740441592:,
+++i,jmp(____CODE_JUMP____963148828),____CODE_JUMP____228361290:,
+clear(tmpTab);clearmark;;emptystack?;not;do{ {"you did not close the idea "};throw(1100) }
+back
+
+checkPointLeftUp:,tmpTab=0,mov(tmpTab)
+v1=0,v2=0,tScore=0,totScore=0
+k=1,____CODE_JUMP____383238436:,{k};lthan(SIZE),jnt(____CODE_JUMP____216224275),
+;{k};loc1;get(tmpTab),mov(v1)
+; {k}; ;plus(1) ;loc1;get(tmpTab),mov(v2)
+,{v1};eqto(v2),jnt(____CODE_JUMP____793961143),
+{v1}plus(v2),cpy(tScore)
+;{k};loc1;put(tmpTab),; {k}; ;plus(1);loc1;;{0};;put(tmpTab)
+{tScore};;plus(totScore);,mov(totScore)
+____CODE_JUMP____824750151:,____CODE_JUMP____793961143:,
+++k,jmp(____CODE_JUMP____383238436),____CODE_JUMP____216224275:,
+{tmpTab};{totScore};;
+back
+
+checkMoveLeftUp:,_DIRECTION_=0,mov(_DIRECTION_)
+tmpTab=0
+i=1,____CODE_JUMP____520004164:,{i};lethan(SIZE),jnt(____CODE_JUMP____728314173),
+,{_DIRECTION_},jnt(____CODE_JUMP____920846538),
+;{i};{1};loc2;{0};{SIZE};offset2;
+jmp(____CODE_JUMP____660691793),____CODE_JUMP____920846538:,true,jnt(____CODE_JUMP____258786732),
+;{1};{i};loc2;{SIZE};{0};offset2;
+____CODE_JUMP____660691793:,____CODE_JUMP____258786732:,
+get(table),mov(tmpTab)
+,{tmpTab};stats(0),jnt(____CODE_JUMP____918785590),
+;clearmark;
+{tmpTab};jsub(MovingLeftUp);,mov(tmpTab)
+;clearmark;
+{tmpTab};jsub(checkPointLeftUp);plus(score),mov(score);mov(tmpTab);,
+
+;clearmark;
+{tmpTab};jsub(MovingLeftUp);,mov(tmpTab)
+,{_DIRECTION_},jnt(____CODE_JUMP____640024854),
+;{i};{1};loc2;{0};{SIZE};offset2;
+jmp(____CODE_JUMP____295403701),____CODE_JUMP____640024854:,true,jnt(____CODE_JUMP____332693127),
+;{1};{i};loc2;{SIZE};{0};offset2;
+____CODE_JUMP____295403701:,____CODE_JUMP____332693127:,
+{tmpTab};;,put(table)
+____CODE_JUMP____295850969:,____CODE_JUMP____918785590:,
+++i,jmp(____CODE_JUMP____520004164),____CODE_JUMP____728314173:,
+;clearmark;;emptystack?;not;do{ {"you did not close the idea "};throw(1100) }
+back
+
+
+selectPositionofaleatorytail:
+;prec(-1)
+tSIZE=0,
+{SIZE};;plus(1);,mov(tSIZE)
+__NO_VALID_POS__:
+x=0,y=0
+{10};rand;;mulby(10);ceil;;module(tSIZE);cpy(x);zero?;;do{x=1}
+{10};rand;;mulby(10);ceil;;module(tSIZE);cpy(y);zero?;;do{y=1}
+;{x};{y};loc2;,get(table),jnz(__NO_VALID_POS__)
+newTail=2
+{1};rand;gthan(0.9);do{newTail=4}
+{newTail};;,put(table);clearinterval;;emptystack?;not;do{ {"you did not close the idea "};throw(1100) }
+;prec(0)
+back
+checkWinnerorGameOver:
+{table};gthan(0);stats(0){SIZE};;mulby(SIZE);eq?;;do{
+{0},cpy(swFin);cpy(go);,kill,,back
+}
+{0};;reshape(table)
+{1};{2048};{table};array(1);neqto(0);do{
+{SIZE};{SIZE};;reshape(table),{0};,mov(go)back
+}
+{SIZE};{SIZE};;reshape(table)
+back
+showTable:
+tmpTable=0
+{" "};{6};{table};xtostr;;padcenter;;,mov(tmpTable)
+{0}{0}{"\BGLGR\BK      \OFF"};{"  0   "};{tmpTable};transform;;,mov(tmpTable)
+{0}{0}{"\BGLGR\BK  2   \OFF"};{"  2   "};{tmpTable};transform;;,mov(tmpTable)
+{0}{0}{"\BGLGR\B  4   \OFF"};{"  4   "};{tmpTable};transform;;,mov(tmpTable)
+{0}{0}{"\BGLGR\B  8   \OFF"};{"  8   "};{tmpTable};transform;;,mov(tmpTable)
+{0}{0}{"\BGR\W  16  \OFF"};{"  16  "};{tmpTable};transform;;,mov(tmpTable)
+{0}{0}{"\BGY\BK  32  \OFF"};{"  32  "};{tmpTable};transform;;,mov(tmpTable)
+{0}{0}{"\BGB\W  64  \OFF"};{"  64  "};{tmpTable};transform;;,mov(tmpTable)
+{0}{0}{"\BGLM\BK 128  \OFF"};{" 128  "};{tmpTable};transform;;,mov(tmpTable)
+{0}{0}{"\BGG\W 256  \OFF"};{" 256  "};{tmpTable};transform;;,mov(tmpTable)
+{0}{0}{"\BGB\W 512  \OFF"};{" 512  "};{tmpTable};transform;;,mov(tmpTable)
+{0}{0}{"\BGR\W 1024 \OFF"};{" 1024 "};{tmpTable};transform;;,mov(tmpTable)
+{0}{0}{"\BGBK\W\ENF 2048 \OFF"};{" 2048 "};{tmpTable};transform;;,mov(tmpTable)
+{showStructure};do{jsub(printTablestructure),{0};,mov(showStructure)}
+;clearmark;
+scrx=2
+i=1,____CODE_JUMP____477626040:,{i};lethan(SIZE),jnt(____CODE_JUMP____270884090),
+{scrx};goy;
+{2};gox;,;{1};{i};loc2;,get(tmpTable);;print;
+{4};gox;,;{2};{i};loc2;,get(tmpTable);;print;
+{6};gox;,;{3};{i};loc2;,get(tmpTable);;print;
+{8};gox;,;{4};{i};loc2;,get(tmpTable);;print;
+{SIZE};gethan(5);do{{10};gox;,;{5};{i};loc2;,get(tmpTable);;print;}
+{SIZE};gethan(6);do{{12};gox;,;{6};{i};loc2;,get(tmpTable);;print;}
+scrx+=7
+++i,jmp(____CODE_JUMP____477626040),____CODE_JUMP____270884090:,
+;clearmark;
+{"\BGB\W\ENF"};{"\n\n\t   2 0 4 8   \OFF\n\n"};{"Movimiento # "};{contadordemovimientos};{", \INVSCORE="};{score};{"\OFF\n"};;
+
+print
+back
+printTablestructure:
+{1};{1};;goxy;
+,{SIZE};eqto(4),jnt(____CODE_JUMP____894192634),
+{"┌──────┬──────┬──────┬──────┐\n"};strtoutf8;
+{"│ 2048 │ 2048 │ 2048 │ 2048 │\n"};strtoutf8;
+{"├──────┼──────┼──────┼──────┤\n"};strtoutf8;
+{"│ 2048 │ 2048 │ 2048 │ 2048 │\n"};strtoutf8;
+{"├──────┼──────┼──────┼──────┤\n"};strtoutf8;
+{"│ 2048 │ 2048 │ 2048 │ 2048 │\n"};strtoutf8;
+{"├──────┼──────┼──────┼──────┤\n"};strtoutf8;
+{"│ 2048 │ 2048 │ 2048 │ 2048 │\n"};strtoutf8;
+{"└──────┴──────┴──────┴──────┘"};strtoutf8;
+jmp(____CODE_JUMP____78343779),____CODE_JUMP____894192634:,{SIZE};eqto(5),jnt(____CODE_JUMP____407050408),
+{"┌──────┬──────┬──────┬──────┬──────┐\n"};strtoutf8;
+{"│ 2048 │ 2048 │ 2048 │ 2048 │ 2048 │\n"};strtoutf8;
+{"├──────┼──────┼──────┼──────┼──────┤\n"};strtoutf8;
+{"│ 2048 │ 2048 │ 2048 │ 2048 │ 2048 │\n"};strtoutf8;
+{"├──────┼──────┼──────┼──────┼──────┤\n"};strtoutf8;
+{"│ 2048 │ 2048 │ 2048 │ 2048 │ 2048 │\n"};strtoutf8;
+{"├──────┼──────┼──────┼──────┼──────┤\n"};strtoutf8;
+{"│ 2048 │ 2048 │ 2048 │ 2048 │ 2048 │\n"};strtoutf8;
+{"├──────┼──────┼──────┼──────┼──────┤\n"};strtoutf8;
+{"│ 2048 │ 2048 │ 2048 │ 2048 │ 2048 │\n"};strtoutf8;
+{"└──────┴──────┴──────┴──────┴──────┘"};strtoutf8;
+jmp(____CODE_JUMP____78343779),____CODE_JUMP____407050408:,{SIZE};eqto(6),jnt(____CODE_JUMP____909385706),
+{"┌──────┬──────┬──────┬──────┬──────┬──────┐\n"};strtoutf8;
+{"│ 2048 │ 2048 │ 2048 │ 2048 │ 2048 │ 2048 │\n"};strtoutf8;
+{"├──────┼──────┼──────┼──────┼──────┼──────┤\n"};strtoutf8;
+{"│ 2048 │ 2048 │ 2048 │ 2048 │ 2048 │ 2048 │\n"};strtoutf8;
+{"├──────┼──────┼──────┼──────┼──────┼──────┤\n"};strtoutf8;
+{"│ 2048 │ 2048 │ 2048 │ 2048 │ 2048 │ 2048 │\n"};strtoutf8;
+{"├──────┼──────┼──────┼──────┼──────┼──────┤\n"};strtoutf8;
+{"│ 2048 │ 2048 │ 2048 │ 2048 │ 2048 │ 2048 │\n"};strtoutf8;
+{"├──────┼──────┼──────┼──────┼──────┼──────┤\n"};strtoutf8;
+{"│ 2048 │ 2048 │ 2048 │ 2048 │ 2048 │ 2048 │\n"};strtoutf8;
+{"├──────┼──────┼──────┼──────┼──────┼──────┤\n"};strtoutf8;
+{"│ 2048 │ 2048 │ 2048 │ 2048 │ 2048 │ 2048 │\n"};strtoutf8;
+{"└──────┴──────┴──────┴──────┴──────┴──────┘"};strtoutf8;
+____CODE_JUMP____78343779:,____CODE_JUMP____909385706:,
+print
+back
+
